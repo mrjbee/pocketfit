@@ -9,4 +9,6 @@ public class PocketFitModel extends AndroidModel {
     public PocketFitModel(Context context) {
         super("pocketfit", context);
     }
+
+
 }

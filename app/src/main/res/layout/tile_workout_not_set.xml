@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/margin.tile"
+        android:layout_marginRight="@dimen/margin.tile"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/panel">
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:id="@+id/caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="You don`t has an active routine"
+            style="@style/Text.Tile.Caption"/>
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/expand_arrow_btn"
+            android:layout_width="18dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow_left"/>
+        <TextView
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_below="@+id/caption"
+            android:id="@+id/description"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start building your body with creating workout routine. You can have multiple routines but only one will be active at same time"
+            style="@style/Text.Tile"
+            android:paddingBottom="30dp"/>
+
+
+</RelativeLayout>

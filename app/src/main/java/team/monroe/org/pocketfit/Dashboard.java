@@ -25,6 +25,7 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
     @Override
     protected void onResume() {
         super.onResume();
+        /*
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -34,5 +35,6 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
                         .commit();
             }
         },3000);
+        */
     }
 }

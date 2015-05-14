@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dashboard">
+    tools:context=".Dashboard"
+    style="@style/Panel.Base">
 
     <FrameLayout
         android:id="@+id/fragment_container_body"
@@ -13,7 +14,7 @@
     <fragment
         class="team.monroe.org.pocketfit.fragments.HeaderFragment"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="150dp"
         tools:layout="@layout/fragment_header"
         android:id="@+id/fragment_header" />
 
