@@ -94,7 +94,6 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
             hideController.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
                 @Override
                 public void customize(Animator animator) {
-                    animator.setStartDelay(300);
                     animator.addListener(new AnimatorListenerSupport() {
                         @Override
                         public void onAnimationEnd(Animator animation) {

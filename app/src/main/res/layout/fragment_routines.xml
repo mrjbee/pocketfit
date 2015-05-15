@@ -16,6 +16,7 @@
             android:background="@drawable/body_top"
             android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/panel_new_routine"
                 android:paddingLeft="20dp"
                 android:paddingRight="10dp"
                 android:layout_width="fill_parent"
@@ -37,7 +38,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="30dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/arrow_left"
+                    android:src="@drawable/arrow_thin_right"
                     />
 
             </LinearLayout>

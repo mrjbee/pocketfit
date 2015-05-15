@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import org.monroe.team.android.box.data.Data;
 
-import team.monroe.org.pocketfit.Dashboard;
+import team.monroe.org.pocketfit.RootActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
@@ -76,7 +76,7 @@ public class DashboardFragment extends BodyFragment{
                     routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((Dashboard)activity()).open_Routines(null);
+                            ((RootActivity)activity()).open_Routines();
                         }
                     });
                     addTile(routineNoTilePresenter);

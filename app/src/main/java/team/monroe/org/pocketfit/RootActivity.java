@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
-import team.monroe.org.pocketfit.fragments.RoutineEditFragment;
+import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
+import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
-public class Dashboard extends ActivitySupport<PocketFitApp> {
+public class RootActivity extends ActivitySupport<PocketFitApp> {
 
     private ArrayList<FragmentBackStackItem> backStack = new ArrayList<>();
 
@@ -49,11 +50,19 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
     }
 
 
-    public void open_Routines(String routineId) {
+    public void open_Routines() {
         backStack.add(new FragmentBackStackItem(DashboardFragment.class));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,fragment_instance(RoutineEditFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
+                .replace(R.id.fragment_container_body,fragment_instance(RoutinesFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
+                .commit();
+    }
+
+    public void open_Routine(String routineId) {
+        backStack.add(new FragmentBackStackItem(RoutinesFragment.class));
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .replace(R.id.fragment_container_body,fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
                 .commit();
     }
 

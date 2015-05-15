@@ -24,7 +24,7 @@
             android:id="@+id/expand_arrow_btn"
             android:layout_width="18dp"
             android:layout_height="40dp"
-            android:src="@drawable/arrow_left"/>
+            android:src="@drawable/arrow_thin_right"/>
         <TextView
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"

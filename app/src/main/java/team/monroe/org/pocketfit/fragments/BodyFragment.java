@@ -2,7 +2,7 @@ package team.monroe.org.pocketfit.fragments;
 
 import org.monroe.team.android.box.app.FragmentSupport;
 
-import team.monroe.org.pocketfit.Dashboard;
+import team.monroe.org.pocketfit.RootActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 
 public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
@@ -18,9 +18,9 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
         super.onStart();
         if (headerUpdateRequest != HeaderUpdateRequest.NOT_SET){
             if (headerUpdateRequest == HeaderUpdateRequest.SET){
-                ((Dashboard) activity()).header(getHeaderName(), isHeaderSecondary());
+                ((RootActivity) activity()).header(getHeaderName(), isHeaderSecondary());
             }else {
-                ((Dashboard) activity()).animateHeader(getHeaderName(), isHeaderSecondary());
+                ((RootActivity) activity()).animateHeader(getHeaderName(), isHeaderSecondary());
             }
         }
         headerUpdateRequest = HeaderUpdateRequest.NOT_SET;
@@ -33,4 +33,7 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
         SET, NOT_SET, ANIMATE
     }
 
+    public RootActivity owner(){
+        return (RootActivity) activity();
+    }
 }
