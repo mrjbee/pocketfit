@@ -1,19 +1,16 @@
 package team.monroe.org.pocketfit.fragments;
 
 
-import android.animation.Animator;
-import android.app.Activity;
+import android.os.Bundle;
 
 import org.monroe.team.android.box.app.FragmentSupport;
-import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
-import org.monroe.team.corebox.log.L;
 
 import team.monroe.org.pocketfit.Dashboard;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.view.SlidingRelativeLayout;
 
-public class RoutineEditFragment extends FragmentSupport<PocketFitApp> {
+public class RoutineEditFragment extends BodyFragment {
 
     @Override
     protected int getLayoutId() {
@@ -21,20 +18,18 @@ public class RoutineEditFragment extends FragmentSupport<PocketFitApp> {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        SlidingRelativeLayout relativeLayout = (SlidingRelativeLayout) getFragmentView();
-        relativeLayout.mSlidingListener = new SlidingRelativeLayout.SlidingListener() {
-            @Override
-            public void onXFraction(float fraction) {
-                if (fraction == 0){
-                    onAnimationEnd();
-                }
-            }
-        };
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
-    private void onAnimationEnd() {
-        ((Dashboard)activity()).setHeader("Workout Routine", true);
+    @Override
+    protected boolean isHeaderSecondary() {
+        return true;
     }
+
+    @Override
+    protected String getHeaderName() {
+        return "Workout Routines";
+    }
+
 }

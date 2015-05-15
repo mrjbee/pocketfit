@@ -2,6 +2,7 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import org.monroe.team.android.box.app.FragmentSupport;
@@ -19,7 +20,7 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
     private AppearanceController mainHeaderContainerAC;
     private AppearanceController secondaryHeaderContainerAC;
     private boolean secondaryHeaderActivated = false;
-    private String headerCaption = "Pocket.Fit";
+    private String headerCaption = "";
 
     @Override
     protected int getLayoutId() {
@@ -32,7 +33,7 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
 
         if (savedInstanceState != null){
             secondaryHeaderActivated = savedInstanceState.getBoolean("header_secondary",false);
-            headerCaption = savedInstanceState.getString("header_caption","Pocket.Fit");
+            headerCaption = savedInstanceState.getString("header_caption","Uppss Not Set");
         }
 
         mainHeaderContainerAC = animateAppearance(view(R.id.header_main_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
@@ -42,12 +43,12 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
                 .build();
 
         secondaryHeaderContainerAC = combine(
-                animateAppearance(view(R.id.header_secondary_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
-                .showAnimation(duration_constant(300),interpreter_overshot())
+                animateAppearance(view(R.id.header_secondary_container), xSlide(0, -DisplayUtils.screenWidth(getResources()) / 2))
+                .showAnimation(duration_constant(300), interpreter_overshot())
                 .hideAnimation(duration_constant(300), interpreter_accelerate(0.5f))
                 .hideAndGone(),
                 animateAppearance(view(R.id.secondary_caption_arrow),rotate(0, -180))
-                .showAnimation(duration_constant(500),interpreter_overshot())
+                .showAnimation(duration_constant(500), interpreter_overshot())
                 .hideAnimation(duration_constant(500), interpreter_accelerate(0.5f))
                 .hideAndGone());
 
@@ -61,6 +62,16 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
 
         TextView captionView = getHeaderCaptionView();
         captionView.setText(headerCaption);
+        view(R.id.header_secondary_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackHeaderArrow();
+            }
+        });
+    }
+
+    private void onBackHeaderArrow() {
+        activity().onBackPressed();
     }
 
     private TextView getHeaderCaptionView() {
@@ -74,24 +85,38 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
         outState.putString("header_caption",headerCaption);
     }
 
-    public void changeCaption(String newCaption, boolean secondaryHeaderRequested) {
+    public void changeCaption(String newCaption, boolean secondaryHeaderRequested, boolean animate) {
         AppearanceController hideController = secondaryHeaderActivated?secondaryHeaderContainerAC:mainHeaderContainerAC;
         secondaryHeaderActivated = secondaryHeaderRequested;
         final AppearanceController showController = secondaryHeaderActivated?secondaryHeaderContainerAC:mainHeaderContainerAC;
         headerCaption = newCaption;
-        hideController.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
-            @Override
-            public void customize(Animator animator) {
-                animator.setStartDelay(300);
-                animator.addListener(new AnimatorListenerSupport() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        getHeaderCaptionView().setText(headerCaption);
-                        showController.hideWithoutAnimation();
-                        showController.show();
-                    }
-                });
-            }
-        });
+        if (animate) {
+            hideController.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+                @Override
+                public void customize(Animator animator) {
+                    animator.setStartDelay(300);
+                    animator.addListener(new AnimatorListenerSupport() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            getHeaderCaptionView().setText(headerCaption);
+                            showController.hideWithoutAnimation();
+                            showController.show();
+                        }
+                    });
+                }
+            });
+        } else {
+            hideController.hideWithoutAnimation();
+            showController.showWithoutAnimation();
+            getHeaderCaptionView().setText(headerCaption);
+        }
+    }
+
+    public String getCaption() {
+        return headerCaption;
+    }
+
+    public boolean isSecondary() {
+        return secondaryHeaderActivated;
     }
 }

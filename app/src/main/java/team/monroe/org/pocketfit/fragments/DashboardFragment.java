@@ -4,7 +4,6 @@ package team.monroe.org.pocketfit.fragments;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.data.Data;
 
 import team.monroe.org.pocketfit.Dashboard;
@@ -14,7 +13,7 @@ import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.TileNoRoutineViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
-public class DashboardFragment extends FragmentSupport<PocketFitApp>{
+public class DashboardFragment extends BodyFragment{
 
     private final Data.DataChangeObserver<PocketFitApp.RoutineDetails> observer_RoutineDetails = new Data.DataChangeObserver<PocketFitApp.RoutineDetails>() {
         @Override
@@ -44,6 +43,17 @@ public class DashboardFragment extends FragmentSupport<PocketFitApp>{
     }
 
     @Override
+    protected boolean isHeaderSecondary() {
+        return false;
+    }
+
+    @Override
+    protected String getHeaderName() {
+        return "Pocket.Fit";
+    }
+
+
+    @Override
     public void onStop() {
         super.onStop();
         application().data_routineDetails().removeDataChangeObserver(observer_RoutineDetails);
@@ -64,7 +74,7 @@ public class DashboardFragment extends FragmentSupport<PocketFitApp>{
                     routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((Dashboard)activity()).goToRoutineEditor(null);
+                            ((Dashboard)activity()).open_Routines(null);
                         }
                     });
                     addTile(routineNoTilePresenter);
