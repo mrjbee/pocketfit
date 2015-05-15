@@ -7,18 +7,49 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="80dp"
-        android:paddingLeft="20dp"
         android:paddingTop="5dp"
-        android:paddingRight="10dp"
         android:paddingBottom="5dp"
         android:background="@drawable/header">
-        <TextView
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pocket.Fit"
-            style="@style/Text.Header.Caption"
-            />
+        <LinearLayout
+            android:id="@+id/header_main_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="40dp"
+                android:id="@+id/caption"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                style="@style/Text.Header.Caption"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/header_secondary_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ImageView
+                android:id="@+id/secondary_caption_arrow"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:src="@drawable/arrow_to_left2"
+                />
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/secondary_caption"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Secondary Example"
+                style="@style/Text.Header.Secondary.Caption"
+                />
+
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>

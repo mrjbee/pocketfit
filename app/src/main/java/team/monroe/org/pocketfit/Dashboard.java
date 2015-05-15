@@ -5,6 +5,7 @@ import android.os.Bundle;
 import org.monroe.team.android.box.app.ActivitySupport;
 
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
+import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditFragment;
 
 public class Dashboard extends ActivitySupport<PocketFitApp> {
@@ -22,19 +23,15 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.animator.slide_in, R.animator.slide_out)
-                        .replace(R.id.fragment_container_body, new RoutineEditFragment())
-                        .commit();
-            }
-        },3000);
-        */
+    public void goToRoutineEditor(String routineId) {
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in, R.animator.slide_out)
+                .replace(R.id.fragment_container_body, new RoutineEditFragment())
+                .commit();
+    }
+
+    public void setHeader(String headerText, boolean secondary) {
+        HeaderFragment fragment = (HeaderFragment) getFragmentManager().findFragmentById(R.id.fragment_header);
+        fragment.changeCaption(headerText, secondary);
     }
 }

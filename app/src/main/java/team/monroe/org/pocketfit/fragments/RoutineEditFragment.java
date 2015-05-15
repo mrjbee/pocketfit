@@ -8,6 +8,7 @@ import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.corebox.log.L;
 
+import team.monroe.org.pocketfit.Dashboard;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.view.SlidingRelativeLayout;
@@ -34,6 +35,6 @@ public class RoutineEditFragment extends FragmentSupport<PocketFitApp> {
     }
 
     private void onAnimationEnd() {
-
+        ((Dashboard)activity()).setHeader("Workout Routine", true);
     }
 }

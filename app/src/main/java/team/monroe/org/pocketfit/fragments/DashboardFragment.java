@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.data.Data;
 
+import team.monroe.org.pocketfit.Dashboard;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
@@ -60,6 +61,12 @@ public class DashboardFragment extends FragmentSupport<PocketFitApp>{
 
                     routineNoTilePresenter = new TileNoRoutineViewPresenter(inflateView(R.layout.tile_workout_not_set));
                     routineNoTilePresenter.hide();
+                    routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((Dashboard)activity()).goToRoutineEditor(null);
+                        }
+                    });
                     addTile(routineNoTilePresenter);
 
                     if (activity().isFirstRun()) {
