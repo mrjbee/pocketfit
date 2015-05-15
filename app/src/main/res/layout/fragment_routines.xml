@@ -13,7 +13,8 @@
             android:layout_marginTop="100dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/body_top">
+            android:background="@drawable/body_top"
+            android:orientation="vertical">
             <LinearLayout
                 android:paddingLeft="20dp"
                 android:paddingRight="10dp"
@@ -27,7 +28,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Do you want to create new ?"
+                    android:text="Do you want to create a routine?"
                     style="@style/Text.Body.Caption"
                     />
 
@@ -40,6 +41,8 @@
                     />
 
             </LinearLayout>
+            <include
+                layout="@layout/panel_no_items"/>
         </LinearLayout>
     </ScrollView>
 

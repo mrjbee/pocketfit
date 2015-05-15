@@ -28,6 +28,7 @@ public class DashboardFragment extends BodyFragment{
     };
     private TileCaptionViewPresenter routineCaptionPresenter;
     private TileNoRoutineViewPresenter routineNoTilePresenter;
+    private boolean feature_tileAnimation = false;
 
     @Override
     protected int getLayoutId() {
@@ -56,6 +57,7 @@ public class DashboardFragment extends BodyFragment{
     @Override
     public void onStop() {
         super.onStop();
+        feature_tileAnimation = false;
         application().data_routineDetails().removeDataChangeObserver(observer_RoutineDetails);
     }
 
@@ -79,7 +81,7 @@ public class DashboardFragment extends BodyFragment{
                     });
                     addTile(routineNoTilePresenter);
 
-                    if (activity().isFirstRun()) {
+                    if (feature_tileAnimation) {
                         routineCaptionPresenter.showWithAnimation();
                         routineNoTilePresenter.showWithAnimation();
                     }else {
@@ -102,4 +104,7 @@ public class DashboardFragment extends BodyFragment{
         return activity().getLayoutInflater().inflate(id, (android.view.ViewGroup) view(R.id.tile_container),false);
     }
 
+    public void feature_tileAnimation(boolean feature_tileAnimation) {
+        this.feature_tileAnimation = feature_tileAnimation;
+    }
 }

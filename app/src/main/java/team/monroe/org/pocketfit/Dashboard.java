@@ -1,6 +1,5 @@
 package team.monroe.org.pocketfit;
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 import org.monroe.team.android.box.app.ActivitySupport;
@@ -24,10 +23,12 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
         if (isFirstRun(savedInstanceState)){
             DashboardFragment fragment = new DashboardFragment();
             fragment.feature_headerUpdate(BodyFragment.HeaderUpdateRequest.SET);
+            fragment.feature_tileAnimation(true);
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_container_body, fragment)
                     .commit();
+
         } else {
             backStack = (ArrayList<FragmentBackStackItem>) savedInstanceState.getSerializable("back_stack");
         }
@@ -41,7 +42,7 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
         } else {
            FragmentBackStackItem backStackItem = backStack.remove(backStack.size()-1);
            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.slide_in, R.animator.slide_out)
+                    .setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left)
                     .replace(R.id.fragment_container_body, fragment_instance(backStackItem.fragmentClass, BodyFragment.HeaderUpdateRequest.ANIMATE))
                     .commit();
         }
@@ -51,7 +52,7 @@ public class Dashboard extends ActivitySupport<PocketFitApp> {
     public void open_Routines(String routineId) {
         backStack.add(new FragmentBackStackItem(DashboardFragment.class));
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in, R.animator.slide_out)
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,fragment_instance(RoutineEditFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
                 .commit();
     }

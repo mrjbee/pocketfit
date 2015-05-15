@@ -41,6 +41,16 @@
         <item name="android:shadowColor">#ffffffff</item>
     </style>
 
+    <style name="Text.No.Item.Caption" parent="AppTheme">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">#ffd2d2d2</item>
+    </style>
+
+    <style name="Text.No.Item" parent="AppTheme">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#ff9a9a9a</item>
+    </style>
+
     <style name="Text.Tile.Caption" parent="AppTheme">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">#ff575757</item>
