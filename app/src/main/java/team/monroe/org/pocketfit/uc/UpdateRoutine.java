@@ -14,15 +14,31 @@ public class UpdateRoutine extends UserCaseSupport<Routine, Routine>{
 
     @Override
     protected Routine executeImpl(Routine update) {
+
         Routine origin = using(RoutineManager.class).get(update.id);
+
         if (origin == null){
             using(RoutineManager.class).updateOrCreate(update);
             return update;
         }
+
         origin.title = diff(origin.title, update.title);
         origin.description = diff(origin.description, update.description);
         using(RoutineManager.class).updateOrCreate(origin);
+        
+        if (!isDefined(origin)){
+            using(RoutineManager.class).remove(origin.id);
+        }
+
         return origin;
+    }
+
+    private boolean isDefined(Routine routine) {
+        return isDefined(routine.title) || isDefined(routine.description);
+    }
+
+    private boolean isDefined(String string) {
+        return string != null && !string.isEmpty();
     }
 
     private String diff(String origin, String update) {

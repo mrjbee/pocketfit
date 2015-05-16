@@ -30,7 +30,8 @@ public class DashboardFragment extends BodyFragment{
     @Override
     public void onStart() {
         super.onStart();
-        observer_activeRoutineObserver = new Data.DataChangeObserver<Routine>() {
+        observer_activeRoutineObserver = observe_data_change(State.STOP, new Data.DataChangeObserver<Routine>() {
+
             @Override
             public void onDataInvalid() {
                 fetch_ActiveRoutine();
@@ -40,10 +41,12 @@ public class DashboardFragment extends BodyFragment{
             public void onData(Routine routine) {
 
             }
-        };
+        });
         application().data_activeRoutine().addDataChangeObserver(observer_activeRoutineObserver);
         fetch_ActiveRoutine();
     }
+
+
 
     @Override
     protected boolean isHeaderSecondary() {
@@ -64,37 +67,37 @@ public class DashboardFragment extends BodyFragment{
     }
 
     private void fetch_ActiveRoutine() {
-        application().data_activeRoutine().fetch(true, new PocketFitApp.FetchObserver<Routine>(application()){
-            @Override
-            public void onFetch(Routine routineDetails) {
-                if (routineCaptionPresenter == null) {
-                    routineCaptionPresenter = new TileCaptionViewPresenter(inflateView(R.layout.tile_caption));
-                    routineCaptionPresenter.hide();
-                    routineCaptionPresenter.setCaption("Workout Routine");
-                    addTile(routineCaptionPresenter);
+        application().data_activeRoutine().fetch(true, observe_data_fetch(State.STOP, new PocketFitApp.DataAction<Routine>() {
+                    @Override
+                    public void data(Routine data) {
+                        if (routineCaptionPresenter == null) {
+                            routineCaptionPresenter = new TileCaptionViewPresenter(inflateView(R.layout.tile_caption));
+                            routineCaptionPresenter.hide();
+                            routineCaptionPresenter.setCaption("Workout Routine");
+                            addTile(routineCaptionPresenter);
 
-                    routineNoTilePresenter = new TileNoRoutineViewPresenter(inflateView(R.layout.tile_workout_not_set));
-                    routineNoTilePresenter.hide();
-                    routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ((RootActivity)activity()).open_Routines();
+                            routineNoTilePresenter = new TileNoRoutineViewPresenter(inflateView(R.layout.tile_workout_not_set));
+                            routineNoTilePresenter.hide();
+                            routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ((RootActivity)activity()).open_Routines();
+                                }
+                            });
+                            addTile(routineNoTilePresenter);
+
+                            if (feature_tileAnimation) {
+                                routineCaptionPresenter.showWithAnimation();
+                                routineNoTilePresenter.showWithAnimation();
+                            }else {
+                                routineCaptionPresenter.show();
+                                routineNoTilePresenter.show();
+                            }
+                        } else {
+
                         }
-                    });
-                    addTile(routineNoTilePresenter);
-
-                    if (feature_tileAnimation) {
-                        routineCaptionPresenter.showWithAnimation();
-                        routineNoTilePresenter.showWithAnimation();
-                    }else {
-                        routineCaptionPresenter.show();
-                        routineNoTilePresenter.show();
                     }
-                } else {
-
-                }
-            }
-        });
+                }));
     }
 
 

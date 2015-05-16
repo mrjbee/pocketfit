@@ -104,7 +104,7 @@
                         android:id="@+id/caption_workout_days"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Workout Schedule"
+                        android:text="Training Days"
                         style="@style/Text.Body.Section.Caption"
                         android:layout_marginBottom="5dp"
                         />

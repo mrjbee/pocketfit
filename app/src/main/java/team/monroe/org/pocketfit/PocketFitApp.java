@@ -3,14 +3,18 @@ package team.monroe.org.pocketfit;
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.data.Data;
 
+import java.util.List;
+
 import team.monroe.org.pocketfit.presentations.Routine;
-import team.monroe.org.pocketfit.uc.CreateEmptyRoutine;
+import team.monroe.org.pocketfit.uc.CreateRoutineId;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
+import team.monroe.org.pocketfit.uc.GetRoutineList;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
 
 public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     private Data<Routine> data_activeRoutine;
+    private Data<List> data_routines;
 
     @Override
     protected PocketFitModel createModel() {
@@ -23,11 +27,19 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             @Override
             protected Routine provideData() {
                 String routineId = getSetting(Settings.ACTIVE_ROUTINE_ID);
-                if (routineId == null) return null;
+                if (routineId == null) return new Routine(null);
                 Routine routine = model().execute(GetRoutineById.class, routineId);
                 return routine;
             }
         };
+
+        data_routines = new Data<List>(List.class, model()) {
+            @Override
+            protected List<Routine> provideData() {
+                return model().execute(GetRoutineList.class,null);
+            }
+        };
+
     }
 
 
@@ -47,6 +59,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return data_activeRoutine;
     }
 
+    public Data<List> data_routines() {
+        return data_routines;
+    }
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {
         return new ValueObserver<DataType>() {
@@ -62,8 +77,14 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         };
     }
 
-    public void function_createEmptyRoutine(ValueObserver<Routine> routineValueObserver) {
-        fetchValue(CreateEmptyRoutine.class,null,new NoOpValueAdapter<Routine>(),routineValueObserver);
+    public void function_createEmptyRoutine(ValueObserver<String> routineValueObserver) {
+        fetchValue(CreateRoutineId.class,null,new NoOpValueAdapter<String>(){
+            @Override
+            public String adapt(String value) {
+                data_routines().invalidate();
+                return super.adapt(value);
+            }
+        }, routineValueObserver);
     }
 
     public void function_getRoutine(String routineId, ValueObserver<Routine> observer) {
@@ -71,7 +92,13 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public void function_updateRoutine(Routine routine, ValueObserver<Routine> observer) {
-        fetchValue(UpdateRoutine.class, routine, new NoOpValueAdapter<Routine>(), observer );
+        fetchValue(UpdateRoutine.class, routine, new NoOpValueAdapter<Routine>(){
+            @Override
+            public Routine adapt(Routine value) {
+                data_routines().invalidate();
+                return super.adapt(value);
+            }
+        }, observer );
     }
 
 

@@ -4,6 +4,9 @@ import android.content.Context;
 
 import org.monroe.team.android.box.utils.SerializationMap;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import team.monroe.org.pocketfit.presentations.Routine;
 
 public class RoutineManager {
@@ -20,5 +23,13 @@ public class RoutineManager {
 
     public Routine get(String routineId) {
         return routineSerializationMap.get(routineId);
+    }
+
+    public Set<String> listIds() {
+        return new HashSet<>(routineSerializationMap.keys());
+    }
+
+    public void remove(String routineId) {
+        routineSerializationMap.remove(routineId);
     }
 }

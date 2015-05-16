@@ -1,8 +1,5 @@
 package team.monroe.org.pocketfit.fragments;
 
-import android.os.Bundle;
-import android.widget.Toast;
-
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -27,31 +24,34 @@ public class RoutineEditorFragment extends BodyFragment {
     }
 
 
-
     @Override
-    public void onResume() {
-        super.onResume();
-        String routineId = getArguments().getString("routine_id");
+    public void onStart() {
+        super.onStart();
+        final String routineId = getArguments().getString("routine_id");
         if (routineId == null){
             application().error("No routine id");
         }
-        application().function_getRoutine(routineId, observe_function(new PocketFitApp.DataAction<Routine>() {
+        application().function_getRoutine(routineId, observe_function(State.STOP, new PocketFitApp.DataAction<Routine>() {
             @Override
             public void data(Routine routine) {
                 mRoutine = routine;
-                view_text(R.id.edit_title).setText(routine.title);
-                view_text(R.id.edit_description).setText(routine.description);
+                if (mRoutine == null){
+                    mRoutine = new Routine(routineId);
+                }
+                view_text(R.id.edit_title).setText(mRoutine.title);
+                view_text(R.id.edit_description).setText(mRoutine.description);
             }
         }));
     }
 
+
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         if (mRoutine != null){
             mRoutine.title = view_text(R.id.edit_title).getText().toString();
             mRoutine.description = view_text(R.id.edit_description).getText().toString();
-            application().function_updateRoutine(mRoutine, observe_function(new PocketFitApp.DataAction<Routine>() {
+            application().function_updateRoutine(mRoutine, observe_function(State.ANY, new PocketFitApp.DataAction<Routine>() {
                 @Override
                 public void data(Routine data) {
                     //Do nothing here
