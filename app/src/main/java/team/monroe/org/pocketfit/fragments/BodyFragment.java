@@ -1,5 +1,7 @@
 package team.monroe.org.pocketfit.fragments;
 
+import android.net.Uri;
+
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.data.Data;
@@ -33,6 +35,8 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
     protected abstract boolean isHeaderSecondary();
     protected abstract String getHeaderName();
 
+    public void onImageResult(Uri uri) {}
+
 
     public static enum HeaderUpdateRequest {
         SET, NOT_SET, ANIMATE
@@ -57,6 +61,17 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
         });
     }
 
+    public <DataType> PocketFitApp.DataAction<DataType> observe_data_action(final State activeUntilState, final PocketFitApp.DataAction<DataType> observeAction){
+        return new PocketFitApp.DataAction<DataType>(){
+
+            @Override
+            public void data(DataType data) {
+                if (state_before(activeUntilState)){
+                    observeAction.data(data);
+                }
+            }
+        };
+    }
 
     public <DataType> PocketFitApp.FetchObserver<DataType> observe_data_fetch(final State activeUntilState, final PocketFitApp.DataAction<DataType> observeAction){
         return new PocketFitApp.FetchObserver<DataType>(application()) {

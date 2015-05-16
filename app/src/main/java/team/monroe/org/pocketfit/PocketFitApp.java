@@ -1,9 +1,21 @@
 package team.monroe.org.pocketfit;
 
+import android.graphics.Bitmap;
+import android.util.Pair;
+
+import org.monroe.team.android.box.BitmapUtils;
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.data.Data;
+import org.monroe.team.android.box.utils.FileUtils;
+import org.monroe.team.corebox.services.BackgroundTaskManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.uc.CreateRoutineId;
@@ -102,6 +114,103 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
 
+    public void saveImage(final InputStream fromIs, final DataAction<String> imageIdAction) {
+        model().usingService(BackgroundTaskManager.class).execute(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                File saveFile =  FileUtils.storageFile(getApplicationContext(), FileUtils.timeName());
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(saveFile);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+
+                byte[] buffer = new byte[1024];
+                int length;
+
+                try {
+                    while((length = fromIs.read(buffer)) > 0){
+                        outputStream.write(buffer, 0, length);
+                    }
+                    return saveFile.getAbsolutePath();
+                } catch (IOException e) {
+                    if (outputStream != null){
+                        try {
+                            outputStream.close();
+                            outputStream = null;
+                        } catch (IOException e1) {}
+                        saveFile.delete();
+                    }
+                    throw new RuntimeException(e);
+                } finally {
+                    if (outputStream != null){
+                        try {
+                            outputStream.flush();
+                        } catch (IOException e) {throw new RuntimeException("Flush error", e);}
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {}
+                    }
+                    if (fromIs != null){
+                        try {
+                            fromIs.close();
+                        } catch (IOException e) {}
+                    }
+                }
+            }
+        }, new BackgroundTaskManager.TaskCompletionNotificationObserver<String>() {
+            @Override
+            public void onSuccess(final String imagePath) {
+                model().ui(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageIdAction.data(imagePath);
+                    }
+                });
+            }
+
+            @Override
+            public void onFails(final Exception e) {
+                model().ui(new Runnable() {
+                    @Override
+                    public void run() {
+                        error(e);
+                    }
+                });
+            }
+        });
+    }
+
+    public void loadToBitmap(final String imageId, final float reqHeight, final float reqWidth, final DataAction<Pair<String, Bitmap>> observer) {
+        model().usingService(BackgroundTaskManager.class).execute(new Callable<Bitmap>() {
+            @Override
+            public Bitmap call() throws Exception {
+                File file = new File(imageId);
+                if (!file.exists()){
+                    throw new RuntimeException("File not exists = "+imageId);
+                }
+                return BitmapUtils.decodeBitmap(BitmapUtils.fromFile(file),
+                        (int)reqWidth,
+                        (int)reqHeight);
+            }
+        }, new BackgroundTaskManager.TaskCompletionNotificationObserver<Bitmap>() {
+            @Override
+            public void onSuccess(final Bitmap bitmap) {
+                model().ui(new Runnable() {
+                    @Override
+                    public void run() {
+                        observer.data(new Pair<String, Bitmap>(imageId, bitmap));
+                    }
+                });
+            }
+
+            @Override
+            public void onFails(final Exception e) {
+                error(e);
+            }
+        });
+    }
 
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {

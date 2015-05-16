@@ -1,6 +1,11 @@
 package team.monroe.org.pocketfit;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import org.monroe.team.android.box.app.ActivitySupport;
 
@@ -15,6 +20,7 @@ import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
 public class RootActivity extends ActivitySupport<PocketFitApp> {
 
+    private static final int PICK_IMAGE = 30;
     private ArrayList<FragmentBackStackItem> backStack = new ArrayList<>();
 
     @Override
@@ -65,7 +71,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
-                        fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle) )
+                        fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
                 .commit();
     }
 
@@ -115,5 +121,30 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void performImageSelection() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra("return-data", false);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Pick cover"), PICK_IMAGE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No application for image selection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_IMAGE && data != null && resultCode == Activity.RESULT_OK) {
+            Uri _uri = data.getData();
+            if (_uri == null) return;
+            BodyFragment bodyFragment = (BodyFragment) getFragmentManager().findFragmentByTag("body_fragment");
+            bodyFragment.onImageResult(_uri);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
