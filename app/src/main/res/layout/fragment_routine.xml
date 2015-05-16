@@ -170,7 +170,73 @@
                 android:src="@drawable/separator"
                 android:scaleType="centerCrop"
                 android:layout_margin="2dp"/>
-        </LinearLayout>
+
+            <GridLayout
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:layout_columnSpan="2"
+                    android:id="@+id/caption_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cover"
+                    style="@style/Text.Body.Section.Caption"
+                    android:layout_marginBottom="5dp"
+                    />
+
+                <ImageView
+                    android:layout_gravity="right"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:layout_width="40dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/take_picture"/>
+
+                <RelativeLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_columnSpan="2"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    >
+
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/no_covert"
+                        android:scaleType="centerCrop"
+                        />
+
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/round_frame_big"
+                        />
+
+                </RelativeLayout>
+
+            </GridLayout>
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:src="@drawable/separator"
+                android:scaleType="centerCrop"
+                android:layout_margin="2dp"/>
+
+            </LinearLayout>
         </LinearLayout>
 
         </ScrollView>

@@ -19,18 +19,23 @@ public class UpdateRoutine extends UserCaseSupport<Routine, Routine>{
 
         if (origin == null){
             using(RoutineManager.class).updateOrCreate(update);
+            checkForRemove(update);
             return update;
         }
 
         origin.title = diff(origin.title, update.title);
         origin.description = diff(origin.description, update.description);
         using(RoutineManager.class).updateOrCreate(origin);
-        
+
+        checkForRemove(origin);
+
+        return origin;
+    }
+
+    private void checkForRemove(Routine origin) {
         if (!isDefined(origin)){
             using(RoutineManager.class).remove(origin.id);
         }
-
-        return origin;
     }
 
     private boolean isDefined(Routine routine) {
@@ -38,7 +43,7 @@ public class UpdateRoutine extends UserCaseSupport<Routine, Routine>{
     }
 
     private boolean isDefined(String string) {
-        return string != null && !string.isEmpty();
+        return string != null && !string.trim().isEmpty();
     }
 
     private String diff(String origin, String update) {
