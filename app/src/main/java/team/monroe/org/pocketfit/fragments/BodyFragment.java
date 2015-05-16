@@ -1,5 +1,6 @@
 package team.monroe.org.pocketfit.fragments;
 
+import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
 
 import team.monroe.org.pocketfit.RootActivity;
@@ -8,6 +9,7 @@ import team.monroe.org.pocketfit.PocketFitApp;
 public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
 
     private HeaderUpdateRequest headerUpdateRequest = HeaderUpdateRequest.NOT_SET;
+    private boolean stopped = true;
 
     public void feature_headerUpdate(HeaderUpdateRequest headerUpdateRequest) {
         this.headerUpdateRequest = headerUpdateRequest;
@@ -15,6 +17,7 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
 
     @Override
     public void onStart() {
+        stopped = false;
         super.onStart();
         if (headerUpdateRequest != HeaderUpdateRequest.NOT_SET){
             if (headerUpdateRequest == HeaderUpdateRequest.SET){
@@ -36,4 +39,21 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
     public RootActivity owner(){
         return (RootActivity) activity();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopped = true;
+    }
+
+    public <DataType> ApplicationSupport.ValueObserver<DataType> observe_function(final PocketFitApp.DataAction<DataType> observeAction){
+        return application().observe_function(new PocketFitApp.DataAction<DataType>() {
+            @Override
+            public void data(DataType data) {
+                if (!stopped) observeAction.data(data);
+            }
+        });
+    }
+
+
 }

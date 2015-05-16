@@ -59,10 +59,13 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
     }
 
     public void open_Routine(String routineId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("routine_id",routineId);
         backStack.add(new FragmentBackStackItem(RoutinesFragment.class));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
+                .replace(R.id.fragment_container_body,
+                        fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle) )
                 .commit();
     }
 
@@ -97,11 +100,17 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
 
     }
 
+    public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request) {
+        return fragment_instance(fragmentClass,request,null);
+    }
 
-    public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request){
+    public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request, Bundle arguments){
         try {
             BodyFragment fragment = fragmentClass.newInstance();
             fragment.feature_headerUpdate(request);
+            if (arguments != null){
+                fragment.setArguments(arguments);
+            }
             return fragment;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -9,23 +9,14 @@ import org.monroe.team.android.box.data.Data;
 import team.monroe.org.pocketfit.RootActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.TileNoRoutineViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
 public class DashboardFragment extends BodyFragment{
 
-    private final Data.DataChangeObserver<PocketFitApp.RoutineDetails> observer_RoutineDetails = new Data.DataChangeObserver<PocketFitApp.RoutineDetails>() {
-        @Override
-        public void onDataInvalid() {
-            fetchRoutineDetails();
-        }
-
-        @Override
-        public void onData(PocketFitApp.RoutineDetails routineDetails) {
-
-        }
-    };
+    private Data.DataChangeObserver<Routine> observer_activeRoutineObserver;
     private TileCaptionViewPresenter routineCaptionPresenter;
     private TileNoRoutineViewPresenter routineNoTilePresenter;
     private boolean feature_tileAnimation = false;
@@ -39,8 +30,19 @@ public class DashboardFragment extends BodyFragment{
     @Override
     public void onStart() {
         super.onStart();
-        application().data_routineDetails().addDataChangeObserver(observer_RoutineDetails);
-        fetchRoutineDetails();
+        observer_activeRoutineObserver = new Data.DataChangeObserver<Routine>() {
+            @Override
+            public void onDataInvalid() {
+                fetch_ActiveRoutine();
+            }
+
+            @Override
+            public void onData(Routine routine) {
+
+            }
+        };
+        application().data_activeRoutine().addDataChangeObserver(observer_activeRoutineObserver);
+        fetch_ActiveRoutine();
     }
 
     @Override
@@ -58,13 +60,13 @@ public class DashboardFragment extends BodyFragment{
     public void onStop() {
         super.onStop();
         feature_tileAnimation = false;
-        application().data_routineDetails().removeDataChangeObserver(observer_RoutineDetails);
+        application().data_activeRoutine().removeDataChangeObserver(observer_activeRoutineObserver);
     }
 
-    private void fetchRoutineDetails() {
-        application().data_routineDetails().fetch(true, new PocketFitApp.FetchObserver<PocketFitApp.RoutineDetails>(application()){
+    private void fetch_ActiveRoutine() {
+        application().data_activeRoutine().fetch(true, new PocketFitApp.FetchObserver<Routine>(application()){
             @Override
-            public void onFetch(PocketFitApp.RoutineDetails routineDetails) {
+            public void onFetch(Routine routineDetails) {
                 if (routineCaptionPresenter == null) {
                     routineCaptionPresenter = new TileCaptionViewPresenter(inflateView(R.layout.tile_caption));
                     routineCaptionPresenter.hide();

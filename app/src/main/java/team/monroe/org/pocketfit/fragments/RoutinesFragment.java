@@ -4,7 +4,9 @@ package team.monroe.org.pocketfit.fragments;
 import android.os.Bundle;
 import android.view.View;
 
+import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.presentations.Routine;
 
 public class RoutinesFragment extends BodyFragment {
 
@@ -19,7 +21,12 @@ public class RoutinesFragment extends BodyFragment {
         view(R.id.panel_new_routine).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().open_Routine(null);
+                application().function_createEmptyRoutine(application().observe_function(new PocketFitApp.DataAction<Routine>() {
+                    @Override
+                    public void data(Routine routine) {
+                        owner().open_Routine(routine.id);
+                    }
+                }));
             }
         });
     }
