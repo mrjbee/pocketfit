@@ -18,10 +18,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.uc.CreateRoutineId;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
+import team.monroe.org.pocketfit.uc.GetRoutineDayById;
 import team.monroe.org.pocketfit.uc.GetRoutineList;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
+import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 
 public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
@@ -89,8 +92,8 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         };
     }
 
-    public void function_createEmptyRoutine(ValueObserver<String> routineValueObserver) {
-        fetchValue(CreateRoutineId.class,null,new NoOpValueAdapter<String>(){
+    public void function_createId(String prefix, ValueObserver<String> routineValueObserver) {
+        fetchValue(CreateRoutineId.class, prefix,new NoOpValueAdapter<String>(){
             @Override
             public String adapt(String value) {
                 data_routines().invalidate();
@@ -114,11 +117,23 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
 
+    public void function_getRoutineDay(String routineDayId, ValueObserver<RoutineDay> observer) {
+        fetchValue(GetRoutineDayById.class, routineDayId, new NoOpValueAdapter<RoutineDay>(), observer);
+    }
+
+    public void function_updateRoutineDay(RoutineDay mRoutineDay) {
+        fetchValue(UpdateRoutineDay.class, mRoutineDay, new NoOpValueAdapter<Void>(),observe_function(new DataAction<Void>() {
+            @Override
+            public void data(Void data) {}
+        }));
+    }
+
+
     public void saveImage(final InputStream fromIs, final DataAction<String> imageIdAction) {
         model().usingService(BackgroundTaskManager.class).execute(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                File saveFile =  FileUtils.storageFile(getApplicationContext(), FileUtils.timeName());
+                File saveFile = FileUtils.storageFile(getApplicationContext(), FileUtils.timeName());
                 FileOutputStream outputStream = null;
                 try {
                     outputStream = new FileOutputStream(saveFile);
@@ -130,32 +145,37 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
                 int length;
 
                 try {
-                    while((length = fromIs.read(buffer)) > 0){
+                    while ((length = fromIs.read(buffer)) > 0) {
                         outputStream.write(buffer, 0, length);
                     }
                     return saveFile.getAbsolutePath();
                 } catch (IOException e) {
-                    if (outputStream != null){
+                    if (outputStream != null) {
                         try {
                             outputStream.close();
                             outputStream = null;
-                        } catch (IOException e1) {}
+                        } catch (IOException e1) {
+                        }
                         saveFile.delete();
                     }
                     throw new RuntimeException(e);
                 } finally {
-                    if (outputStream != null){
+                    if (outputStream != null) {
                         try {
                             outputStream.flush();
-                        } catch (IOException e) {throw new RuntimeException("Flush error", e);}
+                        } catch (IOException e) {
+                            throw new RuntimeException("Flush error", e);
+                        }
                         try {
                             outputStream.close();
-                        } catch (IOException e) {}
+                        } catch (IOException e) {
+                        }
                     }
-                    if (fromIs != null){
+                    if (fromIs != null) {
                         try {
                             fromIs.close();
-                        } catch (IOException e) {}
+                        } catch (IOException e) {
+                        }
                     }
                 }
             }
@@ -211,7 +231,6 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             }
         });
     }
-
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
         final PocketFitApp owner;

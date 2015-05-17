@@ -4,13 +4,11 @@ package team.monroe.org.pocketfit.fragments;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
@@ -46,7 +44,7 @@ public class RoutinesFragment extends BodyFragment {
         view(R.id.panel_new_routine).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                application().function_createEmptyRoutine(observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
+                application().function_createId("routine",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                     @Override
                     public void data(String routine) {
                         owner().open_Routine(routine);

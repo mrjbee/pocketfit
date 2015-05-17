@@ -37,9 +37,9 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
 
     public void onImageResult(Uri uri) {}
 
-    public String getStringArgument(String routine_id) {
+    public String getStringArgument(String key) {
        if (getArguments() == null)return null;
-       return getArguments().getString("routine_id");
+       return getArguments().getString(key);
     }
 
 

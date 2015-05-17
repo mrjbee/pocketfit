@@ -82,9 +82,10 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .commit();
     }
 
-    public void open_RoutineDay(String routineId) {
+    public void open_RoutineDay(String routineId, String routineDayId) {
         Bundle bundle = new Bundle();
         bundle.putString("routine_id",routineId);
+        bundle.putString("day_id",routineDayId);
         backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id",routineId));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)

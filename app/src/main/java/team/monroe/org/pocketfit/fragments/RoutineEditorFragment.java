@@ -93,7 +93,12 @@ public class RoutineEditorFragment extends BodyFragment {
                 view(R.id.button_add_day).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner().open_RoutineDay(mRoutine.id);
+                        application().function_createId("day",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
+                            @Override
+                            public void data(String id) {
+                                owner().open_RoutineDay(mRoutine.id, id);
+                            }
+                        }));
                     }
                 });
                 if (mRoutine.imageId != null){
