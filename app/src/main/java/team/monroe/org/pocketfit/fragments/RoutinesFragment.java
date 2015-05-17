@@ -7,6 +7,8 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,6 +60,7 @@ public class RoutinesFragment extends BodyFragment {
             public GetViewImplementation.ViewHolder<Routine> create(final View convertView) {
                 return new GetViewImplementation.GenericViewHolder<Routine>() {
 
+                    CheckBox activeCheck = (CheckBox) convertView.findViewById(R.id.item_checkbox);
                     TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
                     TextView subCaption = (TextView) convertView.findViewById(R.id.item_sub_caption);
                     TextView text = (TextView) convertView.findViewById(R.id.item_text);
@@ -71,14 +74,28 @@ public class RoutinesFragment extends BodyFragment {
                     public void cleanup() {
                         slidePanelAC.showWithoutAnimation();
                         imageView.setImageResource(R.drawable.covert_loading);
+                        activeCheck.setOnCheckedChangeListener(null);
+                        activeCheck.setChecked(false);
                     }
 
                     @Override
                     public void update(final Routine routine, int position) {
+                        activeCheck.setChecked(routine.active);
+                        activeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                routine.active = isChecked;
+                                application().function_updateRoutine(routine, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+                                    @Override
+                                    public void data(Void data) {
+                                        fetch_Routines();
+                                    }
+                                }));
+                            }
+                        });
                         caption.setText(routine.title);
                         text.setText(routine.description);
-                        //TODO: add routine real training day count
-                        subCaption.setText(0+" training days");
+                        subCaption.setText(routine.trainingDays.size() + " training days");
                         panelDetails.setOnTouchListener(new SlideTouchGesture(DisplayUtils.dpToPx(100, getResources()),
                                 SlideTouchGesture.Axis.X_LEFT) {
                             @Override

@@ -103,10 +103,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(GetRoutineById.class, routineId, new NoOpValueAdapter<Routine>(), observer);
     }
 
-    public void function_updateRoutine(Routine routine, ValueObserver<Routine> observer) {
-        fetchValue(UpdateRoutine.class, routine, new NoOpValueAdapter<Routine>(){
+    public void function_updateRoutine(Routine routine, ValueObserver<Void> observer) {
+        fetchValue(UpdateRoutine.class, routine, new NoOpValueAdapter<Void>(){
             @Override
-            public Routine adapt(Routine value) {
+            public Void adapt(Void value) {
                 data_routines().invalidate();
                 return super.adapt(value);
             }

@@ -64,10 +64,40 @@
             >
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="right"
+                >
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    style="@style/Text.Checkbox"
+                    />
+
+                <CheckBox
+                    android:id="@+id/item_checkbox"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/activation_check"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
                 >
 
                 <TextView
@@ -81,11 +111,6 @@
                     android:singleLine="true"
                     android:maxLines="1"
                     style="@style/Text.Item.Caption"
-                    />
-                <CheckBox
-                    android:layout_marginTop="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     />
             </LinearLayout>
 

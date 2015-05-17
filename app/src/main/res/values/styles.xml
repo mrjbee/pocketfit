@@ -51,7 +51,7 @@
     </style>
 
     <style name="Text.Item.Caption" parent="AppTheme">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">#ff3a3a3a</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowDx">1</item>
@@ -64,6 +64,10 @@
         <item name="android:textColor">#ffff0c46</item>
     </style>
 
+    <style name="Text.Checkbox" parent="AppTheme">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#ff8e8e8e</item>
+    </style>
 
     <style name="Text.Body" parent="AppTheme">
         <item name="android:textSize">16sp</item>

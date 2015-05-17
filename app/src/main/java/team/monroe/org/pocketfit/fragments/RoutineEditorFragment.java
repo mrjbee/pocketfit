@@ -109,9 +109,9 @@ public class RoutineEditorFragment extends BodyFragment {
         if (mRoutine != null){
             mRoutine.title = view_text(R.id.edit_title).getText().toString();
             mRoutine.description = view_text(R.id.edit_description).getText().toString();
-            application().function_updateRoutine(mRoutine, observe_function(State.ANY, new PocketFitApp.DataAction<Routine>() {
+            application().function_updateRoutine(mRoutine, observe_function(State.ANY, new PocketFitApp.DataAction<Void>() {
                 @Override
-                public void data(Routine data) {
+                public void data(Void nothing) {
                     //Do nothing here
                 }
             }));
