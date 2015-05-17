@@ -18,6 +18,7 @@ import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
+import team.monroe.org.pocketfit.fragments.RoutineTrainingFragment;
 import team.monroe.org.pocketfit.fragments.RoutineTrainingsFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
@@ -81,14 +82,14 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .commit();
     }
 
-    public void open_RoutineDays(String routineId) {
+    public void open_RoutineDay(String routineId) {
         Bundle bundle = new Bundle();
         bundle.putString("routine_id",routineId);
         backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id",routineId));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
-                        fragment_instance(RoutineTrainingsFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
+                        fragment_instance(RoutineTrainingFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
                 .commit();
     }
 

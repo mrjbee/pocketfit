@@ -42,7 +42,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Routine Description"
-                    android:singleLine="true"
+                    android:singleLine="false"
+                    android:lines="3"
+                    android:maxLines="3"
                     style="@style/Text.Body.Optional"
                     />
 

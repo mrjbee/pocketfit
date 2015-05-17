@@ -1,7 +1,5 @@
 package team.monroe.org.pocketfit.fragments;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
 import java.io.FileNotFoundException;
@@ -96,7 +93,7 @@ public class RoutineEditorFragment extends BodyFragment {
                 view(R.id.button_add_day).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner().open_RoutineDays(mRoutine.id);
+                        owner().open_RoutineDay(mRoutine.id);
                     }
                 });
                 if (mRoutine.imageId != null){
