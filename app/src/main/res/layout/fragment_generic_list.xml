@@ -34,11 +34,12 @@
             android:background="@drawable/body_top_bottom">
 
             <TextView
+                android:id="@+id/caption_new_item"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Do you want to setup new training?"
+                android:text="Example"
                 style="@style/Text.Body.Caption"
                 />
 

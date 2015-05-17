@@ -11,14 +11,15 @@ import org.monroe.team.android.box.app.ActivitySupport;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
+import team.monroe.org.pocketfit.fragments.RoutineTrainingsFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
-import team.monroe.org.pocketfit.fragments.TrainingDayFragment;
-import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class RootActivity extends ActivitySupport<PocketFitApp> {
 
@@ -55,7 +56,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                     .replace(R.id.fragment_container_body, fragment_instance(
                             backStackItem.fragmentClass,
                             BodyFragment.HeaderUpdateRequest.ANIMATE,
-                            backStackItem.arguments))
+                            backStackItem.getArgumentBundle()))
                     .commit();
         }
     }
@@ -83,11 +84,11 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
     public void open_RoutineDays(String routineId) {
         Bundle bundle = new Bundle();
         bundle.putString("routine_id",routineId);
-        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class, bundle));
+        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id",routineId));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
-                        fragment_instance(TrainingDayFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
+                        fragment_instance(RoutineTrainingsFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
                 .commit();
     }
 
@@ -111,24 +112,6 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         outState.putSerializable("back_stack", backStack);
     }
 
-
-
-
-    public static class FragmentBackStackItem implements Serializable{
-
-        private final Class<? extends BodyFragment> fragmentClass;
-        private final Bundle arguments;
-
-        public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass) {
-            this.fragmentClass = fragmentClass;
-            arguments = null;
-        }
-
-        public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass, Bundle arguments) {
-            this.fragmentClass = fragmentClass;
-            this.arguments = arguments;
-        }
-    }
 
     public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request) {
         return fragment_instance(fragmentClass,request,null);
@@ -171,4 +154,30 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public static class FragmentBackStackItem implements Serializable{
+
+        private final Class<? extends BodyFragment> fragmentClass;
+        private final Map<String,Serializable> argumentMap = new HashMap<>();
+
+        public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass) {
+            this.fragmentClass = fragmentClass;
+        }
+
+        public Bundle getArgumentBundle(){
+            if (argumentMap.size() == 0) return null;
+            Bundle bundle = new Bundle();
+            for (Map.Entry<String, Serializable> entry : argumentMap.entrySet()) {
+                bundle.putSerializable(entry.getKey(), entry.getValue());
+            }
+            return bundle;
+        }
+
+        public FragmentBackStackItem addArgument(String key, Serializable value){
+            argumentMap.put(key, value);
+            return this;
+        }
+
+    }
+
 }
