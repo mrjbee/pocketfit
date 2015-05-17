@@ -8,13 +8,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/body_top">
-        <ListView
+        <team.monroe.org.pocketfit.view.SlideOffListView
             android:id="@+id/list_routine"
             android:layout_marginTop="47dp"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-        </ListView>
+            android:layout_height="fill_parent"
+            android:listSelector="@null"
+            android:scrollbars="none"/>
         <include
             android:layout_below="@+id/panel_new_routine"
             android:id="@+id/panel_no_items"

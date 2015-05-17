@@ -1,18 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="160dp">
 
-    <TextView
-        android:text="Example"
-        android:id="@+id/item_caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Text.Body.Section.Caption"/>
-    <TextView
-        android:text="Example"
-        android:id="@+id/item_sub_caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Text.Body"/>
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
+        android:background="#ffff0a09"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:gravity="right"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/Text.List.Action"
+            android:text="Edit"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:id="@+id/item_panel_details"
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
+        android:background="#f3f3f3"
+        android:padding="10dp"
+        >
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            >
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_centerInParent="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/covert_loading"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/round_frame"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/item_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Example"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    style="@style/Text.Item.Caption"
+                    />
+                <CheckBox
+                    android:layout_marginTop="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_sub_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                android:lines="1"
+                android:singleLine="true"
+                android:maxLines="1"
+                style="@style/Text.Item.Sub.Caption"
+                />
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                style="@style/Text.Body.Optional"
+                android:maxLines="3"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

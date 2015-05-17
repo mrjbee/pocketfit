@@ -1,27 +1,36 @@
 package team.monroe.org.pocketfit.fragments;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
+import org.monroe.team.android.box.app.ui.SlideTouchGesture;
+import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 import org.monroe.team.android.box.data.Data;
+import org.monroe.team.android.box.utils.DisplayUtils;
 
 import java.util.List;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.view.SlideOffListView;
 
 public class RoutinesFragment extends BodyFragment {
 
     private Data.DataChangeObserver<List> observer_routines;
     private GenericListViewAdapter<Routine, GetViewImplementation.ViewHolder<Routine>> mRoutinesAdapter;
-    private ListView mRoutineListView;
+    private SlideOffListView mRoutineListView;
     private View mNoItemsView;
 
     @Override
@@ -50,19 +59,78 @@ public class RoutinesFragment extends BodyFragment {
                 return new GetViewImplementation.GenericViewHolder<Routine>() {
 
                     TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
-                    TextView text = (TextView) convertView.findViewById(R.id.item_sub_caption);
+                    TextView subCaption = (TextView) convertView.findViewById(R.id.item_sub_caption);
+                    TextView text = (TextView) convertView.findViewById(R.id.item_text);
+                    ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
+                    View panelDetails = convertView.findViewById(R.id.item_panel_details);
+
+                    AppearanceController slidePanelAC = animateAppearance(panelDetails,xSlide(0f,100f))
+                            .showAnimation(duration_constant(100), interpreter_accelerate_decelerate()).build();
 
                     @Override
-                    public void update(Routine routine, int position) {
+                    public void cleanup() {
+                        slidePanelAC.showWithoutAnimation();
+                        imageView.setImageResource(R.drawable.covert_loading);
+                    }
+
+                    @Override
+                    public void update(final Routine routine, int position) {
                         caption.setText(routine.title);
                         text.setText(routine.description);
+                        //TODO: add routine real training day count
+                        subCaption.setText(0+" training days");
+                        panelDetails.setOnTouchListener(new SlideTouchGesture(DisplayUtils.dpToPx(100, getResources()),
+                                SlideTouchGesture.Axis.X_LEFT) {
+                            @Override
+                            protected float applyFraction() {
+                                return 0.95f;
+                            }
+
+                            @Override
+                            protected void onEnd(float x, float y, float slideValue, float fraction) {
+                                mRoutineListView.disabled = false;
+                            }
+
+                            @Override
+                            protected void onApply(float x, float y, float slideValue, float fraction) {
+                                owner().open_Routine(routine.id);
+                            }
+
+                            @Override
+                            protected void onProgress(float x, float y, float slideValue, float fraction) {
+                                if (Math.abs(slideValue) < 80) return;
+                                mRoutineListView.disabled = true;
+                                panelDetails.setTranslationX(-(slideValue));
+                            }
+                            @Override
+                            protected void onCancel(float x, float y, float slideValue, float fraction) {
+                                super.onCancel(x, y, slideValue, fraction);
+                                slidePanelAC.show();
+                            }
+                        });
+                        if (routine.imageId == null){
+                            imageView.setImageResource(R.drawable.no_covert);
+                        }else{
+                            final String finalImageId = routine.imageId;
+                            application().loadToBitmap(routine.imageId,
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
+                                        @Override
+                                        public void data(Pair<String, Bitmap> data) {
+                                            if (finalImageId.equals(data.first)){
+                                                imageView.setImageBitmap(data.second);
+                                            }
+                                        }
+                                    });
+                        }
                     }
 
                 };
             }
-        },R.layout.item_debug);
+        },R.layout.item_routine);
 
-        mRoutineListView = view_list(R.id.list_routine);
+        mRoutineListView = view(R.id.list_routine, SlideOffListView.class);
         mRoutineListView.setAdapter(mRoutinesAdapter);
         mRoutineListView.setVisibility(View.INVISIBLE);
 
