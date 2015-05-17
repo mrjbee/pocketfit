@@ -217,7 +217,7 @@
                         android:layout_centerInParent="true"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:src="@drawable/no_covert"
+                        android:src="@drawable/covert_loading"
                         android:scaleType="centerCrop"
                         />
 

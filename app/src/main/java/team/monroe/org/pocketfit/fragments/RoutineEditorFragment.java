@@ -57,6 +57,7 @@ public class RoutineEditorFragment extends BodyFragment {
                 @Override
                 public void data(String imageId) {
                     restoreImage(imageId);
+                    mRoutine.imageId = imageId;
                 }
             }));
         } catch (FileNotFoundException e) {
@@ -69,8 +70,8 @@ public class RoutineEditorFragment extends BodyFragment {
         application().loadToBitmap(imageId, DisplayUtils.dpToPx(300, getResources()), DisplayUtils.dpToPx(300,getResources()), observe_data_action(State.STOP,new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
             @Override
             public void data(Pair<String, Bitmap> data) {
+                if (!data.first.equals(mRoutine.imageId)) return;
                 view(R.id.image_cover, ImageView.class).setImageBitmap(data.second);
-                mRoutine.imageId = data.first;
             }
         }));
     }
@@ -94,6 +95,8 @@ public class RoutineEditorFragment extends BodyFragment {
                 view_text(R.id.edit_description).setText(mRoutine.description);
                 if (mRoutine.imageId != null){
                     restoreImage(mRoutine.imageId);
+                }else{
+                    view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
                 }
             }
         }));
