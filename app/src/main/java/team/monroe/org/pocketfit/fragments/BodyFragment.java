@@ -37,6 +37,11 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
 
     public void onImageResult(Uri uri) {}
 
+    public String getStringArgument(String routine_id) {
+       if (getArguments() == null)return null;
+       return getArguments().getString("routine_id");
+    }
+
 
     public static enum HeaderUpdateRequest {
         SET, NOT_SET, ANIMATE

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="130dp">
+
+    <LinearLayout
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:id="@+id/item_panel_details"
+        android:layout_width="fill_parent"
+        android:layout_height="130dp"
+        android:background="#f3f3f3"
+        android:padding="30dp"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+                >
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/item_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Example"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    style="@style/Text.Item.Caption"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_sub_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                android:lines="1"
+                android:singleLine="true"
+                android:maxLines="1"
+                style="@style/Text.Item.Sub.Caption"
+                />
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                style="@style/Text.Body.Optional"
+                android:maxLines="3"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

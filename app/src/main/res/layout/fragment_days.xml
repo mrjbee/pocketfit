@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginTop="100dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/body_top">
+
+        <ListView
+            android:id="@+id/list_items"
+            android:layout_marginTop="47dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:listSelector="@null"
+            android:scrollbars="none"/>
+
+        <include
+            android:layout_below="@+id/panel_new_item"
+            android:id="@+id/panel_no_items"
+            layout="@layout/panel_no_items"
+            android:layout_height="60dp"
+            android:layout_width="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/panel_new_item"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/body_top_bottom">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Do you want to setup new training?"
+                style="@style/Text.Body.Caption"
+                />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:src="@drawable/arrow_thin_right"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>

@@ -80,7 +80,7 @@ public class RoutineEditorFragment extends BodyFragment {
     @Override
     public void onStart() {
         super.onStart();
-        final String routineId = getArguments().getString("routine_id");
+        final String routineId = super.getStringArgument("routine_id");
         if (routineId == null){
             application().error("No routine id");
         }
@@ -93,6 +93,12 @@ public class RoutineEditorFragment extends BodyFragment {
                 }
                 view_text(R.id.edit_title).setText(mRoutine.title);
                 view_text(R.id.edit_description).setText(mRoutine.description);
+                view(R.id.button_add_day).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        owner().open_RoutineDays(mRoutine.id);
+                    }
+                });
                 if (mRoutine.imageId != null){
                     restoreImage(mRoutine.imageId);
                 }else{

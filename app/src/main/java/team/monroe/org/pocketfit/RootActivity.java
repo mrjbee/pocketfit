@@ -17,6 +17,8 @@ import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
+import team.monroe.org.pocketfit.fragments.TrainingDayFragment;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class RootActivity extends ActivitySupport<PocketFitApp> {
 
@@ -50,7 +52,10 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
            FragmentBackStackItem backStackItem = backStack.remove(backStack.size()-1);
            getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left)
-                    .replace(R.id.fragment_container_body, fragment_instance(backStackItem.fragmentClass, BodyFragment.HeaderUpdateRequest.ANIMATE))
+                    .replace(R.id.fragment_container_body, fragment_instance(
+                            backStackItem.fragmentClass,
+                            BodyFragment.HeaderUpdateRequest.ANIMATE,
+                            backStackItem.arguments))
                     .commit();
         }
     }
@@ -75,6 +80,17 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .commit();
     }
 
+    public void open_RoutineDays(String routineId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("routine_id",routineId);
+        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class, bundle));
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .replace(R.id.fragment_container_body,
+                        fragment_instance(TrainingDayFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
+                .commit();
+    }
+
     public void header(String headerText, boolean secondary) {
         HeaderFragment fragment = getHeaderFragment();
         fragment.changeCaption(headerText, secondary, false);
@@ -96,14 +112,22 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
     }
 
 
+
+
     public static class FragmentBackStackItem implements Serializable{
 
         private final Class<? extends BodyFragment> fragmentClass;
+        private final Bundle arguments;
 
         public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass) {
             this.fragmentClass = fragmentClass;
+            arguments = null;
         }
 
+        public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass, Bundle arguments) {
+            this.fragmentClass = fragmentClass;
+            this.arguments = arguments;
+        }
     }
 
     public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request) {

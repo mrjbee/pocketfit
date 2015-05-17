@@ -37,19 +37,19 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
         }
 
         mainHeaderContainerAC = animateAppearance(view(R.id.header_main_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
-                .showAnimation(duration_constant(300),interpreter_overshot())
-                .hideAnimation(duration_constant(300), interpreter_accelerate(0.5f))
+                .showAnimation(duration_constant(200),interpreter_overshot())
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
                 .hideAndGone()
                 .build();
 
         secondaryHeaderContainerAC = combine(
                 animateAppearance(view(R.id.header_secondary_container), xSlide(0, -DisplayUtils.screenWidth(getResources()) / 2))
-                .showAnimation(duration_constant(300), interpreter_overshot())
-                .hideAnimation(duration_constant(300), interpreter_accelerate(0.5f))
+                .showAnimation(duration_constant(200), interpreter_overshot())
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
                 .hideAndGone(),
                 animateAppearance(view(R.id.secondary_caption_arrow),rotate(0, -180))
                 .showAnimation(duration_constant(500), interpreter_overshot())
-                .hideAnimation(duration_constant(500), interpreter_accelerate(0.5f))
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
                 .hideAndGone());
 
         if (secondaryHeaderActivated){
