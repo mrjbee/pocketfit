@@ -19,7 +19,6 @@ import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineTrainingFragment;
-import team.monroe.org.pocketfit.fragments.RoutineTrainingsFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
 public class RootActivity extends ActivitySupport<PocketFitApp> {

@@ -51,7 +51,19 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"/>
 
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Position in routine"
+                        style="@style/Text.Body.Optional"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinner_position"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
                     <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"

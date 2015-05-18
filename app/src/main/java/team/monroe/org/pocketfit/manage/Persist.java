@@ -33,4 +33,15 @@ public class Persist {
         }
     }
 
+    public static class DayExercise implements Serializable {
+
+        public final String id;
+        public final String dayId;
+
+        public DayExercise(String id, String dayId) {
+            this.id = id;
+            this.dayId = dayId;
+        }
+    }
+
 }
