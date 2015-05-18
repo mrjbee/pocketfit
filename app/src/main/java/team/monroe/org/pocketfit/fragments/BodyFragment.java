@@ -1,6 +1,9 @@
 package team.monroe.org.pocketfit.fragments;
 
 import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
@@ -40,6 +43,15 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
     public String getStringArgument(String key) {
        if (getArguments() == null)return null;
        return getArguments().getString(key);
+    }
+
+    public android.view.View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
+        return null;
+    }
+
+    public boolean getBoolArgument(String chooserMode) {
+        if (getArguments() == null) return false;
+        return Boolean.parseBoolean(getArguments().getString(chooserMode,"false"));
     }
 
 

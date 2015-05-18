@@ -12,7 +12,7 @@ public class Routine{
     public String description = null;
     public String imageId = null;
     public Boolean active = null;
-    public List<RoutineDay> trainingDays = null;
+    public List<RoutineDay> trainingDays = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

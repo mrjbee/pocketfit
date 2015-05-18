@@ -3,6 +3,7 @@ package team.monroe.org.pocketfit.fragments;
 import android.animation.Animator;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.monroe.team.android.box.app.FragmentSupport;
@@ -14,6 +15,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RootActivity;
 
 public class HeaderFragment extends FragmentSupport<PocketFitApp>{
 
@@ -36,17 +38,27 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
             headerCaption = savedInstanceState.getString("header_caption","Uppss Not Set");
         }
 
-        mainHeaderContainerAC = animateAppearance(view(R.id.header_main_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
+        mainHeaderContainerAC = combine(
+                animateAppearance(view(R.id.header_main_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
                 .showAnimation(duration_constant(200),interpreter_overshot())
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-                .hideAndGone()
-                .build();
+                .hideAndGone(),
+
+                animateAppearance(view(R.id.panel_actions),xSlide(0, DisplayUtils.screenWidth(getResources())/2))
+                .showAnimation(duration_constant(200),interpreter_overshot())
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
+        );
 
         secondaryHeaderContainerAC = combine(
                 animateAppearance(view(R.id.header_secondary_container), xSlide(0, -DisplayUtils.screenWidth(getResources()) / 2))
                 .showAnimation(duration_constant(200), interpreter_overshot())
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
                 .hideAndGone(),
+
+                animateAppearance(view(R.id.panel_actions),xSlide(0, DisplayUtils.screenWidth(getResources())/2))
+                .showAnimation(duration_constant(200),interpreter_overshot())
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f)),
+
                 animateAppearance(view(R.id.secondary_caption_arrow),rotate(0, -180))
                 .showAnimation(duration_constant(500), interpreter_overshot())
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
@@ -56,18 +68,28 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
             mainHeaderContainerAC.hideWithoutAnimation();
             secondaryHeaderContainerAC.showWithoutAnimation();
         }else {
-            mainHeaderContainerAC.showWithoutAnimation();
             secondaryHeaderContainerAC.hideWithoutAnimation();
+            mainHeaderContainerAC.showWithoutAnimation();
         }
 
-        TextView captionView = getHeaderCaptionView();
-        captionView.setText(headerCaption);
+        build_header();
+
         view(R.id.header_secondary_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackHeaderArrow();
             }
         });
+    }
+
+    private void build_header() {
+        getHeaderCaptionView().setText(headerCaption);
+        ViewGroup group = view(R.id.panel_actions, ViewGroup.class);
+        group.removeAllViews();
+        View answer = ((RootActivity)activity()).build_actions(group);
+        if (answer != null) {
+            group.addView(answer);
+        }
     }
 
     private void onBackHeaderArrow() {
@@ -97,7 +119,7 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
                     animator.addListener(new AnimatorListenerSupport() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            getHeaderCaptionView().setText(headerCaption);
+                            build_header();
                             showController.hideWithoutAnimation();
                             showController.show();
                         }
@@ -107,7 +129,7 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp>{
         } else {
             hideController.hideWithoutAnimation();
             showController.showWithoutAnimation();
-            getHeaderCaptionView().setText(headerCaption);
+            build_header();
         }
     }
 

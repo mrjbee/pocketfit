@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        >
+        <RelativeLayout
+            android:layout_marginTop="100dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/body_top">
+            <LinearLayout
+                android:id="@+id/panel_training"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:listSelector="@null"
+                android:scrollbars="none"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/panel_new_routine"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/body_top_bottom">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Looking for exercises and challenges?"
+                    style="@style/Text.Body.Caption"
+                    />
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/arrow_thin_right"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>

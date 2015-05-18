@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -30,6 +31,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     private Data<Routine> data_activeRoutine;
     private Data<List> data_routines;
+    private Data<List> data_exercises;
 
     @Override
     protected PocketFitModel createModel() {
@@ -55,6 +57,13 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             }
         };
 
+        data_exercises = new Data<List>(List.class, model()) {
+            @Override
+            protected List<Routine> provideData() {
+                return Collections.EMPTY_LIST;
+            }
+        };
+
     }
 
 
@@ -76,6 +85,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public Data<List> data_routines() {
         return data_routines;
+    }
+
+    public Data<List> data_exercises() {
+        return data_exercises;
     }
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {

@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.monroe.team.android.box.app.ActivitySupport;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
+import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
@@ -36,7 +39,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
             fragment.feature_tileAnimation(true);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container_body, fragment)
+                    .add(R.id.fragment_container_body, fragment,"body_fragment")
                     .commit();
 
         } else {
@@ -66,7 +69,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         backStack.add(new FragmentBackStackItem(DashboardFragment.class));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,fragment_instance(RoutinesFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE) )
+                .replace(R.id.fragment_container_body,fragment_instance(RoutinesFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE),"body_fragment" )
                 .commit();
     }
 
@@ -90,6 +93,15 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
                         fragment_instance(RoutineDayEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
+                .commit();
+    }
+
+    public void open_exercises_editor() {
+        backStack.add(new FragmentBackStackItem(DashboardFragment.class));
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .replace(R.id.fragment_container_body,
+                        fragment_instance(ExercisesListFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE))
                 .commit();
     }
 
@@ -150,11 +162,22 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         if(requestCode == PICK_IMAGE && data != null && resultCode == Activity.RESULT_OK) {
             Uri _uri = data.getData();
             if (_uri == null) return;
-            BodyFragment bodyFragment = (BodyFragment) getFragmentManager().findFragmentByTag("body_fragment");
+            BodyFragment bodyFragment = getBodyFragment();
             bodyFragment.onImageResult(_uri);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private BodyFragment getBodyFragment() {
+        return (BodyFragment) getFragmentManager().findFragmentById(R.id.fragment_container_body);
+    }
+
+    public View build_actions(ViewGroup actionPanel) {
+            if (getBodyFragment() == null) return null;
+            return getBodyFragment().build_HeaderActionsView(actionPanel, getLayoutInflater());
+    }
+
+
 
     public static class FragmentBackStackItem implements Serializable{
 

@@ -148,7 +148,12 @@ public class RoutineEditorFragment extends BodyFragment {
                         application().function_createId("day",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                             @Override
                             public void data(String id) {
-                                owner().open_RoutineDay(mRoutine.id, id);
+                                String title = view_text(R.id.edit_title).getText().toString();
+                                if (!title.trim().isEmpty()){
+                                    owner().open_RoutineDay(mRoutine.id, id);
+                                }else{
+                                    Toast.makeText(getActivity(), "Please add title first", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }));
                     }
@@ -164,6 +169,7 @@ public class RoutineEditorFragment extends BodyFragment {
                 int totalCycle = 0;
                 int totalDays = 0;
                 int totalExercises = 0;
+
                 for (RoutineDay trainingDay : mRoutine.trainingDays) {
                     totalCycle += 1+trainingDay.restDays;
                     totalDays ++;

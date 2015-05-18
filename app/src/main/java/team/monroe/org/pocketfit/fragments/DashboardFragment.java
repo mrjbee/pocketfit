@@ -1,6 +1,7 @@
 package team.monroe.org.pocketfit.fragments;
 
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -111,5 +112,17 @@ public class DashboardFragment extends BodyFragment{
 
     public void feature_tileAnimation(boolean feature_tileAnimation) {
         this.feature_tileAnimation = feature_tileAnimation;
+    }
+
+    @Override
+    public View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
+        View view = layoutInflater.inflate(R.layout.actions_dashboard, actionPanel, false);
+        view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                owner().open_exercises_editor();
+            }
+        });
+        return view;
     }
 }
