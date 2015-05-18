@@ -14,20 +14,22 @@
             android:layout_height="fill_parent"
             android:paddingTop="100dp">
 
-
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/body_top"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <GridLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="20dp"
                     android:orientation="vertical">
 
                     <TextView
+                        android:layout_marginTop="20dp"
                         android:id="@+id/text_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -37,15 +39,25 @@
 
                     <TextView
                         android:id="@+id/text_description"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Text.Body.Optional"
                         android:text="Example"
                         />
 
+                    <ImageView
+                        android:id="@+id/action_change_exercise"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="50dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/arrow_thin_right"
+                        />
 
-                </LinearLayout>
+                </GridLayout>
                     <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"

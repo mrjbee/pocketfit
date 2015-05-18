@@ -73,16 +73,23 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         FragmentBackStackItem producerBackStack = backStack.remove(backStack.size()-1);
         Class<BodyFragment> consumerFragmentClass = (Class<BodyFragment>) producerBackStack.argumentMap.get("fragment_class");
 
-        FragmentBackStackItem consumerBackStackItem = new FragmentBackStackItem(consumerFragmentClass);
-        for (Map.Entry<String, Serializable> stringSerializableEntry : producerBackStack.argumentMap.entrySet()) {
-            consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
+        FragmentBackStackItem consumerBackStackItem;
+        if (consumerFragmentClass != null){
+            consumerBackStackItem = new FragmentBackStackItem(consumerFragmentClass);
+            for (Map.Entry<String, Serializable> stringSerializableEntry : producerBackStack.argumentMap.entrySet()) {
+                consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
+            }
+            backStack.add(consumerBackStackItem);
+        }else {
+            consumerBackStackItem = backStack.get(backStack.size()-1);
         }
+
         for (Map.Entry<String, String> stringSerializableEntry : results.entrySet()) {
             consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
         }
-        backStack.add(consumerBackStackItem);
+
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left)
+                .setCustomAnimations(R.animator.card_flip_in, R.animator.card_flip_out)
                 .replace(R.id.fragment_container_body, fragment_instance(
                         consumerBackStackItem.fragmentClass,
                         BodyFragment.HeaderUpdateRequest.ANIMATE,
@@ -130,17 +137,19 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .commit();
     }
 
-    public void open_exercisesAsChooser(String routineDayId, String routineExerciseId) {
+    public void open_exercisesAsChooser(String routineDayId, String routineExerciseId, boolean moveToExerciseConfigFragment) {
 
         FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(ExercisesListFragment.class)
                 .addArgument("routine_exercise_id",routineExerciseId)
                 .addArgument("day_id",routineDayId)
-                .addArgument("chooserMode", "true")
-                .addArgument("fragment_class", DayExerciseEditorFragment.class);
+                .addArgument("chooserMode", "true");
+        if (moveToExerciseConfigFragment){
+            fragmentBackStackItem.addArgument("fragment_class", DayExerciseEditorFragment.class);
+        }
 
         backStack.add(fragmentBackStackItem);
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .setCustomAnimations(R.animator.card_flip_in_right, R.animator.card_flip_out_right)
                 .replace(R.id.fragment_container_body,
                         fragment_instance(
                                 ExercisesListFragment.class,

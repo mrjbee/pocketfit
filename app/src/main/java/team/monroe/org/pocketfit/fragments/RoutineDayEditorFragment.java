@@ -77,7 +77,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
                     public void data(String id) {
                         String title = view_text(R.id.edit_description).getText().toString();
                         if (!title.trim().isEmpty()){
-                            owner().open_exercisesAsChooser(mRoutineDay.id, id);
+                            owner().open_exercisesAsChooser(mRoutineDay.id, id, true);
                         }else{
                             Toast.makeText(getActivity(), "Please add description first", Toast.LENGTH_SHORT).show();
                         }
