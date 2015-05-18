@@ -18,6 +18,7 @@ import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
+import team.monroe.org.pocketfit.fragments.DayExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
@@ -67,6 +68,27 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         }
     }
 
+    public void on_choose(Map<String, String> results) {
+
+        FragmentBackStackItem producerBackStack = backStack.remove(backStack.size()-1);
+        Class<BodyFragment> consumerFragmentClass = (Class<BodyFragment>) producerBackStack.argumentMap.get("fragment_class");
+
+        FragmentBackStackItem consumerBackStackItem = new FragmentBackStackItem(consumerFragmentClass);
+        for (Map.Entry<String, Serializable> stringSerializableEntry : producerBackStack.argumentMap.entrySet()) {
+            consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
+        }
+        for (Map.Entry<String, String> stringSerializableEntry : results.entrySet()) {
+            consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
+        }
+        backStack.add(consumerBackStackItem);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left)
+                .replace(R.id.fragment_container_body, fragment_instance(
+                        consumerBackStackItem.fragmentClass,
+                        BodyFragment.HeaderUpdateRequest.ANIMATE,
+                        consumerBackStackItem.getArgumentBundle()))
+                .commit();
+    }
 
     public void open_Routines() {
         backStack.add(new FragmentBackStackItem(RoutinesFragment.class));
@@ -79,7 +101,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
     public void open_Routine(String routineId) {
         Bundle bundle = new Bundle();
         bundle.putString("routine_id",routineId);
-        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id",routineId));
+        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id", routineId));
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
@@ -105,6 +127,25 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
                         fragment_instance(ExercisesListFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE))
+                .commit();
+    }
+
+    public void open_exercisesAsChooser(String routineDayId, String routineExerciseId) {
+
+        FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(ExercisesListFragment.class)
+                .addArgument("routine_exercise_id",routineExerciseId)
+                .addArgument("day_id",routineDayId)
+                .addArgument("chooserMode", "true")
+                .addArgument("fragment_class", DayExerciseEditorFragment.class);
+
+        backStack.add(fragmentBackStackItem);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .replace(R.id.fragment_container_body,
+                        fragment_instance(
+                                ExercisesListFragment.class,
+                                BodyFragment.HeaderUpdateRequest.ANIMATE,
+                                fragmentBackStackItem.getArgumentBundle()))
                 .commit();
     }
 

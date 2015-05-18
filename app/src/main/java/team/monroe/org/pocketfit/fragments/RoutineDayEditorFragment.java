@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
@@ -67,6 +68,23 @@ public class RoutineDayEditorFragment extends BodyFragment{
         }, R.layout.item_simple);
         mPositionAdapter.add(POSITION_AFTER_ALL);
         mPositionSpinner.setAdapter(mPositionAdapter);
+
+        view(R.id.button_add_exercise).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                application().function_createId("dex",observe_function(State.STOP, new PocketFitApp.DataAction<String>() {
+                    @Override
+                    public void data(String id) {
+                        String title = view_text(R.id.edit_description).getText().toString();
+                        if (!title.trim().isEmpty()){
+                            owner().open_exercisesAsChooser(mRoutineDay.id, id);
+                        }else{
+                            Toast.makeText(getActivity(), "Please add description first", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }));
+            }
+        });
     }
 
     @Override
@@ -111,6 +129,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
         }));
     }
 
+    //button_add_exercise
     @Override
     public void onStop() {
         super.onStop();

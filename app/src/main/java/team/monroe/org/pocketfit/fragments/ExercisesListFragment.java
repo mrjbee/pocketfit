@@ -2,7 +2,9 @@ package team.monroe.org.pocketfit.fragments;
 
 import org.monroe.team.android.box.data.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.presentations.Exercise;
@@ -24,7 +26,9 @@ public class ExercisesListFragment extends GenericListFragment<Exercise> {
     @Override
     protected void onItemClick(Exercise exercise) {
         if (getBoolArgument("chooserMode")){
-            throw new IllegalStateException();
+            Map<String, String> results = new HashMap<>();
+            results.put("exercise_id", exercise.id);
+            owner().on_choose(results);
         }else {
             owner().open_exercisesEditor(exercise.id);
         }
