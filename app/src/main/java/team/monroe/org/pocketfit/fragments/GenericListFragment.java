@@ -24,8 +24,16 @@ public abstract class GenericListFragment<ItemsType> extends BodyFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         ((TextView)view.findViewById(R.id.caption_new_item)).setText(getNewItemCaption());
+        view.findViewById(R.id.panel_new_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNewItemClick();
+            }
+        });
         return view;
     }
+
+    protected abstract void onNewItemClick();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

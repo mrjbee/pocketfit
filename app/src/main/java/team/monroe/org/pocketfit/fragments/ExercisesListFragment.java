@@ -12,6 +12,16 @@ public class ExercisesListFragment extends GenericListFragment<Exercise> {
     private Data.DataChangeObserver<List> observer_exercise;
 
     @Override
+    protected void onNewItemClick() {
+        application().function_createId("exercise",observe_function(State.STOP, new PocketFitApp.DataAction<String>() {
+            @Override
+            public void data(String id) {
+                owner().open_exercisesEditor(id);
+            }
+        }));
+    }
+
+    @Override
     protected String item_text(Exercise item) {
         return item.description;
     }

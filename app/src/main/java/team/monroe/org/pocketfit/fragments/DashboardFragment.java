@@ -120,7 +120,7 @@ public class DashboardFragment extends BodyFragment{
         view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().open_exercises_editor();
+                owner().open_exercisesAsEditor();
             }
         });
         return view;
