@@ -17,8 +17,8 @@ import java.util.Map;
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
+import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
-import team.monroe.org.pocketfit.fragments.RoutineTrainingFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
 public class RootActivity extends ActivitySupport<PocketFitApp> {
@@ -89,7 +89,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
                 .replace(R.id.fragment_container_body,
-                        fragment_instance(RoutineTrainingFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
+                        fragment_instance(RoutineDayEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
                 .commit();
     }
 

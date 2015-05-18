@@ -14,7 +14,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 
-public class RoutineTrainingFragment extends BodyFragment{
+public class RoutineDayEditorFragment extends BodyFragment{
 
     private final static PositionDescription POSITION_AFTER_ALL = new PositionDescription("Last. After All", UpdateRoutineDay.RoutineDayUpdate.INDEX_ADD_LAST);
 
@@ -117,7 +117,7 @@ public class RoutineTrainingFragment extends BodyFragment{
         mRoutineDay.description = view_text(R.id.edit_description).getText().toString();
         mRoutineDay.restDays = mRestLongSpinner.getSelectedItemPosition();
         PositionDescription positionDescription = (PositionDescription) mPositionSpinner.getSelectedItem();
-        application().function_updateRoutineDay(mRoutineDay, mRoutineId, positionDescription.index);
+        application().function_updateRoutineDay(mRoutineDay, mRoutineId, positionDescription.index, null);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class RoutineTrainingFragment extends BodyFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_training_day;
+        return R.layout.fragment_edit_day;
     }
 
     private static class PositionDescription{

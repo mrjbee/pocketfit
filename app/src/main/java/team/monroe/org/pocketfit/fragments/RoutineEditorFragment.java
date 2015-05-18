@@ -19,6 +19,7 @@ import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
+import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
 public class RoutineEditorFragment extends BodyFragment {
@@ -38,7 +39,7 @@ public class RoutineEditorFragment extends BodyFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_routine;
+        return R.layout.fragment_edit_routine;
     }
 
     @Override
@@ -52,9 +53,9 @@ public class RoutineEditorFragment extends BodyFragment {
         });
         listViewPresenter = new ListViewPresenter<RoutineDay>(view(R.id.panel_days, ViewGroup.class)) {
             @Override
-            protected View data_to_view(int index, RoutineDay routineDay, ViewGroup owner, LayoutInflater inflater) {
+            protected View data_to_view(int index, final RoutineDay routineDay, final ViewGroup owner, LayoutInflater inflater) {
                 View view = inflater.inflate(R.layout.item_day,owner, false);
-                ((TextView)view.findViewById(R.id.item_caption)).setText("0 exercises");
+                ((TextView)view.findViewById(R.id.item_caption)).setText(routineDay.exerciseList.size() + " exercises");
                 ((TextView)view.findViewById(R.id.item_sub_caption)).setText("Rest " +routineDay.restDays + " days");
                 ((TextView)view.findViewById(R.id.item_text)).setText(routineDay.description);
                 ((TextView)view.findViewById(R.id.item_index)).setText(""+(index + 1));
@@ -65,6 +66,24 @@ public class RoutineEditorFragment extends BodyFragment {
                 }else {
                     view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step);
                 }
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        owner().open_RoutineDay(mRoutine.id, routineDay.id);
+                    }
+                });
+                view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        application().function_updateRoutineDay(routineDay,mRoutine.id, UpdateRoutineDay.RoutineDayUpdate.INDEX_DELETE, new PocketFitApp.DataAction<Void>() {
+                            @Override
+                            public void data(Void data) {
+                                updateRoutineDetails(mRoutine.id);
+                            }
+                        });
+                    }
+                });
                 return view;
             }
 
@@ -110,6 +129,10 @@ public class RoutineEditorFragment extends BodyFragment {
         if (routineId == null){
             application().error("No routine id");
         }
+        updateRoutineDetails(routineId);
+    }
+
+    private void updateRoutineDetails(final String routineId) {
         application().function_getRoutine(routineId, observe_function(State.STOP, new PocketFitApp.DataAction<Routine>() {
             @Override
             public void data(Routine routine) {
@@ -136,6 +159,20 @@ public class RoutineEditorFragment extends BodyFragment {
                 }else{
                     view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
                 }
+
+                //Training days details
+                int totalCycle = 0;
+                int totalDays = 0;
+                int totalExercises = 0;
+                for (RoutineDay trainingDay : mRoutine.trainingDays) {
+                    totalCycle += 1+trainingDay.restDays;
+                    totalDays ++;
+                    totalExercises += trainingDay.exerciseList.size();
+                }
+
+                view_text(R.id.text_total_cycle).setText(totalCycle + " days");
+                view_text(R.id.text_total_days).setText(totalDays+"");
+                view_text(R.id.text_total_exercises).setText(totalExercises + " days");
             }
         }));
     }

@@ -90,7 +90,7 @@
 
                         <TextView
                             android:layout_centerInParent="true"
-                            android:id="@+id/text_day_count"
+                            android:id="@+id/text_total_days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
@@ -117,8 +117,8 @@
                         android:layout_column="4"
                         android:layout_row="0"
                         android:layout_width="40dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/arrow_thin_right"/>
+                        android:layout_height="22dp"
+                        android:src="@drawable/cross_thin"/>
 
 
                     <TextView
