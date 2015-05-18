@@ -60,7 +60,7 @@ public class RoutineTrainingFragment extends BodyFragment{
             public void data(RoutineDay day) {
                 mRoutineDay = day;
                 if (mRoutineDay == null){
-                    mRoutineDay = new RoutineDay(mRoutineDayId, mRoutineId);
+                    mRoutineDay = new RoutineDay(mRoutineDayId);
                 }
                 view_text(R.id.edit_description).setText(mRoutineDay.description);
                 mRestLongSpinner.setSelection(mRoutineDay.restDays == null ? 0 : mRoutineDay.restDays);
@@ -73,7 +73,7 @@ public class RoutineTrainingFragment extends BodyFragment{
         super.onStop();
         mRoutineDay.description = view_text(R.id.edit_description).getText().toString();
         mRoutineDay.restDays = mRestLongSpinner.getSelectedItemPosition();
-        application().function_updateRoutineDay(mRoutineDay);
+        application().function_updateRoutineDay(mRoutineDay, mRoutineId);
     }
 
     @Override

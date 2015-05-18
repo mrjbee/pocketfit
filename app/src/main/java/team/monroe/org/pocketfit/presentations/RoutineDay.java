@@ -1,18 +1,13 @@
 package team.monroe.org.pocketfit.presentations;
 
-
-import java.io.Serializable;
-
-public class RoutineDay implements Serializable {
+public class RoutineDay{
 
     public final String id;
-    public final String routineId;
-    public Integer restDays;
-    public String description;
+    public Integer restDays  = null;
+    public String description = null;
 
-    public RoutineDay(String id, String routineId) {
+    public RoutineDay(String id) {
         this.id = id;
-        this.routineId = routineId;
     }
 
 

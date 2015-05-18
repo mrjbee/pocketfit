@@ -121,8 +121,12 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(GetRoutineDayById.class, routineDayId, new NoOpValueAdapter<RoutineDay>(), observer);
     }
 
-    public void function_updateRoutineDay(RoutineDay mRoutineDay) {
-        fetchValue(UpdateRoutineDay.class, mRoutineDay, new NoOpValueAdapter<Void>(),observe_function(new DataAction<Void>() {
+    public void function_updateRoutineDay(RoutineDay mRoutineDay, String routineId) {
+        function_updateRoutineDay(mRoutineDay, routineId, UpdateRoutineDay.RoutineDayUpdate.INDEX_ADD_LAST);
+    }
+
+    public void function_updateRoutineDay(RoutineDay mRoutineDay, String routineId, int index) {
+        fetchValue(UpdateRoutineDay.class, new UpdateRoutineDay.RoutineDayUpdate(mRoutineDay, routineId, index), new NoOpValueAdapter<Void>(),observe_function(new DataAction<Void>() {
             @Override
             public void data(Void data) {}
         }));

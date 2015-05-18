@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import team.monroe.org.pocketfit.manage.RoutineManager;
+import team.monroe.org.pocketfit.manage.PersistManager;
 import team.monroe.org.pocketfit.presentations.Routine;
 
 public class GetRoutineList extends UserCaseSupport<Void, List<Routine>>{
@@ -19,7 +19,7 @@ public class GetRoutineList extends UserCaseSupport<Void, List<Routine>>{
 
     @Override
     protected  List<Routine> executeImpl(Void request) {
-        Set<String> idSet = using(RoutineManager.class).listIds();
+        Set<String> idSet = using(PersistManager.class).listRoutineIds();
         List<Routine> answer = new ArrayList<>(idSet.size());
         for (String routineId : idSet) {
             Routine routine = using(Model.class).execute(GetRoutineById.class, routineId);

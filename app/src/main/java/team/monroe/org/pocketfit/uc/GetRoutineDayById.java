@@ -1,12 +1,10 @@
 package team.monroe.org.pocketfit.uc;
 
-import org.monroe.team.android.box.services.SettingManager;
 import org.monroe.team.corebox.services.ServiceRegistry;
 import org.monroe.team.corebox.uc.UserCaseSupport;
 
-import team.monroe.org.pocketfit.Settings;
-import team.monroe.org.pocketfit.manage.RoutineManager;
-import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.manage.Persist;
+import team.monroe.org.pocketfit.manage.PersistManager;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class GetRoutineDayById extends UserCaseSupport<String, RoutineDay>{
@@ -17,8 +15,11 @@ public class GetRoutineDayById extends UserCaseSupport<String, RoutineDay>{
 
     @Override
     protected RoutineDay executeImpl(String id) {
-        RoutineDay routineDay = using(RoutineManager.class).getDay(id);
-        if (routineDay == null) return null;
-        return routineDay;
+        Persist.RoutineDay routineDayPersist = using(PersistManager.class).getDay(id);
+        if (routineDayPersist == null) return null;
+        RoutineDay answer = new RoutineDay(routineDayPersist.id);
+        answer.restDays = routineDayPersist.restDays;
+        answer.description = routineDayPersist.description;
+        return answer;
     }
 }

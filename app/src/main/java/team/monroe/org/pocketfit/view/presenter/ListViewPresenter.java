@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ListViewPresenter<DataType> extends ViewPresenter<ViewGroup> {
@@ -13,6 +14,7 @@ public abstract class ListViewPresenter<DataType> extends ViewPresenter<ViewGrou
     }
 
     public void synchronizeItems(List<DataType> items) {
+        if (items == null) items = Collections.emptyList();
         for (int i = 0; i < items.size(); i++){
             View childView = getRootView().getChildAt(i);
             if (childView == null){

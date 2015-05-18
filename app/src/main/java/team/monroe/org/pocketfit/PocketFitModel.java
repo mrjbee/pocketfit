@@ -5,7 +5,7 @@ import android.content.Context;
 import org.monroe.team.android.box.app.AndroidModel;
 import org.monroe.team.corebox.services.ServiceRegistry;
 
-import team.monroe.org.pocketfit.manage.RoutineManager;
+import team.monroe.org.pocketfit.manage.PersistManager;
 
 
 public class PocketFitModel extends AndroidModel {
@@ -16,6 +16,6 @@ public class PocketFitModel extends AndroidModel {
     @Override
     protected void constructor(String appName, Context context, ServiceRegistry serviceRegistry) {
         super.constructor(appName, context, serviceRegistry);
-        serviceRegistry.registrate(RoutineManager.class, new RoutineManager(context));
+        serviceRegistry.registrate(PersistManager.class, new PersistManager(context));
     }
 }
