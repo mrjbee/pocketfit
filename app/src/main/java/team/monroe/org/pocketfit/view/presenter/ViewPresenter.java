@@ -1,11 +1,11 @@
 package team.monroe.org.pocketfit.view.presenter;
 import android.view.View;
 
-public class ViewPresenter {
+public class ViewPresenter <RootViewType extends View> {
 
-    private final View rootView;
+    private final RootViewType rootView;
 
-    public ViewPresenter(View rootView) {
+    public ViewPresenter(RootViewType rootView) {
         this.rootView = rootView;
     }
 
@@ -29,7 +29,7 @@ public class ViewPresenter {
         setVisibility(View.VISIBLE);
     }
 
-    public View getRootView() {
+    public RootViewType getRootView() {
         return rootView;
     }
 }

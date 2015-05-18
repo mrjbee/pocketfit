@@ -22,7 +22,7 @@ public class TileCaptionViewPresenter extends TileViewPresenter{
 
     public TileCaptionViewPresenter(View rootView) {
         super(rootView);
-        captionView = find(R.id.text);
+        captionView = (TextView) find(R.id.text);
     }
 
     @Override

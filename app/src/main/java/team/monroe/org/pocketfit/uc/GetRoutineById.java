@@ -4,11 +4,13 @@ import org.monroe.team.android.box.services.SettingManager;
 import org.monroe.team.corebox.services.ServiceRegistry;
 import org.monroe.team.corebox.uc.UserCaseSupport;
 
+import java.util.List;
 import java.util.UUID;
 
 import team.monroe.org.pocketfit.Settings;
 import team.monroe.org.pocketfit.manage.RoutineManager;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class GetRoutineById extends UserCaseSupport<String, Routine>{
 
@@ -20,8 +22,8 @@ public class GetRoutineById extends UserCaseSupport<String, Routine>{
     protected Routine executeImpl(String id) {
         Routine routine = using(RoutineManager.class).get(id);
         if (routine == null) return null;
-
         routine.active = routine.id.equals(using(SettingManager.class).get(Settings.ACTIVE_ROUTINE_ID));
+        routine.trainingDays = using(RoutineManager.class).getRoutineDayList(routine.id);
         return routine;
     }
 }

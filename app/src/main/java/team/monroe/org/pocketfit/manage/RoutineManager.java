@@ -4,7 +4,9 @@ import android.content.Context;
 
 import org.monroe.team.android.box.utils.SerializationMap;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -42,5 +44,15 @@ public class RoutineManager {
 
     public void updateOrCreateDay(RoutineDay update) {
         routineDaySerializationMap.put(update.id, update);
+    }
+
+    public List<RoutineDay> getRoutineDayList(String routeId) {
+        List<RoutineDay> answer = new ArrayList<>();
+        for (RoutineDay routineDay : routineDaySerializationMap.values()) {
+            if (routeId.equals(routineDay.routineId)){
+                answer.add(routineDay);
+            }
+        }
+        return answer;
     }
 }

@@ -4,8 +4,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.monroe.team.android.box.utils.DisplayUtils;
@@ -15,10 +18,13 @@ import java.io.FileNotFoundException;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
+import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
 public class RoutineEditorFragment extends BodyFragment {
 
     private Routine mRoutine;
+    private ListViewPresenter<RoutineDay> listViewPresenter;
 
     @Override
     protected boolean isHeaderSecondary() {
@@ -44,6 +50,29 @@ public class RoutineEditorFragment extends BodyFragment {
                 owner().performImageSelection();
             }
         });
+        listViewPresenter = new ListViewPresenter<RoutineDay>(view(R.id.panel_days, ViewGroup.class)) {
+            @Override
+            protected View data_to_view(int index, RoutineDay routineDay, ViewGroup owner, LayoutInflater inflater) {
+                View view = inflater.inflate(R.layout.item_day,owner, false);
+                ((TextView)view.findViewById(R.id.item_caption)).setText("0 exercises");
+                ((TextView)view.findViewById(R.id.item_sub_caption)).setText("Rest " +routineDay.restDays + " days");
+                ((TextView)view.findViewById(R.id.item_text)).setText(routineDay.description);
+                ((TextView)view.findViewById(R.id.item_index)).setText(""+(index + 1));
+                if (index == 0){
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step_top);
+                } else if (index == mRoutine.trainingDays.size()-1){
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step_bottom);
+                }else {
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step);
+                }
+                return view;
+            }
+
+            @Override
+            protected String data_to_id(RoutineDay routineDay) {
+                return routineDay.id;
+            }
+        };
     }
 
     @Override
@@ -101,6 +130,7 @@ public class RoutineEditorFragment extends BodyFragment {
                         }));
                     }
                 });
+                listViewPresenter.synchronizeItems(mRoutine.trainingDays);
                 if (mRoutine.imageId != null){
                     restoreImage(mRoutine.imageId);
                 }else{
