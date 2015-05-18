@@ -22,6 +22,25 @@ public class ExercisesListFragment extends GenericListFragment<Exercise> {
     }
 
     @Override
+    protected void onItemClick(Exercise exercise) {
+        if (getBoolArgument("chooserMode")){
+            throw new IllegalStateException();
+        }else {
+            owner().open_exercisesEditor(exercise.id);
+        }
+    }
+
+    @Override
+    protected void onItemEdit(Exercise exercise) {
+        owner().open_exercisesEditor(exercise.id);
+    }
+
+    @Override
+    protected boolean isInlineEditAllowed() {
+        return getBoolArgument("chooserMode");
+    }
+
+    @Override
     protected String item_text(Exercise item) {
         return item.description;
     }

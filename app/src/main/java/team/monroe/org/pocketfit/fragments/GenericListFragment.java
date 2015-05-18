@@ -46,12 +46,29 @@ public abstract class GenericListFragment<ItemsType> extends BodyFragment{
                     TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
                     TextView subCaption = (TextView) convertView.findViewById(R.id.item_sub_caption);
                     TextView text = (TextView) convertView.findViewById(R.id.item_text);
+                    View edit = convertView.findViewById(R.id.item_edit_btn);
+                    View itemView = convertView;
 
                     @Override
-                    public void update(ItemsType itemsType, int position) {
+                    public void update(final ItemsType itemsType, int position) {
                         caption.setText(item_caption(itemsType));
                         subCaption.setText(item_subCaption(itemsType));
                         text.setText(item_text(itemsType));
+                        edit.setVisibility(isInlineEditAllowed()?View.VISIBLE:View.INVISIBLE);
+                        if (isInlineEditAllowed()){
+                            edit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onItemEdit(itemsType);
+                                }
+                            });
+                        }
+                        itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                onItemClick(itemsType);
+                            }
+                        });
                     }
                 };
             }
@@ -65,6 +82,10 @@ public abstract class GenericListFragment<ItemsType> extends BodyFragment{
         mNoItemsView.setVisibility(View.VISIBLE);
     }
 
+
+    protected void onItemEdit(ItemsType itemsType) {}
+    protected abstract void onItemClick(ItemsType itemsType);
+    protected abstract boolean isInlineEditAllowed();
     protected abstract String item_text(ItemsType item);
     protected abstract String item_subCaption(ItemsType item);
     protected abstract String item_caption(ItemsType item);

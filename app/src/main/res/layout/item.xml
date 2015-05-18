@@ -28,6 +28,7 @@
                 >
 
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:id="@+id/item_caption"
@@ -39,9 +40,17 @@
                     android:maxLines="1"
                     style="@style/Text.Item.Caption"
                     />
+
+                <ImageView
+                    android:id="@+id/item_edit_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/edit"/>
+
             </LinearLayout>
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/item_sub_caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,6 +62,7 @@
                 />
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/item_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
