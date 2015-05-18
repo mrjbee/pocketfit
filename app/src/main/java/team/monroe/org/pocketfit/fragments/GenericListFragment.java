@@ -55,7 +55,7 @@ public abstract class GenericListFragment<ItemsType> extends BodyFragment{
                     }
                 };
             }
-        }, R.layout.fragment_generic_list);
+        }, R.layout.item);
 
         mListView = view(R.id.list_items, ListView.class);
         mListView.setAdapter(mAdapter);

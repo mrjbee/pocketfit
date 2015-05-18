@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
@@ -16,10 +17,13 @@ public class PersistManager {
 
     private final SerializationMap<String, Persist.Routine> routineSerializationMap;
     private final SerializationMap<String, Persist.RoutineDay> routineDaySerializationMap;
+    private final SerializationMap<String, Exercise> exerciseSerializationMap;
+
 
     public PersistManager(Context context) {
         this.routineSerializationMap = new SerializationMap<>("persist_routine.map", context);
         this.routineDaySerializationMap = new SerializationMap<>("persist_routinedays.map", context);
+        this.exerciseSerializationMap = new SerializationMap<>("persist_exercises.map", context);
     }
 
     public void updateOrCreate(Persist.Routine routine) {
@@ -48,5 +52,17 @@ public class PersistManager {
 
     public void removeDay(String dayId) {
         routineDaySerializationMap.remove(dayId);
+    }
+
+    public Exercise getExercise(String exerciseId) {
+        return exerciseSerializationMap.get(exerciseId);
+    }
+
+    public void updateOrCreateExercise(Exercise update) {
+        exerciseSerializationMap.put(update.id,update);
+    }
+
+    public Set<String> listExerciseIds() {
+        return exerciseSerializationMap.keys();
     }
 }

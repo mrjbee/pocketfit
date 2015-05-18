@@ -18,12 +18,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
-import team.monroe.org.pocketfit.uc.CreateRoutineId;
+import team.monroe.org.pocketfit.uc.CreateId;
+import team.monroe.org.pocketfit.uc.GetExerciseById;
+import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
 import team.monroe.org.pocketfit.uc.GetRoutineDayById;
 import team.monroe.org.pocketfit.uc.GetRoutineList;
+import team.monroe.org.pocketfit.uc.IsExerciseSafeToChange;
+import team.monroe.org.pocketfit.uc.UpdateExercise;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 
@@ -59,8 +64,8 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
         data_exercises = new Data<List>(List.class, model()) {
             @Override
-            protected List<Routine> provideData() {
-                return Collections.EMPTY_LIST;
+            protected List<Exercise> provideData() {
+                return model().execute(GetExerciseList.class, null);
             }
         };
 
@@ -106,7 +111,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public void function_createId(String prefix, ValueObserver<String> routineValueObserver) {
-        fetchValue(CreateRoutineId.class, prefix,new NoOpValueAdapter<String>(){
+        fetchValue(CreateId.class, prefix,new NoOpValueAdapter<String>(){
             @Override
             public String adapt(String value) {
                 data_routines().invalidate();
@@ -249,6 +254,24 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
                 error(e);
             }
         });
+    }
+
+    public void function_getExercise(String exerciseId, ValueObserver<Exercise> observer) {
+        fetchValue(GetExerciseById.class, exerciseId, new NoOpValueAdapter<Exercise>(), observer);
+    }
+
+    public void function_getExerciseTypeEditable(String exerciseId, ValueObserver<Boolean> observer) {
+        fetchValue(IsExerciseSafeToChange.class, exerciseId, new NoOpValueAdapter<Boolean>() ,observer);
+    }
+
+    public void function_updateExercise(Exercise mExercise, ValueObserver<Void> voidValueObserver) {
+        fetchValue(UpdateExercise.class, mExercise, new NoOpValueAdapter<Void>(){
+            @Override
+            public Void adapt(Void value) {
+                data_exercises().invalidate();
+                return super.adapt(value);
+            }
+        } ,voidValueObserver);
     }
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {

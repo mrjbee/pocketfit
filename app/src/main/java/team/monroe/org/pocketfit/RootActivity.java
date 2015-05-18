@@ -52,7 +52,7 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
 
     @Override
     public void onBackPressed() {
-        if (backStack.isEmpty()) {
+        if (backStack.size() == 1) {
             super.onBackPressed();
         } else {
            FragmentBackStackItem backStackItem = backStack.remove(backStack.size()-1);

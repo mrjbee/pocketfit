@@ -5,9 +5,9 @@ import org.monroe.team.corebox.uc.UserCaseSupport;
 
 import java.util.UUID;
 
-public class CreateRoutineId extends UserCaseSupport<String, String>{
+public class CreateId extends UserCaseSupport<String, String>{
 
-    public CreateRoutineId(ServiceRegistry serviceRegistry) {
+    public CreateId(ServiceRegistry serviceRegistry) {
         super(serviceRegistry);
     }
 
