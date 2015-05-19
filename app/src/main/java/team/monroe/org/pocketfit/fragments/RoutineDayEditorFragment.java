@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
@@ -17,6 +18,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
+import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
 public class RoutineDayEditorFragment extends BodyFragment{
@@ -110,13 +112,18 @@ public class RoutineDayEditorFragment extends BodyFragment{
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        owner().open_RoutineExercise(mRoutineDay.id, routineExercise.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        application().function_updateRoutineExercise(routineExercise, mRoutineDay.id, UpdateRoutineExercise.RoutineExerciseUpdate.INDEX_DELETE, observe_function(State.STOP,new PocketFitApp.DataAction<Void>() {
+                            @Override
+                            public void data(Void data) {
+                               updateRoutineDay();
+                            }
+                        }));
                     }
                 });
                 return view;
@@ -137,19 +144,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
         if (mRoutineDayId == null){
             throw new IllegalStateException();
         }
-        application().function_getRoutineDay(mRoutineDayId, observe_function(State.STOP, new PocketFitApp.DataAction<RoutineDay>() {
-            @Override
-            public void data(RoutineDay day) {
-                mRoutineDay = day;
-                if (mRoutineDay == null){
-                    mRoutineDay = new RoutineDay(mRoutineDayId);
-                }
-                view_text(R.id.edit_description).setText(mRoutineDay.description);
-                view_text(R.id.text_exercises).setText(mRoutineDay.exerciseList.size()+"");
-                mRestLongSpinner.setSelection(mRoutineDay.restDays == null ? 0 : mRoutineDay.restDays);
-                listViewPresenter.synchronizeItems(mRoutineDay.exerciseList);
-            }
-        }));
+        updateRoutineDay();
         application().function_getRoutine(mRoutineId, observe_function(State.STOP, new PocketFitApp.DataAction<Routine>() {
             @Override
             public void data(Routine routine) {
@@ -169,6 +164,22 @@ public class RoutineDayEditorFragment extends BodyFragment{
                 mPositionAdapter.add(POSITION_AFTER_ALL);
                 mPositionAdapter.notifyDataSetChanged();
                 mPositionSpinner.setSelection(position_index);
+            }
+        }));
+    }
+
+    private void updateRoutineDay() {
+        application().function_getRoutineDay(mRoutineDayId, observe_function(State.STOP, new PocketFitApp.DataAction<RoutineDay>() {
+            @Override
+            public void data(RoutineDay day) {
+                mRoutineDay = day;
+                if (mRoutineDay == null){
+                    mRoutineDay = new RoutineDay(mRoutineDayId);
+                }
+                view_text(R.id.edit_description).setText(mRoutineDay.description);
+                view_text(R.id.text_exercises).setText(mRoutineDay.exerciseList.size()+"");
+                mRestLongSpinner.setSelection(mRoutineDay.restDays == null ? 0 : mRoutineDay.restDays);
+                listViewPresenter.synchronizeItems(mRoutineDay.exerciseList);
             }
         }));
     }

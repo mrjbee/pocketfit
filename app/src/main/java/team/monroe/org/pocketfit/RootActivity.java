@@ -128,6 +128,22 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
                 .commit();
     }
 
+
+    public void open_RoutineExercise(String dayId, String routineId) {
+        FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(RoutineExerciseEditorFragment.class)
+                .addArgument("routine_exercise_id", routineId)
+                .addArgument("day_id",dayId);
+        backStack.add(fragmentBackStackItem);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
+                .replace(R.id.fragment_container_body,
+                        fragment_instance(
+                                fragmentBackStackItem.fragmentClass,
+                                BodyFragment.HeaderUpdateRequest.ANIMATE,
+                                fragmentBackStackItem.getArgumentBundle()))
+                .commit();
+    }
+
     public void open_exercisesAsEditor() {
         backStack.add(new FragmentBackStackItem(ExercisesListFragment.class));
         getFragmentManager().beginTransaction()
@@ -248,7 +264,6 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
             if (getBodyFragment() == null) return null;
             return getBodyFragment().build_HeaderActionsView(actionPanel, getLayoutInflater());
     }
-
 
 
 
