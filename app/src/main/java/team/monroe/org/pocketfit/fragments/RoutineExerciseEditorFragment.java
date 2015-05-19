@@ -2,15 +2,25 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
+import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Exercise;
+import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
+import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
+import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
 public class RoutineExerciseEditorFragment extends BodyFragment {
+
+    private final static PositionDescription POSITION_AFTER_ALL = new PositionDescription("Last. After All", UpdateRoutineDay.RoutineDayUpdate.INDEX_ADD_LAST);
 
     private String mDayId;
     private String mRoutineExerciseId;
@@ -23,6 +33,9 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
     private ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails> timesExerciseDetailsViewPresenter;
 
     private ExerciseDetailsViewPresenter mDetailsViewPresenter;
+
+    private GenericListViewAdapter<PositionDescription, GetViewImplementation.ViewHolder<PositionDescription>> mPositionAdapter;
+    private Spinner mPositionSpinner;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -76,6 +89,22 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
 
             }
         };
+
+        mPositionSpinner = view(R.id.spinner_position, Spinner.class);
+        mPositionAdapter = new GenericListViewAdapter<PositionDescription,GetViewImplementation.ViewHolder<PositionDescription>>(activity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<PositionDescription>>() {
+            @Override
+            public GetViewImplementation.ViewHolder<PositionDescription> create(final View convertView) {
+                return new GetViewImplementation.GenericViewHolder<PositionDescription>() {
+                    TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
+                    @Override
+                    public void update(PositionDescription description, int position) {
+                        caption.setText(description.description);
+                    }
+                };
+            }
+        }, R.layout.item_simple);
+        mPositionAdapter.add(POSITION_AFTER_ALL);
+        mPositionSpinner.setAdapter(mPositionAdapter);
     }
 
     @Override
@@ -154,6 +183,28 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
                 owner().open_exercisesAsChooser(mDayId, mRoutineExerciseId, false);
             }
         });
+
+        application().function_getRoutineDay(mDayId, observe_function(State.STOP, new PocketFitApp.DataAction<RoutineDay>() {
+            @Override
+            public void data(RoutineDay routineDay) {
+                int position_index = 0;
+                mPositionAdapter.clear();
+                for (int i = 0; i < routineDay.exerciseList.size(); i++) {
+                    RoutineExercise routineExercise = routineDay.exerciseList.get(i);
+                    if (mRoutineExerciseId.equals(routineExercise.id)) {
+                        position_index = i;
+                        String positionDescription = (i + 1) + ". Do not change";
+                        mPositionAdapter.add(new PositionDescription(positionDescription, i));
+                    } else {
+                        String positionDescription = (i + 1) + ". Before " + routineExercise.exercise.title + ":" + routineExercise.exerciseDetails.detailsString();
+                        mPositionAdapter.add(new PositionDescription(positionDescription, i));
+                    }
+                }
+                mPositionAdapter.add(POSITION_AFTER_ALL);
+                mPositionAdapter.notifyDataSetChanged();
+                mPositionSpinner.setSelection(position_index);
+            }
+        }));
     }
 
     @Override
@@ -161,7 +212,8 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
         super.onStop();
         if (mDetailsViewPresenter != null) {
             mDetailsViewPresenter.fillDetails(mRoutineExercise.exerciseDetails);
-            application().function_updateRoutineExercise(mRoutineExercise, mDayId, Integer.MAX_VALUE, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+            PositionDescription positionDescription = (PositionDescription) mPositionSpinner.getSelectedItem();
+            application().function_updateRoutineExercise(mRoutineExercise, mDayId, positionDescription.index, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
                 @Override
                 public void data(Void data) {
 
@@ -233,5 +285,15 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
         protected abstract void fillUI(DetailsType details);
         public abstract void fillDetails(DetailsType details);
 
+    }
+
+    private static class PositionDescription{
+        private final String description;
+        private final int index;
+
+        private PositionDescription(String description, int index) {
+            this.description = description;
+            this.index = index;
+        }
     }
 }

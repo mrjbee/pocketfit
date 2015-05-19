@@ -46,6 +46,7 @@
                         android:text="Example"
                         />
 
+
                     <ImageView
                         android:id="@+id/action_change_exercise"
                         android:layout_column="2"
@@ -56,14 +57,50 @@
                         android:layout_height="20dp"
                         android:src="@drawable/arrow_thin_right"
                         />
-
                 </GridLayout>
+
                 <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:src="@drawable/separator"
                     android:scaleType="centerCrop"
                     android:layout_margin="2dp"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="20dp"
+                    >
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Position in training"
+                        style="@style/Text.Body.Optional"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinner_position"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:src="@drawable/separator"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="2dp"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
