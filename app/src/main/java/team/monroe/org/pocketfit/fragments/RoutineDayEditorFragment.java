@@ -1,7 +1,9 @@
 package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +15,9 @@ import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
+import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
+import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
 public class RoutineDayEditorFragment extends BodyFragment{
 
@@ -26,6 +30,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
     private String mRoutineId;
     private Spinner mPositionSpinner;
     private GenericListViewAdapter<PositionDescription, GetViewImplementation.ViewHolder<PositionDescription>> mPositionAdapter;
+    private ListViewPresenter<RoutineExercise> listViewPresenter;
 
     @Override
     protected boolean isHeaderSecondary() {
@@ -85,6 +90,43 @@ public class RoutineDayEditorFragment extends BodyFragment{
                 }));
             }
         });
+
+        listViewPresenter = new ListViewPresenter<RoutineExercise>(view(R.id.panel_exercises, ViewGroup.class)) {
+            @Override
+            protected View data_to_view(int index, final RoutineExercise routineExercise, final ViewGroup owner, LayoutInflater inflater) {
+                View view = inflater.inflate(R.layout.item_day,owner, false);
+                ((TextView)view.findViewById(R.id.item_caption)).setText(routineExercise.exercise.title);
+                ((TextView)view.findViewById(R.id.item_sub_caption)).setText(routineExercise.exerciseDetails.detailsString());
+                ((TextView)view.findViewById(R.id.item_text)).setText(routineExercise.exercise.description);
+                ((TextView)view.findViewById(R.id.item_index)).setText(""+(index + 1));
+                if (index == 0){
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step_top);
+                } else if (index == mRoutineDay.exerciseList.size()-1){
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step_bottom);
+                }else {
+                    view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step);
+                }
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                return view;
+            }
+
+            @Override
+            protected String data_to_id(RoutineExercise routineExercise) {
+                return routineExercise.id;
+            }
+        };
     }
 
     @Override
@@ -103,7 +145,9 @@ public class RoutineDayEditorFragment extends BodyFragment{
                     mRoutineDay = new RoutineDay(mRoutineDayId);
                 }
                 view_text(R.id.edit_description).setText(mRoutineDay.description);
+                view_text(R.id.text_exercises).setText(mRoutineDay.exerciseList.size()+"");
                 mRestLongSpinner.setSelection(mRoutineDay.restDays == null ? 0 : mRoutineDay.restDays);
+                listViewPresenter.synchronizeItems(mRoutineDay.exerciseList);
             }
         }));
         application().function_getRoutine(mRoutineId, observe_function(State.STOP, new PocketFitApp.DataAction<Routine>() {

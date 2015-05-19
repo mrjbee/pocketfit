@@ -168,17 +168,14 @@ public class RoutineEditorFragment extends BodyFragment {
                 //Training days details
                 int totalCycle = 0;
                 int totalDays = 0;
-                int totalExercises = 0;
 
                 for (RoutineDay trainingDay : mRoutine.trainingDays) {
                     totalCycle += 1+trainingDay.restDays;
                     totalDays ++;
-                    totalExercises += trainingDay.exerciseList.size();
                 }
 
                 view_text(R.id.text_total_cycle).setText(totalCycle + " days");
                 view_text(R.id.text_total_days).setText(totalDays+"");
-                view_text(R.id.text_total_exercises).setText(totalExercises + " days");
             }
         }));
     }
