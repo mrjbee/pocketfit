@@ -64,6 +64,7 @@ public class RoutinesFragment extends BodyFragment {
                     TextView text = (TextView) convertView.findViewById(R.id.item_text);
                     ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
                     View panelDetails = convertView.findViewById(R.id.item_panel_details);
+                    String lastInstalledImageId;
 
                     AppearanceController slidePanelAC = animateAppearance(panelDetails,xSlide(0f,100f))
                             .showAnimation(duration_constant(100), interpreter_accelerate_decelerate()).build();
@@ -71,7 +72,6 @@ public class RoutinesFragment extends BodyFragment {
                     @Override
                     public void cleanup() {
                         slidePanelAC.showWithoutAnimation();
-                        imageView.setImageResource(R.drawable.covert_loading);
                         activeCheck.setOnCheckedChangeListener(null);
                         activeCheck.setChecked(false);
                     }
@@ -127,6 +127,9 @@ public class RoutinesFragment extends BodyFragment {
                             imageView.setImageResource(R.drawable.no_covert);
                         }else{
                             final String finalImageId = routine.imageId;
+                            if (finalImageId.equals(lastInstalledImageId)) return;
+
+                            imageView.setImageResource(R.drawable.covert_loading);
                             application().loadToBitmap(routine.imageId,
                                     DisplayUtils.dpToPx(100, getResources()),
                                     DisplayUtils.dpToPx(100, getResources()),
@@ -134,6 +137,7 @@ public class RoutinesFragment extends BodyFragment {
                                         @Override
                                         public void data(Pair<String, Bitmap> data) {
                                             if (finalImageId.equals(data.first)){
+                                                lastInstalledImageId = finalImageId;
                                                 imageView.setImageBitmap(data.second);
                                             }
                                         }
