@@ -2,6 +2,7 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
@@ -29,12 +30,27 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
         powerExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.PowerExerciseDetails>(view(R.id.panel_power)) {
             @Override
             public void fillDetails(RoutineExercise.PowerExerciseDetails details) {
-
+                details.times  = readPositiveInteger(R.id.edit_power_times);
+                details.sets  = readPositiveInteger(R.id.edit_power_sets);
+                details.weight  = readPositiveFloat(R.id.edit_power_weight);
             }
+
+            @Override
+            protected void fillUI(RoutineExercise.PowerExerciseDetails details) {
+                updateTextView(R.id.edit_power_weight, details.weight);
+                updateTextView(R.id.edit_power_sets, details.sets);
+                updateTextView(R.id.edit_power_times, details.times);
+            }
+
         };
         distanceExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.DistanceExerciseDetails>(view(R.id.panel_disatnce)) {
             @Override
             public void fillDetails(RoutineExercise.DistanceExerciseDetails details) {
+
+            }
+
+            @Override
+            protected void fillUI(RoutineExercise.DistanceExerciseDetails details) {
 
             }
         };
@@ -43,10 +59,20 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
             public void fillDetails(RoutineExercise.TimeExerciseDetails details) {
 
             }
+
+            @Override
+            protected void fillUI(RoutineExercise.TimeExerciseDetails details) {
+
+            }
         };
         timesExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails>(view(R.id.panel_times)) {
             @Override
             public void fillDetails(RoutineExercise.TimesExerciseDetails details) {
+
+            }
+
+            @Override
+            protected void fillUI(RoutineExercise.TimesExerciseDetails details) {
 
             }
         };
@@ -130,6 +156,20 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
         });
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mDetailsViewPresenter != null) {
+            mDetailsViewPresenter.fillDetails(mRoutineExercise.exerciseDetails);
+            application().function_updateRoutineExercise(mRoutineExercise, mDayId, Integer.MAX_VALUE, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+                @Override
+                public void data(Void data) {
+
+                }
+            }));
+        }
+    }
+
     private void updateExerciseDetailsUI() {
         view_text(R.id.text_title).setText(mRoutineExercise.exercise.title);
         view_text(R.id.text_description).setText(mRoutineExercise.exercise.description);
@@ -149,7 +189,7 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
             default:
                 throw new IllegalStateException();
         }
-        mDetailsViewPresenter.show();
+        mDetailsViewPresenter.show(mRoutineExercise.exerciseDetails);
     }
 
     public static abstract class ExerciseDetailsViewPresenter<DetailsType extends RoutineExercise.ExerciseDetails> extends ViewPresenter<View>{
@@ -158,6 +198,40 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
             super(rootView);
         }
 
+        protected Integer readPositiveInteger(int r_text) {
+            Integer value;
+            String text = ((TextView)getRootView().findViewById(r_text)).getText().toString();
+            try {
+                value = Math.abs(Integer.parseInt(text));
+            }catch (Exception e){
+                value = null;
+            }
+            return value;
+        }
+
+        protected Float readPositiveFloat(int r_text) {
+            Float value;
+            String text = ((TextView)getRootView().findViewById(r_text)).getText().toString();
+            try {
+                value = Math.abs(Float.parseFloat(text));
+            }catch (Exception e){
+                value = null;
+            }
+            return value;
+        }
+
+        protected void updateTextView(int r, Object value) {
+            ((TextView)getRootView().findViewById(r)).setText(value == null?"":value.toString());
+        }
+
+
+        public void show(DetailsType details) {
+            fillUI(details);
+            show();
+        }
+
+        protected abstract void fillUI(DetailsType details);
         public abstract void fillDetails(DetailsType details);
+
     }
 }

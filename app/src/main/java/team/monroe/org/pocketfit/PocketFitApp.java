@@ -33,6 +33,7 @@ import team.monroe.org.pocketfit.uc.IsExerciseSafeToChange;
 import team.monroe.org.pocketfit.uc.UpdateExercise;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
+import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
 
 public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
@@ -278,6 +279,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public void function_getRoutineExercise(String routineExerciseId, ValueObserver<RoutineExercise> routineExerciseValueObserver) {
         fetchValue(GetRoutineExerciseById.class,routineExerciseId,new NoOpValueAdapter<RoutineExercise>(),routineExerciseValueObserver);
+    }
+
+    public void function_updateRoutineExercise(RoutineExercise routineExercise, String dayId, int index, ValueObserver<Void> observer) {
+        fetchValue(UpdateRoutineExercise.class, new UpdateRoutineExercise.RoutineExerciseUpdate(routineExercise, dayId, index), new NoOpValueAdapter<Void>(),observer);
     }
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {

@@ -28,6 +28,7 @@ public class Persist {
         public final String routineId;
         public Integer restDays;
         public String description;
+        public List<String> routineExerciseIdList = new ArrayList<>();
 
         public RoutineDay(String id, String routineId) {
             this.id = id;

@@ -71,4 +71,12 @@ public class PersistManager {
     public Persist.RoutineExercise getRoutineExercise(String id) {
         return routineExerciseSerializationMap.get(id);
     }
+
+    public void removeRoutineExercise(String id) {
+        routineExerciseSerializationMap.remove(id);
+    }
+
+    public void updateOrCreateRoutineExercise(Persist.RoutineExercise updateExercisePersists) {
+        routineExerciseSerializationMap.put(updateExercisePersists.id, updateExercisePersists);
+    }
 }
