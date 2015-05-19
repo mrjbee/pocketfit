@@ -69,7 +69,7 @@
                     android:layout_height="fill_parent"
                     android:padding="30dp">
                     <LinearLayout
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:id="@+id/panel_disatnce"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
@@ -104,7 +104,7 @@
                             />
                     </LinearLayout>
                     <LinearLayout
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:id="@+id/panel_time"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
@@ -139,7 +139,7 @@
                             />
                     </LinearLayout>
                     <LinearLayout
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:id="@+id/panel_times"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
@@ -174,7 +174,7 @@
                             />
                     </LinearLayout>
                     <GridLayout
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:layout_centerHorizontal="true"
                         android:id="@+id/panel_power"
                         android:orientation="horizontal"
