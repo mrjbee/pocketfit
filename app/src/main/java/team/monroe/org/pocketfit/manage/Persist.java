@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.monroe.org.pocketfit.presentations.RoutineExercise;
+
 public class Persist {
 
     public static class Routine implements Serializable {
@@ -33,14 +35,18 @@ public class Persist {
         }
     }
 
-    public static class DayExercise implements Serializable {
+    public static class RoutineExercise implements Serializable {
 
         public final String id;
         public final String dayId;
+        public final String exerciseId;
 
-        public DayExercise(String id, String dayId) {
+        public team.monroe.org.pocketfit.presentations.RoutineExercise.ExerciseDetails details;
+
+        public RoutineExercise(String id, String dayId, String exerciseId) {
             this.id = id;
             this.dayId = dayId;
+            this.exerciseId = exerciseId;
         }
     }
 

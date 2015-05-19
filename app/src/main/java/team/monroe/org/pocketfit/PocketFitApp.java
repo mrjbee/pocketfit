@@ -21,11 +21,13 @@ import java.util.concurrent.Callable;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
+import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.uc.CreateId;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
 import team.monroe.org.pocketfit.uc.GetRoutineDayById;
+import team.monroe.org.pocketfit.uc.GetRoutineExerciseById;
 import team.monroe.org.pocketfit.uc.GetRoutineList;
 import team.monroe.org.pocketfit.uc.IsExerciseSafeToChange;
 import team.monroe.org.pocketfit.uc.UpdateExercise;
@@ -272,6 +274,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
                 return super.adapt(value);
             }
         } ,voidValueObserver);
+    }
+
+    public void function_getRoutineExercise(String routineExerciseId, ValueObserver<RoutineExercise> routineExerciseValueObserver) {
+        fetchValue(GetRoutineExerciseById.class,routineExerciseId,new NoOpValueAdapter<RoutineExercise>(),routineExerciseValueObserver);
     }
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {

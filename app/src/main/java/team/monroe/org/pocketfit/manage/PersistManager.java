@@ -17,12 +17,14 @@ public class PersistManager {
 
     private final SerializationMap<String, Persist.Routine> routineSerializationMap;
     private final SerializationMap<String, Persist.RoutineDay> routineDaySerializationMap;
+    private final SerializationMap<String, Persist.RoutineExercise> routineExerciseSerializationMap;
     private final SerializationMap<String, Exercise> exerciseSerializationMap;
 
 
     public PersistManager(Context context) {
         this.routineSerializationMap = new SerializationMap<>("persist_routine.map", context);
         this.routineDaySerializationMap = new SerializationMap<>("persist_routinedays.map", context);
+        this.routineExerciseSerializationMap = new SerializationMap<>("persist_routineexercise.map", context);
         this.exerciseSerializationMap = new SerializationMap<>("persist_exercises.map", context);
     }
 
@@ -64,5 +66,9 @@ public class PersistManager {
 
     public Set<String> listExerciseIds() {
         return exerciseSerializationMap.keys();
+    }
+
+    public Persist.RoutineExercise getRoutineExercise(String id) {
+        return routineExerciseSerializationMap.get(id);
     }
 }

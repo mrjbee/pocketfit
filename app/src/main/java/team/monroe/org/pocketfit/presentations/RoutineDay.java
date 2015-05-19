@@ -7,7 +7,7 @@ public class RoutineDay{
     public final String id;
     public Integer restDays  = null;
     public String description = null;
-    public List<DayExercise> exerciseList = null;
+    public List<RoutineExercise> exerciseList = null;
 
     public RoutineDay(String id) {
         this.id = id;

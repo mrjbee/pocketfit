@@ -18,7 +18,7 @@ import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
-import team.monroe.org.pocketfit.fragments.DayExerciseEditorFragment;
+import team.monroe.org.pocketfit.fragments.RoutineExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
@@ -140,11 +140,11 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
     public void open_exercisesAsChooser(String routineDayId, String routineExerciseId, boolean moveToExerciseConfigFragment) {
 
         FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(ExercisesListFragment.class)
-                .addArgument("routine_exercise_id",routineExerciseId)
+                .addArgument("routine_exercise_id", routineExerciseId)
                 .addArgument("day_id",routineDayId)
                 .addArgument("chooserMode", "true");
         if (moveToExerciseConfigFragment){
-            fragmentBackStackItem.addArgument("fragment_class", DayExerciseEditorFragment.class);
+            fragmentBackStackItem.addArgument("fragment_class", RoutineExerciseEditorFragment.class);
         }
 
         backStack.add(fragmentBackStackItem);
