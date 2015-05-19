@@ -148,8 +148,16 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         }
 
         backStack.add(fragmentBackStackItem);
+
+        int in_animation = R.animator.card_flip_in_right, out_animation = R.animator.card_flip_out_right;
+        if (moveToExerciseConfigFragment){
+            in_animation = R.animator.slide_in_from_left;
+            out_animation = R.animator.slide_out_to_right;
+        }
+
+
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.card_flip_in_right, R.animator.card_flip_out_right)
+                .setCustomAnimations(in_animation, out_animation)
                 .replace(R.id.fragment_container_body,
                         fragment_instance(
                                 ExercisesListFragment.class,
