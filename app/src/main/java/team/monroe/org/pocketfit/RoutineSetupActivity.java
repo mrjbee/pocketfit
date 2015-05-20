@@ -26,7 +26,7 @@ public class RoutineSetupActivity extends FragmentActivity implements ExerciseOw
 
     @Override
     protected FragmentItem customize_startupFragment() {
-        return new FragmentItem(DashboardFragment.class);
+        return new FragmentItem(RoutinesFragment.class);
     }
 
     @Override

@@ -212,12 +212,12 @@ public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
 
     @Override
     protected boolean isHeaderSecondary() {
-        return true;
+        return false;
     }
 
     @Override
     protected String getHeaderName() {
-        return "Workout Routines";
+        return "Routines";
     }
 
 }

@@ -141,6 +141,10 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         return (BodyFragment) getFragmentManager().findFragmentById(R.id.fragment_container_body);
     }
 
+    protected final <Contract> Contract getBodyFragment(Class<Contract> contract) {
+        return (Contract) getBodyFragment();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

@@ -6,8 +6,9 @@ import android.view.ViewGroup;
 
 import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public class NoActiveRoutineFragment extends BodyFragment<DashboardActivity>{
+public class NoActiveRoutineFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract {
 
     @Override
     protected boolean isHeaderSecondary() {
@@ -34,5 +35,15 @@ public class NoActiveRoutineFragment extends BodyFragment<DashboardActivity>{
             }
         });
         return view;
+    }
+
+    @Override
+    public Integer icon_mainButton() {
+        return R.drawable.round_btn_gear;
+    }
+
+    @Override
+    public void onMainButton() {
+        owner().openRoutineEditor();
     }
 }

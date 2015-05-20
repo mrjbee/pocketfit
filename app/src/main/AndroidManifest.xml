@@ -23,6 +23,11 @@
             android:name=".ExercisesActivity"
             android:label="Exercises" >
         </activity>
+        <activity
+            android:theme="@style/AnimationActivity"
+            android:name=".RoutineSetupActivity"
+            android:label="Exercises" >
+        </activity>
     </application>
 
 </manifest>

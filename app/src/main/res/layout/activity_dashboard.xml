@@ -6,13 +6,14 @@
     android:background="#252525">
 
     <LinearLayout
+        android:id="@+id/background_stripe"
         android:layout_marginTop="130dp"
         android:layout_marginBottom="@dimen/background.margin.bottom"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        style="@style/Panel.Base">
+        android:background="#ff515151"
+        android:orientation="vertical" />
 
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container_body"
@@ -27,5 +28,28 @@
         android:layout_height="150dp"
         tools:layout="@layout/fragment_dash_header"
         android:id="@+id/fragment_header" />
+
+    <RelativeLayout
+        android:id="@+id/panel_main_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/button.margin.bottom"
+        android:layout_marginRight="@dimen/button.margin.side"
+        >
+        <Button
+            android:id="@+id/main_button"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/button_round"/>
+
+        <ImageView
+            android:id="@+id/image_main_button"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/round_btn_gear"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>
