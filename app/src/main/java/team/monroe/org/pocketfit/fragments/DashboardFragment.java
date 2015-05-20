@@ -25,6 +25,16 @@ public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
     protected int getLayoutId() {
         return R.layout.fragment_no_active_routine;
     }
+    @Override
+    protected boolean isHeaderSecondary() {
+        return false;
+    }
+
+    @Override
+    protected String getHeaderName() {
+        return "Pocket.Fit";
+    }
+
 
 
     @Override
@@ -45,19 +55,6 @@ public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
         application().data_activeRoutine().addDataChangeObserver(observer_activeRoutineObserver);
         fetch_ActiveRoutine();
     }
-
-
-
-    @Override
-    protected boolean isHeaderSecondary() {
-        return false;
-    }
-
-    @Override
-    protected String getHeaderName() {
-        return "Pocket.Fit";
-    }
-
 
     @Override
     public void onStop() {

@@ -1,10 +1,7 @@
 package team.monroe.org.pocketfit;
 
-import android.content.Intent;
-
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
-import team.monroe.org.pocketfit.fragments.NoActiveRoutineFragment;
 import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 
 public class ExercisesActivity extends FragmentActivity implements ExerciseOwnerContract {

@@ -56,6 +56,12 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         }
     }
 
+    final protected void replaceBodyFragment(FragmentItem backStackItem, BodyFragmentChangeRequest changeRequest) {
+        backStack.remove(backStack.size()-1);
+        backStack.add(backStackItem);
+        updateBodyFragmentNoHistory(backStackItem, changeRequest);
+    }
+
     final protected void updateBodyFragment(FragmentItem backStackItem, BodyFragmentChangeRequest changeRequest) {
         backStack.add(backStackItem);
         updateBodyFragmentNoHistory(backStackItem, changeRequest);
@@ -81,6 +87,10 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
 
     final protected BodyFragmentChangeRequest change_flip_in() {
         return new BodyFragmentChangeRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    }
+
+    final protected BodyFragmentChangeRequest change_flip_out() {
+        return new BodyFragmentChangeRequest(R.animator.card_flip_in, R.animator.card_flip_out, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
     final public void onChooseResult(Map<String, String> results) {

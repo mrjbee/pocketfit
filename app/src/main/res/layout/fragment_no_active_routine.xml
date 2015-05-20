@@ -5,56 +5,16 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/panel_tile"
         android:layout_marginTop="@dimen/tile.margin.top"
         android:layout_marginBottom="@dimen/tile.margin.bottom"
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/tile_white">
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="#e11142"
-            android:orientation="vertical">
-                <LinearLayout
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Build"
-                        style="@style/Text.Header.Secondary.Caption.Light"/>
-                    <TextView
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your Routine"
-                        android:textStyle="bold"
-                        style="@style/Text.Header.Secondary.Caption.Light"/>
-                </LinearLayout>
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:src="@drawable/gears"/>
+        android:background="@drawable/tile_white"
+        android:orientation="vertical">
 
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_below="@+id/caption"
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start building your body with creating workout routine. You can have multiple routines but only one will be active at same time"
-                style="@style/Text.Body.Light"/>
-
-        </LinearLayout>
     </LinearLayout>
 
 </team.monroe.org.pocketfit.view.SlidingRelativeLayout>

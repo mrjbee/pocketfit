@@ -12,7 +12,8 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
-import team.monroe.org.pocketfit.fragments.NoActiveRoutineFragment;
+import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
+import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
 public class DashboardActivity extends FragmentActivity {
@@ -95,7 +96,7 @@ public class DashboardActivity extends FragmentActivity {
 
     @Override
     protected FragmentItem customize_startupFragment() {
-        return new FragmentItem(NoActiveRoutineFragment.class);
+        return new FragmentItem(application().hasActiveRoutine()? TileRoutineFragment.class : TileNoRoutineFragment.class);
     }
 
     @Override
@@ -108,6 +109,61 @@ public class DashboardActivity extends FragmentActivity {
     }
 
     public void openRoutineEditor() {
-        startActivity(new Intent(this, RoutineSetupActivity.class));
+        mainButtonAC.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+            @Override
+            public void customize(Animator animator) {
+                animator.addListener(new AnimatorListenerSupport() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        startActivityForResult(new Intent(DashboardActivity.this, RoutineSetupActivity.class), 40);
+                    }
+                });
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 40){
+            if (isMainButtonRequested()) {
+                mainButtonAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
+                    @Override
+                    public void customize(Animator animator) {
+                        animator.setStartDelay(400);
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void switchNoRoutineTile() {
+        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), change_flip_in());
+        runLastOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isMainButtonRequested()) {
+                    mainButtonAC.show();
+                }
+            }
+        },500);
+    }
+
+    public void switchRoutineTile() {
+        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), change_flip_out());
+        runLastOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isMainButtonRequested()) {
+                    mainButtonAC.show();
+                }
+            }
+        },500);
+    }
+
+
 }

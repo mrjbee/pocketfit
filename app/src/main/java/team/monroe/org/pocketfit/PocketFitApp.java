@@ -132,6 +132,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             @Override
             public Void adapt(Void value) {
                 data_routines().invalidate();
+                data_activeRoutine().invalidate();
                 return super.adapt(value);
             }
         }, observer );
@@ -283,6 +284,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public void function_updateRoutineExercise(RoutineExercise routineExercise, String dayId, int index, ValueObserver<Void> observer) {
         fetchValue(UpdateRoutineExercise.class, new UpdateRoutineExercise.RoutineExerciseUpdate(routineExercise, dayId, index), new NoOpValueAdapter<Void>(),observer);
+    }
+
+    public boolean hasActiveRoutine() {
+        return getSetting(Settings.ACTIVE_ROUTINE_ID) != null;
     }
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
