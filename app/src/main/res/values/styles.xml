@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
 
@@ -20,6 +20,19 @@
     </style>
 
     <style name="Text.Header.Secondary.Caption" parent="Text.Header.Caption">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Text.Header.Caption.Light" parent="AppTheme">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">#fffcfcfc</item>
+        <item name="android:shadowDy">-2</item>
+        <item name="android:shadowDx">-1</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowColor">#ff000000</item>
+    </style>
+
+    <style name="Text.Header.Secondary.Caption.Light" parent="Text.Header.Caption.Light">
         <item name="android:textSize">20sp</item>
     </style>
 

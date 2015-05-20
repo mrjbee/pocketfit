@@ -10,6 +10,7 @@ import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
@@ -18,7 +19,7 @@ import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
-public class RoutineExerciseEditorFragment extends BodyFragment {
+public class RoutineExerciseEditorFragment extends BodyFragment<RoutineSetupActivity> {
 
     private final static PositionDescription POSITION_AFTER_ALL = new PositionDescription("Last. After All", UpdateRoutineDay.RoutineDayUpdate.INDEX_ADD_LAST);
 
@@ -180,7 +181,7 @@ public class RoutineExerciseEditorFragment extends BodyFragment {
         view(R.id.action_change_exercise).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().open_exercisesAsChooser(mDayId, mRoutineExerciseId, false);
+                owner(RoutineSetupActivity.class).open_exercisesAsChooser(mDayId, mRoutineExerciseId, false);
             }
         });
 

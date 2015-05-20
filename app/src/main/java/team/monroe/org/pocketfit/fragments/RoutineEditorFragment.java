@@ -17,12 +17,13 @@ import java.io.FileNotFoundException;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
-public class RoutineEditorFragment extends BodyFragment {
+public class RoutineEditorFragment extends BodyFragment<RoutineSetupActivity> {
 
     private Routine mRoutine;
     private ListViewPresenter<RoutineDay> listViewPresenter;
@@ -48,7 +49,7 @@ public class RoutineEditorFragment extends BodyFragment {
         view(R.id.image_select_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().performImageSelection();
+                owner(RoutineSetupActivity.class).performImageSelection();
             }
         });
         listViewPresenter = new ListViewPresenter<RoutineDay>(view(R.id.panel_days, ViewGroup.class)) {
@@ -70,7 +71,7 @@ public class RoutineEditorFragment extends BodyFragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner().open_RoutineDay(mRoutine.id, routineDay.id);
+                        owner(RoutineSetupActivity.class).open_RoutineDay(mRoutine.id, routineDay.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
@@ -150,7 +151,7 @@ public class RoutineEditorFragment extends BodyFragment {
                             public void data(String id) {
                                 String title = view_text(R.id.edit_title).getText().toString();
                                 if (!title.trim().isEmpty()){
-                                    owner().open_RoutineDay(mRoutine.id, id);
+                                    owner(RoutineSetupActivity.class).open_RoutineDay(mRoutine.id, id);
                                 }else{
                                     Toast.makeText(getActivity(), "Please add title first", Toast.LENGTH_SHORT).show();
                                 }

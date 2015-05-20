@@ -12,9 +12,10 @@ import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
 import java.util.List;
 
+import team.monroe.org.pocketfit.FragmentActivity;
 import team.monroe.org.pocketfit.R;
 
-public abstract class GenericListFragment<ItemsType> extends BodyFragment{
+public abstract class GenericListFragment<ItemsType, OwnerActivity extends FragmentActivity> extends BodyFragment<OwnerActivity>{
 
     private GenericListViewAdapter<ItemsType, GetViewImplementation.ViewHolder<ItemsType>> mAdapter;
     private ListView mListView;

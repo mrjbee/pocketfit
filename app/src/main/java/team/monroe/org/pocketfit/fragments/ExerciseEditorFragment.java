@@ -11,9 +11,10 @@ import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Exercise;
 
-public class ExerciseEditorFragment extends BodyFragment{
+public class ExerciseEditorFragment extends BodyFragment<RoutineSetupActivity>{
 
     private Spinner mTypeSpinner;
     private GenericListViewAdapter<String, GetViewImplementation.ViewHolder<String>> mTypeAdapter;

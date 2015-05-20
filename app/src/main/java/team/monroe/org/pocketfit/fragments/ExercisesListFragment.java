@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import team.monroe.org.pocketfit.FragmentActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Exercise;
 
-public class ExercisesListFragment extends GenericListFragment<Exercise> {
+public class ExercisesListFragment extends GenericListFragment<Exercise, RoutineSetupActivity> {
 
     private Data.DataChangeObserver<List> observer_exercise;
 
@@ -28,7 +30,7 @@ public class ExercisesListFragment extends GenericListFragment<Exercise> {
         if (getBoolArgument("chooserMode")){
             Map<String, String> results = new HashMap<>();
             results.put("exercise_id", exercise.id);
-            owner().onResult(results);
+            owner().onChooseResult(results);
         }else {
             owner().open_exercisesEditor(exercise.id);
         }

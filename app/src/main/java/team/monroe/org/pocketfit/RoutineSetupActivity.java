@@ -5,28 +5,18 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
-
-import org.monroe.team.android.box.app.ActivitySupport;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.RoutineExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
-import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
-public class RootActivity extends FragmentActivity {
+public class RoutineSetupActivity extends FragmentActivity {
 
     private static final int PICK_IMAGE = 30;
 
@@ -37,7 +27,7 @@ public class RootActivity extends FragmentActivity {
 
     @Override
     protected int customize_rootLayout() {
-        return R.layout.activity_dashboard;
+        return R.layout.activity_fragment_general;
     }
 
     public void open_Routines() {

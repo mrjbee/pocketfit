@@ -4,19 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
+        android:layout_marginTop="@dimen/tile.margin.top"
+        android:layout_marginBottom="@dimen/tile.margin.bottom"
+        android:layout_marginLeft="@dimen/tile.margin.side"
+        android:layout_marginRight="@dimen/tile.margin.side"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="none"
-        android:fillViewport="true">
+        android:background="@drawable/tile_white">
 
-        <LinearLayout
-            android:layout_marginTop="100dp"
-            android:id="@+id/tile_container"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </team.monroe.org.pocketfit.view.SlidingRelativeLayout>

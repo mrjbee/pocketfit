@@ -14,6 +14,7 @@ import org.monroe.team.android.box.app.ui.GetViewImplementation;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
@@ -21,7 +22,7 @@ import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
-public class RoutineDayEditorFragment extends BodyFragment{
+public class RoutineDayEditorFragment extends BodyFragment<RoutineSetupActivity>{
 
     private final static PositionDescription POSITION_AFTER_ALL = new PositionDescription("Last. After All", UpdateRoutineDay.RoutineDayUpdate.INDEX_ADD_LAST);
 
@@ -84,7 +85,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
                     public void data(String id) {
                         String title = view_text(R.id.edit_description).getText().toString();
                         if (!title.trim().isEmpty()){
-                            owner().open_exercisesAsChooser(mRoutineDay.id, id, true);
+                            owner(RoutineSetupActivity.class).open_exercisesAsChooser(mRoutineDay.id, id, true);
                         }else{
                             Toast.makeText(getActivity(), "Please add description first", Toast.LENGTH_SHORT).show();
                         }
@@ -112,7 +113,7 @@ public class RoutineDayEditorFragment extends BodyFragment{
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner().open_RoutineExercise(mRoutineDay.id, routineExercise.id);
+                        owner(RoutineSetupActivity.class).open_RoutineExercise(mRoutineDay.id, routineExercise.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {

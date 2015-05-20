@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import org.monroe.team.android.box.data.Data;
 
-import team.monroe.org.pocketfit.RootActivity;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -15,7 +15,7 @@ import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.TileNoRoutineViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
-public class DashboardFragment extends BodyFragment{
+public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
 
     private Data.DataChangeObserver<Routine> observer_activeRoutineObserver;
     private TileCaptionViewPresenter routineCaptionPresenter;
@@ -24,7 +24,7 @@ public class DashboardFragment extends BodyFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_dashboard;
+        return R.layout.fragment_no_active_routine;
     }
 
 
@@ -71,47 +71,9 @@ public class DashboardFragment extends BodyFragment{
         application().data_activeRoutine().fetch(true, observe_data_fetch(State.STOP, new PocketFitApp.DataAction<Routine>() {
                     @Override
                     public void data(Routine data) {
-                        if (routineCaptionPresenter == null) {
-                            routineCaptionPresenter = new TileCaptionViewPresenter(inflateView(R.layout.tile_caption));
-                            routineCaptionPresenter.hide();
-                            routineCaptionPresenter.setCaption("Workout Routine");
-                            addTile(routineCaptionPresenter);
 
-                            routineNoTilePresenter = new TileNoRoutineViewPresenter(inflateView(R.layout.tile_workout_not_set));
-                            routineNoTilePresenter.hide();
-                            routineNoTilePresenter.onExpandListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    ((RootActivity)activity()).open_Routines();
-                                }
-                            });
-                            addTile(routineNoTilePresenter);
-
-                            if (feature_tileAnimation) {
-                                routineCaptionPresenter.showWithAnimation();
-                                routineNoTilePresenter.showWithAnimation();
-                            }else {
-                                routineCaptionPresenter.show();
-                                routineNoTilePresenter.show();
-                            }
-                        } else {
-
-                        }
                     }
                 }));
-    }
-
-
-    private void addTile(ViewPresenter presenter) {
-        view(R.id.tile_container, ViewGroup.class).addView(presenter.getRootView());
-    }
-
-    private View inflateView(int id) {
-        return activity().getLayoutInflater().inflate(id, (android.view.ViewGroup) view(R.id.tile_container),false);
-    }
-
-    public void feature_tileAnimation(boolean feature_tileAnimation) {
-        this.feature_tileAnimation = feature_tileAnimation;
     }
 
     @Override
@@ -120,7 +82,6 @@ public class DashboardFragment extends BodyFragment{
         view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().open_exercisesAsEditor();
             }
         });
         return view;

@@ -2,17 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard"
-    style="@style/Panel.Base"
-    android:background="#252525">
-
-    <LinearLayout
-        android:layout_marginTop="130dp"
-        android:layout_marginBottom="@dimen/background.margin.bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        style="@style/Panel.Base">
-
-    </LinearLayout>
+    style="@style/Panel.Base">
 
     <FrameLayout
         android:id="@+id/fragment_container_body"
@@ -22,10 +12,10 @@
 
 
     <fragment
-        class="team.monroe.org.pocketfit.fragments.HeaderDashFragment"
+        class="team.monroe.org.pocketfit.fragments.HeaderFragment"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
-        tools:layout="@layout/fragment_dash_header"
+        tools:layout="@layout/fragment_header"
         android:id="@+id/fragment_header" />
 
 </RelativeLayout>

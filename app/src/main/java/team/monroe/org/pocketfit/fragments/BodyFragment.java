@@ -3,16 +3,16 @@ package team.monroe.org.pocketfit.fragments;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.data.Data;
 
-import team.monroe.org.pocketfit.RootActivity;
+import team.monroe.org.pocketfit.FragmentActivity;
+
 import team.monroe.org.pocketfit.PocketFitApp;
 
-public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
+public abstract class BodyFragment<OwnerActivity extends FragmentActivity>  extends FragmentSupport<PocketFitApp> {
 
     private HeaderUpdateRequest headerUpdateRequest = HeaderUpdateRequest.NOT_SET;
     private boolean stopped = true;
@@ -27,9 +27,9 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
         super.onStart();
         if (headerUpdateRequest != HeaderUpdateRequest.NOT_SET){
             if (headerUpdateRequest == HeaderUpdateRequest.SET){
-                ((RootActivity) activity()).header(getHeaderName(), isHeaderSecondary());
+                ((FragmentActivity) activity()).header(getHeaderName(), isHeaderSecondary());
             }else {
-                ((RootActivity) activity()).animateHeader(getHeaderName(), isHeaderSecondary());
+                ((FragmentActivity) activity()).animateHeader(getHeaderName(), isHeaderSecondary());
             }
         }
         headerUpdateRequest = HeaderUpdateRequest.NOT_SET;
@@ -59,8 +59,12 @@ public abstract class BodyFragment  extends FragmentSupport<PocketFitApp> {
         SET, NOT_SET, ANIMATE
     }
 
-    public RootActivity owner(){
-        return (RootActivity) activity();
+    public OwnerActivity owner(){
+        return (OwnerActivity) activity();
+    }
+
+    public <OwnerType extends FragmentActivity> OwnerType owner(Class<OwnerType> ownerClass){
+        return (OwnerType) activity();
     }
 
     @Override

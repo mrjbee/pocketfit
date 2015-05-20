@@ -23,10 +23,11 @@ import java.util.List;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.RoutineSetupActivity;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.SlideOffListView;
 
-public class RoutinesFragment extends BodyFragment {
+public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
 
     private Data.DataChangeObserver<List> observer_routines;
     private GenericListViewAdapter<Routine, GetViewImplementation.ViewHolder<Routine>> mRoutinesAdapter;
@@ -47,7 +48,7 @@ public class RoutinesFragment extends BodyFragment {
                 application().function_createId("routine",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                     @Override
                     public void data(String routine) {
-                        owner().open_Routine(routine);
+                        owner(RoutineSetupActivity.class).open_Routine(routine);
                     }
                 }));
             }
@@ -108,7 +109,7 @@ public class RoutinesFragment extends BodyFragment {
 
                             @Override
                             protected void onApply(float x, float y, float slideValue, float fraction) {
-                                owner().open_Routine(routine.id);
+                                owner(RoutineSetupActivity.class).open_Routine(routine.id);
                             }
 
                             @Override
@@ -160,7 +161,7 @@ public class RoutinesFragment extends BodyFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Routine routine = mRoutinesAdapter.getItem(position);
-                owner().open_Routine(routine.id);
+                owner(RoutineSetupActivity.class).open_Routine(routine.id);
             }
         });
     }

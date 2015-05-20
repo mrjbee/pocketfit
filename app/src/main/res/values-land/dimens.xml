@@ -2,4 +2,10 @@
 <resources>
     <dimen name="margin.tile">40dp</dimen>
     <dimen name="margin.tile.caption">55dp</dimen>
+
+    <dimen name="tile.margin.top">80dp</dimen>
+    <dimen name="tile.margin.bottom">20dp</dimen>
+    <dimen name="tile.margin.side">60dp</dimen>
+
+    <dimen name="background.margin.bottom">40dp</dimen>
 </resources>

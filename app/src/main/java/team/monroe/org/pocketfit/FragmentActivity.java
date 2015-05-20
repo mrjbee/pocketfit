@@ -13,8 +13,10 @@ import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.HeaderFragment;
+import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
+import team.monroe.org.pocketfit.fragments.contract.HeaderOwnerContract;
 
-public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> {
+public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> implements HeaderOwnerContract {
 
     private ArrayList<FragmentItem> backStack = new ArrayList<>();
 
@@ -81,8 +83,8 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> {
         return new BodyFragmentChangeRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
-
-    final public void onResult(Map<String, String> results) {
+    @Deprecated
+    final public void onChooseResult(Map<String, String> results) {
 
         FragmentItem producerBackStack = backStack.remove(backStack.size()-1);
         Class<BodyFragment> consumerFragmentClass = (Class<BodyFragment>) producerBackStack.argumentMap.get("fragment_class");
@@ -112,22 +114,28 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> {
     }
 
     final public void header(String headerText, boolean secondary) {
-        HeaderFragment fragment = getHeaderFragment();
+        HeaderContract fragment = getHeaderFragment();
         fragment.changeCaption(headerText, secondary, false);
     }
 
     final public void animateHeader(String headerText, boolean secondary) {
-        HeaderFragment fragment = getHeaderFragment();
+        HeaderContract fragment = getHeaderFragment();
         fragment.changeCaption(headerText, secondary, true);
     }
 
-    final public View build_actions(ViewGroup actionPanel) {
+    @Override
+    public View buildHeaderActionsView(ViewGroup actionPanel) {
         if (getBodyFragment() == null) return null;
         return getBodyFragment().build_HeaderActionsView(actionPanel, getLayoutInflater());
     }
 
-    protected final HeaderFragment getHeaderFragment() {
-        return (HeaderFragment) getFragmentManager().findFragmentById(R.id.fragment_header);
+    @Override
+    public void onHeaderBackPressed() {
+        onBackPressed();
+    }
+
+    protected final HeaderContract getHeaderFragment() {
+        return (HeaderContract) getFragmentManager().findFragmentById(R.id.fragment_header);
     }
 
     protected final BodyFragment getBodyFragment() {

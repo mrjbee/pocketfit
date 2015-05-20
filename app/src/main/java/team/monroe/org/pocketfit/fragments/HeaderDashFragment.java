@@ -11,23 +11,27 @@ import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
-import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
-
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
 import team.monroe.org.pocketfit.fragments.contract.HeaderOwnerContract;
 
-public class HeaderFragment extends FragmentSupport<PocketFitApp> implements HeaderContract{
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.combine;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_overshot;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.rotate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
-    private AppearanceController mainHeaderContainerAC;
+public class HeaderDashFragment extends FragmentSupport<PocketFitApp> implements HeaderContract{
+
     private AppearanceController secondaryHeaderContainerAC;
-    private boolean secondaryHeaderActivated = false;
     private String headerCaption = "";
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_header;
+        return R.layout.fragment_dash_header;
     }
 
     @Override
@@ -35,20 +39,8 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp> implements Hea
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null){
-            secondaryHeaderActivated = savedInstanceState.getBoolean("header_secondary",false);
             headerCaption = savedInstanceState.getString("header_caption","Uppss Not Set");
         }
-
-        mainHeaderContainerAC = combine(
-                animateAppearance(view(R.id.header_main_container),xSlide(0, -DisplayUtils.screenWidth(getResources())/2))
-                .showAnimation(duration_constant(200),interpreter_overshot())
-                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-                .hideAndGone(),
-
-                animateAppearance(view(R.id.panel_actions),xSlide(0, DisplayUtils.screenWidth(getResources())/2))
-                .showAnimation(duration_constant(200),interpreter_overshot())
-                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-        );
 
         secondaryHeaderContainerAC = combine(
                 animateAppearance(view(R.id.header_secondary_container), xSlide(0, -DisplayUtils.screenWidth(getResources()) / 2))
@@ -58,29 +50,11 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp> implements Hea
 
                 animateAppearance(view(R.id.panel_actions),xSlide(0, DisplayUtils.screenWidth(getResources())/2))
                 .showAnimation(duration_constant(200),interpreter_overshot())
-                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f)),
-
-                animateAppearance(view(R.id.secondary_caption_arrow),rotate(0, -180))
-                .showAnimation(duration_constant(500), interpreter_overshot())
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-                .hideAndGone());
+                );
 
-        if (secondaryHeaderActivated){
-            mainHeaderContainerAC.hideWithoutAnimation();
             secondaryHeaderContainerAC.showWithoutAnimation();
-        }else {
-            secondaryHeaderContainerAC.hideWithoutAnimation();
-            mainHeaderContainerAC.showWithoutAnimation();
-        }
-
-        build_header();
-
-        view(R.id.header_secondary_container).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackHeaderArrow();
-            }
-        });
+            build_header();
     }
 
     private void build_header() {
@@ -102,20 +76,18 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp> implements Hea
     }
 
     private TextView getHeaderCaptionView() {
-        return view_text(secondaryHeaderActivated? R.id.secondary_caption:R.id.caption);
+        return view_text(R.id.secondary_caption);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("header_secondary", secondaryHeaderActivated);
         outState.putString("header_caption",headerCaption);
     }
 
     public void changeCaption(String newCaption, boolean secondaryHeaderRequested, boolean animate) {
-        AppearanceController hideController = secondaryHeaderActivated?secondaryHeaderContainerAC:mainHeaderContainerAC;
-        secondaryHeaderActivated = secondaryHeaderRequested;
-        final AppearanceController showController = secondaryHeaderActivated?secondaryHeaderContainerAC:mainHeaderContainerAC;
+        AppearanceController hideController = secondaryHeaderContainerAC;
+        final AppearanceController showController = secondaryHeaderContainerAC;
         headerCaption = newCaption;
         if (animate) {
             hideController.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
@@ -141,6 +113,6 @@ public class HeaderFragment extends FragmentSupport<PocketFitApp> implements Hea
         return headerCaption;
     }
     public boolean isSecondary() {
-        return secondaryHeaderActivated;
+        return true;
     }
 }
