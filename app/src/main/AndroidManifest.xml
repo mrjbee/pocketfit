@@ -10,6 +10,7 @@
         android:theme="@style/AppTheme"
         android:largeHeap="true">
         <activity
+            android:theme="@style/AnimationActivity"
             android:name=".DashboardActivity"
             android:label="Pocket Fit" >
             <intent-filter>
@@ -18,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/AnimationActivity"
             android:name=".ExercisesActivity"
             android:label="Exercises" >
         </activity>

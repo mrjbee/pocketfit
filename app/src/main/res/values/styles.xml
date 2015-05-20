@@ -1,8 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
+    </style>
+
+    <style name="Secondary.Activity" parent="AppTheme">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_appear_on_open</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_leave_on_open</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_appear_on_close</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_leave_on_close</item>
     </style>
 
 
