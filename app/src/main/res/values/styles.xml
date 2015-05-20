@@ -62,7 +62,7 @@
 
     <style name="Text.Item.Sub.Caption" parent="AppTheme">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#ffff0c46</item>
+        <item name="android:textColor">#fd0b45</item>
     </style>
 
     <style name="Text.Checkbox" parent="AppTheme">

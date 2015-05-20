@@ -28,7 +28,7 @@ public class ExercisesListFragment extends GenericListFragment<Exercise> {
         if (getBoolArgument("chooserMode")){
             Map<String, String> results = new HashMap<>();
             results.put("exercise_id", exercise.id);
-            owner().on_choose(results);
+            owner().onResult(results);
         }else {
             owner().open_exercisesEditor(exercise.id);
         }

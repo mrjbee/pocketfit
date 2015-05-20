@@ -26,136 +26,54 @@ import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 
-public class RootActivity extends ActivitySupport<PocketFitApp> {
+public class RootActivity extends FragmentActivity {
 
     private static final int PICK_IMAGE = 30;
-    private ArrayList<FragmentBackStackItem> backStack = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-        if (isFirstRun(savedInstanceState)){
-            DashboardFragment fragment = new DashboardFragment();
-            fragment.feature_headerUpdate(BodyFragment.HeaderUpdateRequest.SET);
-            fragment.feature_tileAnimation(true);
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fragment_container_body, fragment,"body_fragment")
-                    .commit();
-            backStack.add(new FragmentBackStackItem(DashboardFragment.class));
-
-        } else {
-            backStack = (ArrayList<FragmentBackStackItem>) savedInstanceState.getSerializable("back_stack");
-        }
-
+    protected FragmentItem customize_startupFragment() {
+        return new FragmentItem(DashboardFragment.class);
     }
 
     @Override
-    public void onBackPressed() {
-        if (backStack.size() == 1) {
-            super.onBackPressed();
-        } else {
-           FragmentBackStackItem backStackItem = backStack.remove(backStack.size()-1);
-           backStackItem = backStack.get(backStack.size()-1);
-           getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left)
-                    .replace(R.id.fragment_container_body, fragment_instance(
-                            backStackItem.fragmentClass,
-                            BodyFragment.HeaderUpdateRequest.ANIMATE,
-                            backStackItem.getArgumentBundle()))
-                    .commit();
-        }
-    }
-
-    public void on_choose(Map<String, String> results) {
-
-        FragmentBackStackItem producerBackStack = backStack.remove(backStack.size()-1);
-        Class<BodyFragment> consumerFragmentClass = (Class<BodyFragment>) producerBackStack.argumentMap.get("fragment_class");
-
-        FragmentBackStackItem consumerBackStackItem;
-        if (consumerFragmentClass != null){
-            consumerBackStackItem = new FragmentBackStackItem(consumerFragmentClass);
-            for (Map.Entry<String, Serializable> stringSerializableEntry : producerBackStack.argumentMap.entrySet()) {
-                consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
-            }
-            backStack.add(consumerBackStackItem);
-        }else {
-            consumerBackStackItem = backStack.get(backStack.size()-1);
-        }
-
-        for (Map.Entry<String, String> stringSerializableEntry : results.entrySet()) {
-            consumerBackStackItem.addArgument(stringSerializableEntry.getKey(), stringSerializableEntry.getValue());
-        }
-
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.card_flip_in, R.animator.card_flip_out)
-                .replace(R.id.fragment_container_body, fragment_instance(
-                        consumerBackStackItem.fragmentClass,
-                        BodyFragment.HeaderUpdateRequest.ANIMATE,
-                        consumerBackStackItem.getArgumentBundle()))
-                .commit();
+    protected int customize_rootLayout() {
+        return R.layout.activity_dashboard;
     }
 
     public void open_Routines() {
-        backStack.add(new FragmentBackStackItem(RoutinesFragment.class));
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,fragment_instance(RoutinesFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE),"body_fragment" )
-                .commit();
+        updateBodyFragment(new FragmentItem(RoutinesFragment.class), change_slide_from_right());
     }
 
     public void open_Routine(String routineId) {
-        Bundle bundle = new Bundle();
-        bundle.putString("routine_id",routineId);
-        backStack.add(new FragmentBackStackItem(RoutineEditorFragment.class).addArgument("routine_id", routineId));
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(RoutineEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
-                .commit();
+        updateBodyFragment(
+                new FragmentItem(
+                        RoutineEditorFragment.class).addArgument("routine_id", routineId),
+                change_slide_from_right()
+        );
     }
 
     public void open_RoutineDay(String routineId, String routineDayId) {
-        Bundle bundle = new Bundle();
-        bundle.putString("routine_id",routineId);
-        bundle.putString("day_id",routineDayId);
-        backStack.add(new FragmentBackStackItem(RoutineDayEditorFragment.class).addArgument("routine_id",routineId).addArgument("day_id",routineDayId));
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(RoutineDayEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE,bundle),"body_fragment")
-                .commit();
+        updateBodyFragment(
+                new FragmentItem(
+                        RoutineDayEditorFragment.class).addArgument("routine_id", routineId).addArgument("day_id", routineDayId),
+                change_slide_from_right()
+        );
     }
 
-
     public void open_RoutineExercise(String dayId, String routineId) {
-        FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(RoutineExerciseEditorFragment.class)
+        FragmentItem fragmentBackStackItem = new FragmentItem(RoutineExerciseEditorFragment.class)
                 .addArgument("routine_exercise_id", routineId)
                 .addArgument("day_id",dayId);
-        backStack.add(fragmentBackStackItem);
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(
-                                fragmentBackStackItem.fragmentClass,
-                                BodyFragment.HeaderUpdateRequest.ANIMATE,
-                                fragmentBackStackItem.getArgumentBundle()))
-                .commit();
+        updateBodyFragment(fragmentBackStackItem, change_slide_from_right());
     }
 
     public void open_exercisesAsEditor() {
-        backStack.add(new FragmentBackStackItem(ExercisesListFragment.class));
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(ExercisesListFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE))
-                .commit();
+        updateBodyFragment(new FragmentItem(ExercisesListFragment.class), change_slide_from_right());
     }
 
     public void open_exercisesAsChooser(String routineDayId, String routineExerciseId, boolean moveToExerciseConfigFragment) {
 
-        FragmentBackStackItem fragmentBackStackItem = new FragmentBackStackItem(ExercisesListFragment.class)
+        FragmentItem fragmentBackStackItem = new FragmentItem(ExercisesListFragment.class)
                 .addArgument("routine_exercise_id", routineExerciseId)
                 .addArgument("day_id",routineDayId)
                 .addArgument("chooserMode", "true");
@@ -163,72 +81,17 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
             fragmentBackStackItem.addArgument("fragment_class", RoutineExerciseEditorFragment.class);
         }
 
-        backStack.add(fragmentBackStackItem);
-
-        int in_animation = R.animator.card_flip_in_right, out_animation = R.animator.card_flip_out_right;
         if (moveToExerciseConfigFragment){
-            in_animation = R.animator.slide_in_from_left;
-            out_animation = R.animator.slide_out_to_right;
+            updateBodyFragment(fragmentBackStackItem, change_slide_from_right());
+        }else {
+            updateBodyFragment(fragmentBackStackItem, change_flip_in());
         }
-
-
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(in_animation, out_animation)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(
-                                ExercisesListFragment.class,
-                                BodyFragment.HeaderUpdateRequest.ANIMATE,
-                                fragmentBackStackItem.getArgumentBundle()))
-                .commit();
     }
 
     public void open_exercisesEditor(String exerciseId) {
         Bundle bundle = new Bundle();
         bundle.putString("exercise_id",exerciseId);
-        backStack.add(new FragmentBackStackItem(ExerciseEditorFragment.class).addArgument("exercise_id", exerciseId));
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right)
-                .replace(R.id.fragment_container_body,
-                        fragment_instance(ExerciseEditorFragment.class, BodyFragment.HeaderUpdateRequest.ANIMATE, bundle))
-                .commit();
-    }
-
-    public void header(String headerText, boolean secondary) {
-        HeaderFragment fragment = getHeaderFragment();
-        fragment.changeCaption(headerText, secondary, false);
-    }
-
-    public void animateHeader(String headerText, boolean secondary) {
-        HeaderFragment fragment = getHeaderFragment();
-        fragment.changeCaption(headerText, secondary, true);
-    }
-
-    private HeaderFragment getHeaderFragment() {
-        return (HeaderFragment) getFragmentManager().findFragmentById(R.id.fragment_header);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("back_stack", backStack);
-    }
-
-
-    public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request) {
-        return fragment_instance(fragmentClass,request,null);
-    }
-
-    public static BodyFragment fragment_instance(Class<? extends BodyFragment> fragmentClass, BodyFragment.HeaderUpdateRequest request, Bundle arguments){
-        try {
-            BodyFragment fragment = fragmentClass.newInstance();
-            fragment.feature_headerUpdate(request);
-            if (arguments != null){
-                fragment.setArguments(arguments);
-            }
-            return fragment;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        updateBodyFragment(new FragmentItem(ExerciseEditorFragment.class).addArgument("exercise_id", exerciseId), change_slide_from_right());
     }
 
     public void performImageSelection() {
@@ -243,8 +106,6 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
         }
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == PICK_IMAGE && data != null && resultCode == Activity.RESULT_OK) {
@@ -254,42 +115,6 @@ public class RootActivity extends ActivitySupport<PocketFitApp> {
             bodyFragment.onImageResult(_uri);
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private BodyFragment getBodyFragment() {
-        return (BodyFragment) getFragmentManager().findFragmentById(R.id.fragment_container_body);
-    }
-
-    public View build_actions(ViewGroup actionPanel) {
-            if (getBodyFragment() == null) return null;
-            return getBodyFragment().build_HeaderActionsView(actionPanel, getLayoutInflater());
-    }
-
-
-
-    public static class FragmentBackStackItem implements Serializable{
-
-        private final Class<? extends BodyFragment> fragmentClass;
-        private final Map<String,Serializable> argumentMap = new HashMap<>();
-
-        public FragmentBackStackItem(Class<? extends BodyFragment> fragmentClass) {
-            this.fragmentClass = fragmentClass;
-        }
-
-        public Bundle getArgumentBundle(){
-            if (argumentMap.size() == 0) return null;
-            Bundle bundle = new Bundle();
-            for (Map.Entry<String, Serializable> entry : argumentMap.entrySet()) {
-                bundle.putSerializable(entry.getKey(), entry.getValue());
-            }
-            return bundle;
-        }
-
-        public FragmentBackStackItem addArgument(String key, Serializable value){
-            argumentMap.put(key, value);
-            return this;
-        }
-
     }
 
 }
