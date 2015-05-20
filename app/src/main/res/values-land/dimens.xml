@@ -7,5 +7,9 @@
     <dimen name="tile.margin.bottom">20dp</dimen>
     <dimen name="tile.margin.side">30dp</dimen>
 
+    <dimen name="button.margin.bottom">5dp</dimen>
+    <dimen name="button.margin.side">10dp</dimen>
+
+
     <dimen name="background.margin.bottom">40dp</dimen>
 </resources>

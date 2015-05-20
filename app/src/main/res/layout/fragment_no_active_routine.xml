@@ -57,4 +57,22 @@
         </LinearLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/button.margin.bottom"
+        android:layout_marginRight="@dimen/button.margin.side"
+        >
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/button_round"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/round_btn_gear"/>
+    </RelativeLayout>
+
 </team.monroe.org.pocketfit.view.SlidingRelativeLayout>
