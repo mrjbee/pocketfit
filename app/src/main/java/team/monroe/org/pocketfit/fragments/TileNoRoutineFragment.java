@@ -38,13 +38,13 @@ public class TileNoRoutineFragment extends DashboardTileFragment {
     }
 
     @Override
-    public Integer icon_mainButton() {
-        return application().hasActiveRoutine()? null : R.drawable.round_btn_gear;
-    }
-
-    @Override
     public void onMainButton() {
-        owner().openRoutinesEditor();
+        owner().hideMainButton(new Runnable() {
+            @Override
+            public void run() {
+                owner().openRoutinesEditor();
+            }
+        });
     }
 
     @Override
@@ -64,12 +64,14 @@ public class TileNoRoutineFragment extends DashboardTileFragment {
             @Override
             public void data(Routine routine) {
                 if (routine.id != null){
-                    runLastOnUiThread(new Runnable() {
+                    owner().hideMainButton(new Runnable() {
                         @Override
                         public void run() {
                             owner().switchRoutineTile();
                         }
-                    },300);
+                    });
+                } else {
+                    owner().showMainButton(R.drawable.round_btn_gear, null);
                 }
             }
         }));

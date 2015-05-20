@@ -55,11 +55,6 @@ public class TileRoutineFragment extends DashboardTileFragment {
     }
 
     @Override
-    public Integer icon_mainButton() {
-        return !application().hasActiveRoutine()? null : R.drawable.round_btn_gear;
-    }
-
-    @Override
     public void onMainButton() {
 
     }

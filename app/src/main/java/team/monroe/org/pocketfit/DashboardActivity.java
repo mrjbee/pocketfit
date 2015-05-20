@@ -14,18 +14,21 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 
 import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
+import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public class DashboardActivity extends FragmentActivity {
-
+public class DashboardActivity extends FragmentActivity implements MainButtonOwnerContract {
 
     private AppearanceController startupTileAC;
-    private AppearanceController mainButtonAC;
     private AppearanceController backgroundStripeAC;
+    private MainButtonController mainButtonController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
+
         startupTileAC = animateAppearance(view(R.id.fragment_container_body), ySlide(0, DisplayUtils.screenHeight(getResources())))
                 .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
                 .build();
@@ -34,11 +37,6 @@ public class DashboardActivity extends FragmentActivity {
                 .showAnimation(duration_constant(300))
                 .build();
 
-        mainButtonAC = animateAppearance(view(R.id.panel_main_button), scale(1f,0f))
-                .showAnimation(duration_constant(500), interpreter_overshot())
-                .hideAnimation(duration_constant(300), interpreter_accelerate(null))
-                .hideAndGone()
-                .build();
 
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,8 +46,8 @@ public class DashboardActivity extends FragmentActivity {
         });
 
         if (isFirstRun()){
+            mainButtonController.blockAppearance();
             backgroundStripeAC.hideWithoutAnimation();
-            mainButtonAC.hideWithoutAnimation();
             startupTileAC.hideWithoutAnimation();
             startupTileAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                 @Override
@@ -65,10 +63,12 @@ public class DashboardActivity extends FragmentActivity {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
-                            boolean required = isMainButtonRequested();
-                            if (required) {
-                                mainButtonAC.show();
-                            }
+                            runLastOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainButtonController.applyAppearance();
+                                }
+                            }, 500);
                         }
                     });
                 }
@@ -76,22 +76,8 @@ public class DashboardActivity extends FragmentActivity {
         }else {
             startupTileAC.showWithoutAnimation();
             backgroundStripeAC.showWithoutAnimation();
-            if (isMainButtonRequested()){
-                mainButtonAC.showWithoutAnimation();
-            }else {
-                mainButtonAC.hideWithoutAnimation();
-            }
+            mainButtonController.restoreState(savedInstanceState);
         }
-    }
-
-    private boolean isMainButtonRequested() {
-        boolean required = false;
-        Integer imageID = getBodyFragment(MainButtonUserContract.class).icon_mainButton();
-        if (imageID != null){
-            view(R.id.image_main_button, ImageView.class).setImageResource(imageID);
-            required = true;
-        }
-        return required;
     }
 
     @Override
@@ -109,17 +95,7 @@ public class DashboardActivity extends FragmentActivity {
     }
 
     public void openRoutinesEditor() {
-        mainButtonAC.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
-            @Override
-            public void customize(Animator animator) {
-                animator.addListener(new AnimatorListenerSupport() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
-                    }
-                });
-            }
-        });
+        startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
     }
 
     public void openRoutineEditor(final String routineId) {
@@ -131,14 +107,14 @@ public class DashboardActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 40){
-            if (isMainButtonRequested()) {
-                mainButtonAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
-                    @Override
-                    public void customize(Animator animator) {
-                        animator.setStartDelay(400);
-                    }
-                });
-            }
+            //TODO: Required unless animation ends
+            mainButtonController.blockAppearance();
+            runLastOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mainButtonController.applyAppearance();
+                }
+            }, 1000);
         }
     }
 
@@ -148,27 +124,162 @@ public class DashboardActivity extends FragmentActivity {
     }
 
     public void switchNoRoutineTile() {
+        mainButtonController.blockAppearance();
         replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), change_flip_in());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (isMainButtonRequested()) {
-                    mainButtonAC.show();
-                }
+                mainButtonController.applyAppearance();
             }
-        },500);
+        },1000);
     }
 
     public void switchRoutineTile() {
+        mainButtonController.blockAppearance();
         replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), change_flip_out());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (isMainButtonRequested()) {
-                    mainButtonAC.show();
-                }
+                mainButtonController.applyAppearance();
             }
-        },500);
+        }, 500);
+    }
+
+    @Override
+    public void showMainButton(int resource, Runnable action) {
+        mainButtonController.show(resource, action);
+    }
+
+    @Override
+    public void hideMainButton(Runnable actionOnHide) {
+        mainButtonController.hide(actionOnHide);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mainButtonController.saveState(outState);
+    }
+
+    private static class MainButtonController {
+
+        private final View mMainButtonPanel;
+        private final ImageView mMainButtonImage;
+        private int mImageButtonResource = 0;
+        private final AppearanceController mMainButtonAC;
+        private boolean mMainButtonVisible = false;
+        private boolean mLock = false;
+        private Request mPendingRequest = null;
+
+        private MainButtonController(View mMainButtonPanel, ImageView mMainButtonImage) {
+            this.mMainButtonPanel = mMainButtonPanel;
+            this.mMainButtonImage = mMainButtonImage;
+            mMainButtonAC = animateAppearance(mMainButtonPanel, scale(1f,0f))
+                    .showAnimation(duration_constant(500), interpreter_overshot())
+                    .hideAnimation(duration_constant(300), interpreter_accelerate(null))
+                    .hideAndGone()
+                    .build();
+            mMainButtonAC.hideWithoutAnimation();
+        }
+
+        public void restoreState(Bundle savedInstanceState) {
+            int resource = savedInstanceState.getInt("main_btn_res", 0);
+            if (savedInstanceState.getBoolean("main_btn_visibility", false)){
+                mMainButtonImage.setImageResource(resource);
+                mMainButtonAC.showWithoutAnimation();
+                mMainButtonVisible = true;
+            }else{
+                mMainButtonVisible = false;
+                mMainButtonAC.hideWithoutAnimation();
+            }
+        }
+
+        public void saveState(Bundle outState) {
+            outState.putBoolean("main_btn_visibility", mMainButtonVisible);
+            outState.putInt("main_btn_res", mImageButtonResource);
+        }
+
+        public void show(int resource, Runnable action) {
+            Request request = new Request(false,resource,action);
+            executeRequest(request);
+        }
+
+        public void hide(Runnable actionOnHide) {
+            Request request = new Request(true, mImageButtonResource, actionOnHide);
+            executeRequest(request);
+        }
+
+        private synchronized void executeRequest(Request request) {
+            //Save int here as rotation may corrupt state
+            mImageButtonResource = request.r;
+            mMainButtonVisible = !request.closeRequest;
+
+            if (mLock){
+                mPendingRequest = request;
+            } else {
+                applyDirectAppearance(request);
+            }
+        }
+
+        public synchronized void blockAppearance() {
+            mLock = true;
+        }
+
+        public synchronized void applyAppearance() {
+            mLock = false;
+            if (mPendingRequest != null){
+                applyDirectAppearance(mPendingRequest);
+            }
+        }
+
+        private void applyDirectAppearance(final Request request) {
+            mPendingRequest = null;
+            mImageButtonResource = request.r;
+            mMainButtonVisible = !request.closeRequest;
+            mMainButtonImage.setImageResource(mImageButtonResource);
+            if (!request.closeRequest){
+                mMainButtonAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
+                    @Override
+                    public void customize(Animator animator) {
+                        animator.addListener(new AnimatorListenerSupport(){
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (request.action != null){
+                                    request.action.run();
+                                }
+                            }
+                        });
+                    }
+                });
+            }else{
+                mMainButtonAC.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+                    @Override
+                    public void customize(Animator animator) {
+                        animator.addListener(new AnimatorListenerSupport() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (request.action != null) {
+                                    request.action.run();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        private final class Request{
+            private final boolean closeRequest;
+            private final int r;
+            private final Runnable action;
+
+            private Request(boolean closeRequest, int r, Runnable action) {
+                this.closeRequest = closeRequest;
+                this.r = r;
+                this.action = action;
+            }
+        }
+
     }
 
 }
