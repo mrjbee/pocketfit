@@ -108,18 +108,24 @@ public class DashboardActivity extends FragmentActivity {
         startActivity(new Intent(this, ExercisesActivity.class));
     }
 
-    public void openRoutineEditor() {
+    public void openRoutinesEditor() {
         mainButtonAC.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
             @Override
             public void customize(Animator animator) {
                 animator.addListener(new AnimatorListenerSupport() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        startActivityForResult(new Intent(DashboardActivity.this, RoutineSetupActivity.class), 40);
+                        startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
                     }
                 });
             }
         });
+    }
+
+    public void openRoutineEditor(final String routineId) {
+        Intent intent = new Intent(DashboardActivity.this, RoutineEditActivity.class);
+        intent.putExtra("routine_id",routineId);
+        startActivityForResult(intent, 40);
     }
 
     @Override
@@ -164,6 +170,5 @@ public class DashboardActivity extends FragmentActivity {
             }
         },500);
     }
-
 
 }

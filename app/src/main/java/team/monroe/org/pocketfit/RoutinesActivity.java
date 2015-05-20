@@ -20,7 +20,7 @@ import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
 import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 
-public class RoutineSetupActivity extends FragmentActivity implements ExerciseOwnerContract {
+public class RoutinesActivity extends FragmentActivity implements ExerciseOwnerContract {
 
     private static final int PICK_IMAGE = 30;
 

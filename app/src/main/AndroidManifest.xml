@@ -25,9 +25,16 @@
         </activity>
         <activity
             android:theme="@style/AnimationActivity"
-            android:name=".RoutineSetupActivity"
+            android:name=".RoutinesActivity"
             android:label="Exercises" >
         </activity>
+
+        <activity
+            android:theme="@style/AnimationActivity"
+            android:name=".RoutineEditActivity"
+            android:label="Routine" >
+        </activity>
+
     </application>
 
 </manifest>

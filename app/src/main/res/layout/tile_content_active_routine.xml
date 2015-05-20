@@ -2,13 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#fff">
     <ImageView
         android:id="@+id/image_cover"
         android:layout_width="fill_parent"
         android:layout_height="250dp"
+        android:src="@drawable/covert_loading"
         android:scaleType="centerCrop"
         />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example"
+            style="@style/Text.Body.Caption"/>
 
+        <TextView
+            android:layout_below="@id/text_title"
+            android:id="@+id/text_description"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example"
+            android:singleLine="false"
+            android:maxLines="3"
+            style="@style/Text.Body.Optional"/>
+
+    </RelativeLayout>
 </LinearLayout>

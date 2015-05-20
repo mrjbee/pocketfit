@@ -40,14 +40,14 @@
         >
         <Button
             android:id="@+id/main_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/button_round"/>
 
         <ImageView
             android:id="@+id/image_main_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/round_btn_gear"/>
     </RelativeLayout>
 

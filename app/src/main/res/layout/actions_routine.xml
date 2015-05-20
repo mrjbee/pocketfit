@@ -5,12 +5,22 @@
     android:layout_height="match_parent"
     android:paddingRight="20dp"
     >
+
+    <ImageView
+        android:id="@+id/action_edit_routine"
+        android:layout_toLeftOf="@+id/action_edit_exercises"
+        android:layout_centerVertical="true"
+        android:layout_width="35dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:src="@drawable/pen"/>
+
     <ImageView
         android:id="@+id/action_edit_exercises"
         android:layout_toLeftOf="@+id/action_edit_routines"
         android:layout_centerVertical="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="50dp"
         android:padding="5dp"
         android:src="@drawable/runner"/>
 
@@ -18,8 +28,8 @@
         android:id="@+id/action_edit_routines"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="50dp"
         android:padding="5dp"
         android:src="@drawable/gear"/>
 

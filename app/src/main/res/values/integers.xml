@@ -2,5 +2,5 @@
 <resources>
     <integer name="card_flip_time_full">400</integer>
     <integer name="card_flip_time_half">200</integer>
-    <color name="light.black">#ff404040</color>
+    <color name="light.black">#252525</color>
 </resources>

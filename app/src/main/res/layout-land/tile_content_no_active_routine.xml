@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#e11142"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/panel_caption"
+        android:layout_toRightOf="@+id/image_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Text.Header.Secondary.Caption.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Build" />
+
+        <TextView
+            style="@style/Text.Header.Secondary.Caption.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Your Routine"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/image_cover"
+        android:layout_centerVertical="true"
+        android:layout_width="200dp"
+        android:layout_height="fill_parent"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:src="@drawable/gears" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_toRightOf="@+id/image_cover"
+        style="@style/Text.Body.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/panel_caption"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Start building your body with creating workout routine. You can have multiple routines but only one will be active at same time" />
+
+</RelativeLayout>

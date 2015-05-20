@@ -23,11 +23,11 @@ import java.util.List;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
-import team.monroe.org.pocketfit.RoutineSetupActivity;
+import team.monroe.org.pocketfit.RoutinesActivity;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.SlideOffListView;
 
-public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
+public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
 
     private Data.DataChangeObserver<List> observer_routines;
     private GenericListViewAdapter<Routine, GetViewImplementation.ViewHolder<Routine>> mRoutinesAdapter;
@@ -48,7 +48,7 @@ public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
                 application().function_createId("routine",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                     @Override
                     public void data(String routine) {
-                        owner(RoutineSetupActivity.class).open_Routine(routine);
+                        owner(RoutinesActivity.class).open_Routine(routine);
                     }
                 }));
             }
@@ -109,7 +109,7 @@ public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
 
                             @Override
                             protected void onApply(float x, float y, float slideValue, float fraction) {
-                                owner(RoutineSetupActivity.class).open_Routine(routine.id);
+                                owner(RoutinesActivity.class).open_Routine(routine.id);
                             }
 
                             @Override
@@ -161,7 +161,7 @@ public class RoutinesFragment extends BodyFragment<RoutineSetupActivity> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Routine routine = mRoutinesAdapter.getItem(position);
-                owner(RoutineSetupActivity.class).open_Routine(routine.id);
+                owner(RoutinesActivity.class).open_Routine(routine.id);
             }
         });
     }

@@ -44,7 +44,7 @@ public class TileNoRoutineFragment extends DashboardTileFragment {
 
     @Override
     public void onMainButton() {
-        owner().openRoutineEditor();
+        owner().openRoutinesEditor();
     }
 
     @Override

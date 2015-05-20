@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 
 import org.monroe.team.android.box.data.Data;
 
-import team.monroe.org.pocketfit.RoutineSetupActivity;
+import team.monroe.org.pocketfit.RoutinesActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.TileNoRoutineViewPresenter;
 
-public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
+public class DashboardFragment extends BodyFragment<RoutinesActivity>{
 
     private Data.DataChangeObserver<Routine> observer_activeRoutineObserver;
     private TileCaptionViewPresenter routineCaptionPresenter;

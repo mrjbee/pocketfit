@@ -17,6 +17,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 public class TileRoutineFragment extends DashboardTileFragment {
 
     private Data.DataChangeObserver<Routine> observer_activeRoutineObserver;
+    private Routine mRoutine;
 
     @Override
     protected String getHeaderName() {
@@ -40,9 +41,16 @@ public class TileRoutineFragment extends DashboardTileFragment {
         view.findViewById(R.id.action_edit_routines).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().openRoutineEditor();
+                owner().openRoutinesEditor();
             }
         });
+        view.findViewById(R.id.action_edit_routine).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                owner().openRoutineEditor(mRoutine.id);
+            }
+        });
+
         return view;
     }
 
@@ -99,14 +107,25 @@ public class TileRoutineFragment extends DashboardTileFragment {
                         }
                     },300);
                 }else {
-                    application().loadToBitmap(routine.imageId,
-                            DisplayUtils.screenHeight(getResources()),
-                            DisplayUtils.screenHeight(getResources()), new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
-                                @Override
-                                public void data(Pair<String, Bitmap> data) {
-                                    view(R.id.image_cover, ImageView.class).setImageBitmap(data.second);
-                                }
-                            });
+                    mRoutine = routine;
+                    view_text(R.id.text_title).setText(routine.title);
+                    view_text(R.id.text_description).setText(routine.description);
+                    if (routine.imageId != null) {
+                        String wasId = (String) view(R.id.image_cover, ImageView.class).getTag();
+                        if (routine.imageId.equals(wasId)) return;
+                        view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.covert_loading);
+                        application().loadToBitmap(routine.imageId,
+                                DisplayUtils.screenHeight(getResources()),
+                                DisplayUtils.screenHeight(getResources()), new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
+                                    @Override
+                                    public void data(Pair<String, Bitmap> data) {
+                                        view(R.id.image_cover, ImageView.class).setImageBitmap(data.second);
+                                        view(R.id.image_cover, ImageView.class).setTag(data.first);
+                                    }
+                                });
+                    }else{
+                        view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
+                    }
                 }
             }
         }));
