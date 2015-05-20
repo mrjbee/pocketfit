@@ -13,7 +13,6 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.TileCaptionViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.TileNoRoutineViewPresenter;
-import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
 public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
 
@@ -78,7 +77,7 @@ public class DashboardFragment extends BodyFragment<RoutineSetupActivity>{
 
     @Override
     public View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
-        View view = layoutInflater.inflate(R.layout.actions_dashboard, actionPanel, false);
+        View view = layoutInflater.inflate(R.layout.actions_no_routines, actionPanel, false);
         view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

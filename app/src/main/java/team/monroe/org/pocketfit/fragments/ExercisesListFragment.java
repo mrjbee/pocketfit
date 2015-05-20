@@ -2,16 +2,14 @@ package team.monroe.org.pocketfit.fragments;
 
 import org.monroe.team.android.box.data.Data;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import team.monroe.org.pocketfit.FragmentActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
-import team.monroe.org.pocketfit.RoutineSetupActivity;
+import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 import team.monroe.org.pocketfit.presentations.Exercise;
 
-public class ExercisesListFragment extends GenericListFragment<Exercise, RoutineSetupActivity> {
+public class ExercisesListFragment extends GenericListFragment<Exercise, FragmentActivity> {
 
     private Data.DataChangeObserver<List> observer_exercise;
 
@@ -20,7 +18,7 @@ public class ExercisesListFragment extends GenericListFragment<Exercise, Routine
         application().function_createId("exercise",observe_function(State.STOP, new PocketFitApp.DataAction<String>() {
             @Override
             public void data(String id) {
-                owner().open_exercisesEditor(id);
+                exerciseOwner().editExercise(id);
             }
         }));
     }
@@ -28,17 +26,15 @@ public class ExercisesListFragment extends GenericListFragment<Exercise, Routine
     @Override
     protected void onItemClick(Exercise exercise) {
         if (getBoolArgument("chooserMode")){
-            Map<String, String> results = new HashMap<>();
-            results.put("exercise_id", exercise.id);
-            owner().onChooseResult(results);
+            exerciseOwner().onExerciseSelected(exercise.id);
         }else {
-            owner().open_exercisesEditor(exercise.id);
+            exerciseOwner().editExercise(exercise.id);
         }
     }
 
     @Override
     protected void onItemEdit(Exercise exercise) {
-        owner().open_exercisesEditor(exercise.id);
+        exerciseOwner().editExercise(exercise.id);
     }
 
     @Override
@@ -106,5 +102,9 @@ public class ExercisesListFragment extends GenericListFragment<Exercise, Routine
                 updateItems(data);
             }
         }));
+    }
+
+    private final ExerciseOwnerContract exerciseOwner(){
+        return (ExerciseOwnerContract) activity();
     }
 }

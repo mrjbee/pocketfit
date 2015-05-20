@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.RoutineExerciseEditorFragment;
@@ -15,8 +18,9 @@ import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutinesFragment;
+import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 
-public class RoutineSetupActivity extends FragmentActivity {
+public class RoutineSetupActivity extends FragmentActivity implements ExerciseOwnerContract {
 
     private static final int PICK_IMAGE = 30;
 
@@ -78,10 +82,15 @@ public class RoutineSetupActivity extends FragmentActivity {
         }
     }
 
-    public void open_exercisesEditor(String exerciseId) {
-        Bundle bundle = new Bundle();
-        bundle.putString("exercise_id",exerciseId);
+    public void editExercise(String exerciseId) {
         updateBodyFragment(new FragmentItem(ExerciseEditorFragment.class).addArgument("exercise_id", exerciseId), change_slide_from_right());
+    }
+
+    @Override
+    public void onExerciseSelected(String exerciseId) {
+        Map<String, String> results = new HashMap<>();
+        results.put("exercise_id", exerciseId);
+        onChooseResult(results);
     }
 
     public void performImageSelection() {

@@ -83,7 +83,6 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         return new BodyFragmentChangeRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
-    @Deprecated
     final public void onChooseResult(Map<String, String> results) {
 
         FragmentItem producerBackStack = backStack.remove(backStack.size()-1);
