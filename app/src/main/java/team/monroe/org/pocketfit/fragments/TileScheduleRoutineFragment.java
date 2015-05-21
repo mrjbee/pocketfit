@@ -65,8 +65,8 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                         }
 
                         if (day.dayDateString.equals("Today")){
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
                             dayBackground.setImageResource(R.drawable.day_today);
-                            caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
                         }
 
                         caption.setText(day.dayDateString);
