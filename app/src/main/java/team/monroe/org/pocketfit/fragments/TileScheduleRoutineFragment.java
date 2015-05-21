@@ -44,10 +44,11 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
                     @Override
                     public void update(final Day day, int position) {
+
                         if (day.id != null){
                             shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
-                            dayBackground.setImageResource(R.drawable.day_training);
                             text.setVisibility(View.VISIBLE);
+                            dayBackground.setImageResource(R.drawable.day_training);
                             caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
                             dayBackground.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -62,6 +63,12 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                             caption.setTextColor(getResources().getColor(R.color.text_color_date));
                             dayBackground.setOnClickListener(null);
                         }
+
+                        if (day.dayDateString.equals("Today")){
+                            dayBackground.setImageResource(R.drawable.day_today);
+                            caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
+                        }
+
                         caption.setText(day.dayDateString);
                         text.setText(day.dayDescription);
                         shortDay.setText(day.shortDay);
