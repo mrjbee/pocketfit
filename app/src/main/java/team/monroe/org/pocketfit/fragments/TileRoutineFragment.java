@@ -95,16 +95,17 @@ public class TileRoutineFragment extends DashboardTileFragment {
             @Override
             public void data(Routine routine) {
                 if (routine.id == null){
-                    runLastOnUiThread(new Runnable() {
+                    owner().hideMainButton(new Runnable() {
                         @Override
                         public void run() {
                             owner().switchNoRoutineTile();
                         }
-                    },300);
+                    });
                 }else {
                     mRoutine = routine;
                     view_text(R.id.text_title).setText(routine.title);
                     view_text(R.id.text_description).setText(routine.description);
+                    //owner().showMainButton(R.drawable.round_btn_gear, null);
                     if (routine.imageId != null) {
                         String wasId = (String) view(R.id.image_cover, ImageView.class).getTag();
                         if (routine.imageId.equals(wasId)) return;

@@ -113,6 +113,11 @@
         <item name="android:textColor">#ff878787</item>
     </style>
 
+    <style name="Text.Link" parent="AppTheme">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#ff30addd</item>
+    </style>
+
     <style name="Text.Widget.Counter" parent="AppTheme">
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">#fffafafa</item>
