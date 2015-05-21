@@ -14,20 +14,18 @@
         android:background="#ff515151"
         android:orientation="vertical" />
 
-
-    <FrameLayout
-        android:id="@+id/fragment_container_body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-
-
     <fragment
         class="team.monroe.org.pocketfit.fragments.HeaderDashFragment"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
         tools:layout="@layout/fragment_dash_header"
         android:id="@+id/fragment_header" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/panel_main_button"
