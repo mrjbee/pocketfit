@@ -8,6 +8,8 @@ import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.data.Data;
 
+import java.io.Serializable;
+
 import team.monroe.org.pocketfit.FragmentActivity;
 
 import team.monroe.org.pocketfit.PocketFitApp;
@@ -55,7 +57,7 @@ public abstract class BodyFragment<OwnerActivity extends FragmentActivity>  exte
     }
 
 
-    public static enum HeaderUpdateRequest {
+    public static enum HeaderUpdateRequest implements Serializable {
         SET, NOT_SET, ANIMATE
     }
 

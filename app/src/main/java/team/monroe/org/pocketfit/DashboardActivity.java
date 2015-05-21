@@ -14,6 +14,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 
 import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
+import team.monroe.org.pocketfit.fragments.TileScheduleRoutineFragment;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
@@ -125,7 +126,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switchNoRoutineTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), change_flip_in());
+        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), animation_flip_in());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +137,18 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switchRoutineTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), change_flip_out());
+        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), animation_flip_out());
+        runLastOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainButtonController.applyAppearance();
+            }
+        }, 500);
+    }
+
+    public void openActiveRoutineSchedule() {
+        mainButtonController.blockAppearance();
+        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_flip_in()), animation_flip_out());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -160,6 +172,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         super.onSaveInstanceState(outState);
         mainButtonController.saveState(outState);
     }
+
 
     private static class MainButtonController {
 
@@ -200,8 +213,18 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         }
 
         public void show(int resource, Runnable action) {
-            Request request = new Request(false,resource,action);
-            executeRequest(request);
+            final Request originalRequest = new Request(false, resource, action);
+            if (mMainButtonVisible && resource != mImageButtonResource){
+                executeRequest(new Request(true, mImageButtonResource, new Runnable() {
+                    @Override
+                    public void run() {
+                        executeRequest(originalRequest);
+                    }
+                }));
+            }else{
+                Request request = new Request(false, resource, action);
+                executeRequest(originalRequest);
+            }
         }
 
         public void hide(Runnable actionOnHide) {

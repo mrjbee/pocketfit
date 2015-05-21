@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
-import team.monroe.org.pocketfit.fragments.DashboardFragment;
 import team.monroe.org.pocketfit.fragments.RoutineExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
@@ -35,14 +33,14 @@ public class RoutinesActivity extends FragmentActivity implements ExerciseOwnerC
     }
 
     public void open_Routines() {
-        updateBodyFragment(new FragmentItem(RoutinesFragment.class), change_slide_from_right());
+        updateBodyFragment(new FragmentItem(RoutinesFragment.class), animation_slide_from_right());
     }
 
     public void open_Routine(String routineId) {
         updateBodyFragment(
                 new FragmentItem(
                         RoutineEditorFragment.class).addArgument("routine_id", routineId),
-                change_slide_from_right()
+                animation_slide_from_right()
         );
     }
 
@@ -50,7 +48,7 @@ public class RoutinesActivity extends FragmentActivity implements ExerciseOwnerC
         updateBodyFragment(
                 new FragmentItem(
                         RoutineDayEditorFragment.class).addArgument("routine_id", routineId).addArgument("day_id", routineDayId),
-                change_slide_from_right()
+                animation_slide_from_right()
         );
     }
 
@@ -58,11 +56,11 @@ public class RoutinesActivity extends FragmentActivity implements ExerciseOwnerC
         FragmentItem fragmentBackStackItem = new FragmentItem(RoutineExerciseEditorFragment.class)
                 .addArgument("routine_exercise_id", routineId)
                 .addArgument("day_id",dayId);
-        updateBodyFragment(fragmentBackStackItem, change_slide_from_right());
+        updateBodyFragment(fragmentBackStackItem, animation_slide_from_right());
     }
 
     public void open_exercisesAsEditor() {
-        updateBodyFragment(new FragmentItem(ExercisesListFragment.class), change_slide_from_right());
+        updateBodyFragment(new FragmentItem(ExercisesListFragment.class), animation_slide_from_right());
     }
 
     public void open_exercisesAsChooser(String routineDayId, String routineExerciseId, boolean moveToExerciseConfigFragment) {
@@ -76,14 +74,14 @@ public class RoutinesActivity extends FragmentActivity implements ExerciseOwnerC
         }
 
         if (moveToExerciseConfigFragment){
-            updateBodyFragment(fragmentBackStackItem, change_slide_from_right());
+            updateBodyFragment(fragmentBackStackItem, animation_slide_from_right());
         }else {
-            updateBodyFragment(fragmentBackStackItem, change_flip_in());
+            updateBodyFragment(fragmentBackStackItem, animation_flip_in());
         }
     }
 
     public void editExercise(String exerciseId) {
-        updateBodyFragment(new FragmentItem(ExerciseEditorFragment.class).addArgument("exercise_id", exerciseId), change_slide_from_right());
+        updateBodyFragment(new FragmentItem(ExerciseEditorFragment.class).addArgument("exercise_id", exerciseId), animation_slide_from_right());
     }
 
     @Override

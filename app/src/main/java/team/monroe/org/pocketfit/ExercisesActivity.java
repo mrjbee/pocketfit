@@ -18,7 +18,7 @@ public class ExercisesActivity extends FragmentActivity implements ExerciseOwner
     @Override
     public void editExercise(String exerciseId) {
         updateBodyFragment(new FragmentItem(ExerciseEditorFragment.class)
-                .addArgument("exercise_id", exerciseId), change_slide_from_right());
+                .addArgument("exercise_id", exerciseId), animation_slide_from_right());
     }
 
     @Override

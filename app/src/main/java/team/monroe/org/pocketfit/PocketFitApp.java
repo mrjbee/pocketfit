@@ -8,13 +8,13 @@ import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.FileUtils;
 import org.monroe.team.corebox.services.BackgroundTaskManager;
+import org.monroe.team.corebox.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -22,7 +22,9 @@ import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
+import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
+import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
@@ -40,6 +42,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     private Data<Routine> data_activeRoutine;
     private Data<List> data_routines;
     private Data<List> data_exercises;
+    private Data<RoutineSchedule> data_activeRoutineSchedule;
 
     @Override
     protected PocketFitModel createModel() {
@@ -48,15 +51,37 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     @Override
     protected void onPostCreate() {
+
+        data_activeRoutineSchedule = new Data<RoutineSchedule>(RoutineSchedule.class, model()) {
+            @Override
+            protected RoutineSchedule provideData() {
+                RoutineSchedule routineSchedule = model().execute(GetActiveRoutineSchedule.class, null);
+                if (routineSchedule == null) routineSchedule = new RoutineSchedule(null, DateUtils.today());
+                return routineSchedule;
+            }
+        };
+
         data_activeRoutine = new Data<Routine>(Routine.class, model()) {
             @Override
             protected Routine provideData() {
-                String routineId = getSetting(Settings.ACTIVE_ROUTINE_ID);
+                String routineId = getSetting(Settings.ROUTINE_ACTIVE_ID);
                 if (routineId == null) return new Routine(null);
                 Routine routine = model().execute(GetRoutineById.class, routineId);
                 return routine;
             }
         };
+
+        data_activeRoutine().addDataChangeObserver(new Data.DataChangeObserver<Routine>() {
+            @Override
+            public void onDataInvalid() {
+                data_activeRoutineSchedule.invalidate();
+            }
+
+            @Override
+            public void onData(Routine routine) {
+
+            }
+        });
 
         data_routines = new Data<List>(List.class, model()) {
             @Override
@@ -97,6 +122,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public Data<List> data_exercises() {
         return data_exercises;
+    }
+
+    public Data<RoutineSchedule> data_activeRoutineSchedule() {
+        return data_activeRoutineSchedule;
     }
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {
@@ -287,8 +316,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public boolean hasActiveRoutine() {
-        return getSetting(Settings.ACTIVE_ROUTINE_ID) != null;
+        return getSetting(Settings.ROUTINE_ACTIVE_ID) != null;
     }
+
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
         final PocketFitApp owner;
@@ -306,6 +336,5 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     public static interface DataAction<DataType>{
         public void data(DataType data);
     }
-
 
 }

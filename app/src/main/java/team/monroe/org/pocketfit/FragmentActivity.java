@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
-import team.monroe.org.pocketfit.fragments.HeaderFragment;
 import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
 import team.monroe.org.pocketfit.fragments.contract.HeaderOwnerContract;
 
@@ -49,25 +48,28 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         } else {
 
            FragmentItem backStackItem = backStack.remove(backStack.size()-1);
+           BodyFragmentAnimationRequest changeAnimation = backStackItem.backAnimation;
            backStackItem = backStack.get(backStack.size()-1);
 
-           BodyFragmentChangeRequest changeRequest = change_slide_from_left();
-           updateBodyFragmentNoHistory(backStackItem, changeRequest);
+           if (changeAnimation == null){
+                changeAnimation = animation_slide_from_left();
+           }
+           updateBodyFragmentNoHistory(backStackItem, changeAnimation);
         }
     }
 
-    final protected void replaceBodyFragment(FragmentItem backStackItem, BodyFragmentChangeRequest changeRequest) {
+    final protected void replaceBodyFragment(FragmentItem backStackItem, BodyFragmentAnimationRequest changeRequest) {
         backStack.remove(backStack.size()-1);
         backStack.add(backStackItem);
         updateBodyFragmentNoHistory(backStackItem, changeRequest);
     }
 
-    final protected void updateBodyFragment(FragmentItem backStackItem, BodyFragmentChangeRequest changeRequest) {
+    final protected void updateBodyFragment(FragmentItem backStackItem, BodyFragmentAnimationRequest changeRequest) {
         backStack.add(backStackItem);
         updateBodyFragmentNoHistory(backStackItem, changeRequest);
     }
 
-    final protected void updateBodyFragmentNoHistory(FragmentItem backStackItem, BodyFragmentChangeRequest changeRequest) {
+    final protected void updateBodyFragmentNoHistory(FragmentItem backStackItem, BodyFragmentAnimationRequest changeRequest) {
         getFragmentManager().beginTransaction()
                  .setCustomAnimations(changeRequest.in_animation, changeRequest.out_animation)
                  .replace(R.id.fragment_container_body, fragment_instance(
@@ -77,20 +79,20 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
                  .commit();
     }
 
-    final protected BodyFragmentChangeRequest change_slide_from_left() {
-        return new BodyFragmentChangeRequest(R.animator.slide_in_from_right, R.animator.slide_out_to_left, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    final protected BodyFragmentAnimationRequest animation_slide_from_left() {
+        return new BodyFragmentAnimationRequest(R.animator.slide_in_from_right, R.animator.slide_out_to_left, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
-    final protected BodyFragmentChangeRequest change_slide_from_right() {
-        return new BodyFragmentChangeRequest(R.animator.slide_in_from_left, R.animator.slide_out_to_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    final protected BodyFragmentAnimationRequest animation_slide_from_right() {
+        return new BodyFragmentAnimationRequest(R.animator.slide_in_from_left, R.animator.slide_out_to_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
-    final protected BodyFragmentChangeRequest change_flip_in() {
-        return new BodyFragmentChangeRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    final protected BodyFragmentAnimationRequest animation_flip_in() {
+        return new BodyFragmentAnimationRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
-    final protected BodyFragmentChangeRequest change_flip_out() {
-        return new BodyFragmentChangeRequest(R.animator.card_flip_in, R.animator.card_flip_out, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    final protected BodyFragmentAnimationRequest animation_flip_out() {
+        return new BodyFragmentAnimationRequest(R.animator.card_flip_in, R.animator.card_flip_out, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
     final public void onChooseResult(Map<String, String> results) {
@@ -181,6 +183,7 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
 
         private final Class<? extends BodyFragment> fragmentClass;
         private final Map<String,Serializable> argumentMap = new HashMap<>();
+        public BodyFragmentAnimationRequest backAnimation = null;
 
         public FragmentItem(Class<? extends BodyFragment> fragmentClass) {
             this.fragmentClass = fragmentClass;
@@ -200,15 +203,20 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
             return this;
         }
 
+        public FragmentItem setBackAnimation(BodyFragmentAnimationRequest animationRequest){
+            backAnimation = animationRequest;
+            return this;
+        }
+
     }
 
-    protected static class BodyFragmentChangeRequest {
+    protected static class BodyFragmentAnimationRequest implements Serializable {
 
         private final int in_animation;
         private final int out_animation;
         private final BodyFragment.HeaderUpdateRequest headerUpdateRequest;
 
-        public BodyFragmentChangeRequest(int in_animation, int out_animation, BodyFragment.HeaderUpdateRequest headerUpdateRequest) {
+        public BodyFragmentAnimationRequest(int in_animation, int out_animation, BodyFragment.HeaderUpdateRequest headerUpdateRequest) {
             this.in_animation = in_animation;
             this.out_animation = out_animation;
             this.headerUpdateRequest = headerUpdateRequest;
