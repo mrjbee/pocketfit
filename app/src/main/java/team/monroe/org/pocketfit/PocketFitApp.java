@@ -177,9 +177,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public void function_updateRoutineDay(RoutineDay mRoutineDay, String routineId, int index, final DataAction<Void> onDone) {
-        fetchValue(UpdateRoutineDay.class, new UpdateRoutineDay.RoutineDayUpdate(mRoutineDay, routineId, index), new NoOpValueAdapter<Void>(),observe_function(new DataAction<Void>() {
+        fetchValue(UpdateRoutineDay.class, new UpdateRoutineDay.RoutineDayUpdate(mRoutineDay, routineId, index), new NoOpValueAdapter<Void>(){},observe_function(new DataAction<Void>() {
             @Override
             public void data(Void data) {
+                data_activeRoutine().invalidate();
                 if (onDone != null) onDone.data(null);
             }
         }));

@@ -1,24 +1,117 @@
 package team.monroe.org.pocketfit.fragments;
 
-import android.graphics.Bitmap;
-import android.util.Pair;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
+import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.data.Data;
-import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.DateUtils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
-import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
 public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineObserver;
     private RoutineSchedule mSchedule;
+    private GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>> mDayListViewAdapter;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mDayListViewAdapter = new GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>>(getActivity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<Day>>() {
+
+
+            @Override
+            public GetViewImplementation.ViewHolder<Day> create(final View convertView) {
+                return new GetViewImplementation.GenericViewHolder<Day>() {
+
+                    TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
+                    TextView text = (TextView) convertView.findViewById(R.id.item_text);
+                    TextView shortDay = (TextView) convertView.findViewById(R.id.item_day);
+                    ImageView dayBackground = (ImageView) convertView.findViewById(R.id.item_day_background);
+
+                    @Override
+                    public void update(final Day day, int position) {
+                        if (day.id != null){
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
+                            dayBackground.setImageResource(R.drawable.day_training);
+                            text.setVisibility(View.VISIBLE);
+                            caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
+                            dayBackground.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onRoutineDaySelect(day.id);
+                                }
+                            });
+                        }else{
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short));
+                            dayBackground.setImageResource(R.drawable.day_not_training);
+                            text.setVisibility(View.INVISIBLE);
+                            caption.setTextColor(getResources().getColor(R.color.text_color_date));
+                            dayBackground.setOnClickListener(null);
+                        }
+                        caption.setText(day.dayDateString);
+                        text.setText(day.dayDescription);
+                        shortDay.setText(day.shortDay);
+
+                    }
+                };
+            }
+        }, R.layout.item_schedule){
+            @Override
+            public int getCount() {
+                return isScheduleAvailable() ? 0: 200;
+            }
+
+            @Override
+            public Day getItem(int position) {
+                return buildDayFor(DateUtils.mathDays(getStartDate(), -1 + position));
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return !isScheduleAvailable();
+            }
+        };
+
+        view_list(R.id.list_items).setAdapter(mDayListViewAdapter);
+    }
+
+    private void onRoutineDaySelect(String id) {
+        owner().openDayEditor(mSchedule.routine.id, id);
+    }
+
+
+    private DateFormat dateFormat= DateFormat.getDateInstance();
+    private DateFormat dayOfWeekFormat = new SimpleDateFormat("EE");
+
+    private Day buildDayFor(Date date) {
+        String dateString = dateFormat.format(date);
+        if (DateUtils.isToday(date)){
+            dateString = "Today";
+        }
+        String shortDay = dayOfWeekFormat.format(date);
+
+        RoutineDay routineDay = mSchedule.getTrainingDay(date);
+        String description = routineDay != null ? routineDay.description:"";
+        return new Day(dateString, description, shortDay, routineDay==null?null:routineDay.id);
+    }
+
+    private boolean isScheduleAvailable() {
+        return mSchedule == null || mSchedule.isNull() || !mSchedule.isDefined();
+    }
 
     @Override
     protected String getHeaderName() {
@@ -27,7 +120,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
     @Override
     protected int getTileLayoutId() {
-        return R.layout.tile_content_active_routine;
+        return R.layout.tile_content_active_schedule;
     }
 
     @Override
@@ -44,9 +137,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
     }
 
     @Override
-    public void onMainButton() {
-
-    }
+    public void onMainButton() {}
 
 
     @Override
@@ -84,10 +175,30 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
             @Override
             public void data(RoutineSchedule schedule) {
                 mSchedule = schedule;
-
+                mDayListViewAdapter.notifyDataSetChanged();
             }
         }));
 
     }
 
+    public Date getStartDate() {
+        return mSchedule.startDate;
+    }
+
+
+    private class Day{
+
+        private final String dayDateString;
+        private final String shortDay;
+        private final String dayDescription;
+        private final String id;
+
+
+        private Day(String dateString, String trainingDescription, String shortDay, String id) {
+            this.dayDateString = dateString;
+            this.shortDay = shortDay;
+            this.dayDescription = trainingDescription;
+            this.id = id;
+        }
+    }
 }

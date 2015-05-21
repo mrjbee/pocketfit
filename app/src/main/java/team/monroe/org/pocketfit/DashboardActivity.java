@@ -99,6 +99,14 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
     }
 
+
+    public void openDayEditor(String routineId, String routineDayId) {
+        Intent intent = new Intent(DashboardActivity.this, RoutineDayEditActivity.class);
+        intent.putExtra("routine_id",routineId);
+        intent.putExtra("day_id",routineDayId);
+        startActivity(intent);
+    }
+
     public void openRoutineEditor(final String routineId) {
         Intent intent = new Intent(DashboardActivity.this, RoutineEditActivity.class);
         intent.putExtra("routine_id",routineId);
@@ -148,7 +156,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void openActiveRoutineSchedule() {
         mainButtonController.blockAppearance();
-        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_flip_in()), animation_flip_out());
+        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_flip_out()), animation_flip_in());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -172,6 +180,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         super.onSaveInstanceState(outState);
         mainButtonController.saveState(outState);
     }
+
 
 
     private static class MainButtonController {

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_panel_details"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#f3f3f3"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_marginRight="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/item_day_background"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/day_not_training" />
+
+            <TextView
+                android:id="@+id/item_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Mon"
+                android:textColor="#ff717171"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:id="@+id/item_caption"
+                style="@style/Text.Item.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Example" />
+
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/item_text"
+                style="@style/Text.Body.Optional"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:text="Example" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

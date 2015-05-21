@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:background="#fff">
+    >
     <ImageView
         android:id="@+id/image_cover"
         android:layout_width="250dp"

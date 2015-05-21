@@ -10,8 +10,8 @@ import java.util.List;
 public class RoutineSchedule {
 
     public final Routine routine;
-    private List<String> routineByDays = new ArrayList<>();
-    private final Date startDate;
+    private List<RoutineDay> routineByDays = new ArrayList<>();
+    public final Date startDate;
 
     public RoutineSchedule(Routine routine, Date startDate) {
         this.routine = routine;
@@ -19,7 +19,7 @@ public class RoutineSchedule {
         if (startDate ==null) throw new IllegalStateException("No start date");
         if (routine != null && routine.trainingDays != null) {
             for (RoutineDay trainingDay : routine.trainingDays) {
-                routineByDays.add(trainingDay.id);
+                routineByDays.add(trainingDay);
                 for (int i=0; i < trainingDay.restDays; i++){
                     routineByDays.add(null);
                 }
@@ -47,5 +47,11 @@ public class RoutineSchedule {
             daysBeforeTraining ++;
         }
         return daysBeforeTraining;
+    }
+
+    public RoutineDay getTrainingDay(Date date) {
+        int daysPastStart = (int) DateUtils.asDays(date.getTime() - startDate.getTime(), true);
+        if (daysPastStart < 0) return null;
+        return routineByDays.get(daysPastStart%routineByDays.size());
     }
 }

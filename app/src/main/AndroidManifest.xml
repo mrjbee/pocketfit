@@ -35,6 +35,14 @@
             android:label="Routine" >
         </activity>
 
+
+        <activity
+            android:theme="@style/AnimationActivity"
+            android:name=".RoutineDayEditActivity"
+            android:label="RoutineDayActivity" >
+        </activity>
+
+
     </application>
 
 </manifest>
