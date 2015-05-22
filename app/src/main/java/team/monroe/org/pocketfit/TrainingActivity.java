@@ -4,15 +4,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Date;
+
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
-import team.monroe.org.pocketfit.fragments.TrainingTilePowerSetFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
-public class TrainingActivity extends FragmentActivity {
+import static team.monroe.org.pocketfit.TrainingExecutionService.TrainingPlan.NoOpTrainingPlanListener;
+
+public class TrainingActivity extends FragmentActivity{
 
     private ClockViewPresenter mTrainingDurationClockPresenter;
 
@@ -50,8 +54,18 @@ public class TrainingActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (application().getExerciseExecution().isStarted()){
-            mTrainingDurationClockPresenter.startClock(application().getExerciseExecutionManger().getStartDate());
+        updateClock();
+        application().getTrainingPlan().setTrainingPlanListener(new NoOpTrainingPlanListener(){
+            @Override
+            public void onStartDateChanged(Date startDate) {
+                updateClock();
+            }
+        });
+    }
+
+    private void updateClock() {
+        if (application().getTrainingPlan().isStarted()){
+            mTrainingDurationClockPresenter.startClock(application().getTrainingPlan().getStartDate());
         }
     }
 
@@ -62,28 +76,23 @@ public class TrainingActivity extends FragmentActivity {
     }
 
     private Class<? extends TrainingTileFragment> calculateCurrentFragment() {
-        TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution exerciseExecution =
-                application().getExerciseExecutionManger().getCurrentExecution();
-
-        Exercise.Type exerciseType = exerciseExecution.routineExercise.exercise.type;
-        if (exerciseType != Exercise.Type.weight_times){
-            finish();
-        }
-
-        boolean started = exerciseExecution.isStarted();
-        if (!started){
+        TrainingExecutionService.TrainingPlan trainingPlan = application().getTrainingPlan();
+        Exercise.Type exerciseType = trainingPlan.getCurrentExercise().exercise.type;
+        if (!trainingPlan.isExerciseStarted()){
+            //show exercise fragment
             return TrainingTileExerciseFragment.class;
         }else{
-            if (!exerciseExecution.isSetFinished()){
+            if (trainingPlan.isSetStarted() && trainingPlan.isSetDone()){
+                //set done, show set results
+
+            }else {
+                //show set execution
                 switch (exerciseType){
                     case weight_times:
-                        return TrainingTilePowerSetFragment.class;
+                        return TrainingTilePowerExecuteFragment.class;
                 }
-            }else {
-
             }
         }
-
         return TrainingTileLoadingRoutineExerciseFragment.class;
     }
 

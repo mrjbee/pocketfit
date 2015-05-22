@@ -12,7 +12,6 @@ import team.monroe.org.pocketfit.presentations.RoutineExercise;
 public class TrainingTileExerciseFragment extends TrainingTileFragment {
 
     private RoutineExercise mRoutineExercise;
-    private TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution mExerciseExecution;
 
     @Override
     protected int getTileLayoutId() {
@@ -25,11 +24,11 @@ public class TrainingTileExerciseFragment extends TrainingTileFragment {
         view(R.id.action_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                application().getExerciseExecution().startSet();
+                application().getTrainingPlan().addSet();
                 owner().updateTile();
             }
         });
-        mRoutineExercise = application().getExerciseExecutionManger().getCurrentExecution().routineExercise;
+        mRoutineExercise = application().getTrainingPlan().getCurrentExercise();
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         view_text(R.id.exercise_description).setText(mRoutineExercise.exercise.description);
 

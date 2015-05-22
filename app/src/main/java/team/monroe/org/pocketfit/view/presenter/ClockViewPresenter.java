@@ -41,15 +41,16 @@ public class ClockViewPresenter extends ViewPresenter<TextView>{
         long delta = System.currentTimeMillis() - mStartTime;
         //days,hours,minutes,seconds, periodMs
         long[] values = DateUtils.splitperiod(delta);
-        String timeString = twoDigits(values[1])+":"+twoDigits(values[2])+":"+twoDigits(values[3]);
+        String timeString = string(values[1], 2)+":"+ string(values[2], 2)+":"+ string(values[3], 2);
         getRootView().setText(timeString);
     }
 
-    private String twoDigits(long value) {
-        if (value < 10){
-            return "0"+value;
+    private String string(long value, int digits) {
+        String answer = Long.toString(value);
+        for (int i = answer.length(); i < digits; i++){
+            answer = "0"+answer;
         }
-        return ""+value;
+        return answer;
     }
 
 

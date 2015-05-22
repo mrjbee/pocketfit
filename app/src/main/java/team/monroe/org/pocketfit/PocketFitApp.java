@@ -380,8 +380,8 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager;
     }
 
-    public TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution getExerciseExecution() {
-        return mTrainingExecutionManager.getCurrentExecution();
+    public TrainingExecutionService.TrainingPlan getTrainingPlan() {
+        return mTrainingExecutionManager.getTrainingPlan();
     }
 
 
