@@ -1,15 +1,21 @@
 package team.monroe.org.pocketfit.fragments;
 
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.R;
-import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
+import team.monroe.org.pocketfit.TrainingActivity;
 
-public abstract class DashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract {
+public abstract class TrainingTileFragment extends BodyFragment<TrainingActivity>{
+
+
+    @Override
+    final protected String getHeaderName() {
+        return "Training";
+    }
 
     @Override
     final protected boolean isHeaderSecondary() {
@@ -18,7 +24,7 @@ public abstract class DashboardTileFragment extends BodyFragment<DashboardActivi
 
     @Override
     final protected int getLayoutId() {
-        return R.layout.fragment_single_tile;
+        return R.layout.fragment_training_tile;
     }
 
     @Override
@@ -30,5 +36,4 @@ public abstract class DashboardTileFragment extends BodyFragment<DashboardActivi
     }
 
     protected abstract int getTileLayoutId();
-
 }

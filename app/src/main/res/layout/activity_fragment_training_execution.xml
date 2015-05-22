@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dashboard"
+    style="@style/Panel.Base">
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/text_routine_name"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        style="@style/Text.Training.Title"
+        android:text="Example"/>
+
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/text_clock"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        style="@style/Text.Training.Clock"
+        android:text="00:00:00"/>
+
+
+    <FrameLayout
+        android:layout_below="@+id/text_routine_name"
+        android:id="@+id/fragment_container_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/text_clock">
+    </FrameLayout>
+
+</RelativeLayout>

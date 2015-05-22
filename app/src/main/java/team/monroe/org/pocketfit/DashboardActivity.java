@@ -126,6 +126,12 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         startActivityForResult(intent, 40);
     }
 
+
+    public void openTrainingRunner() {
+        Intent intent = new Intent(DashboardActivity.this, TrainingActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 40){
@@ -209,7 +215,6 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         super.onSaveInstanceState(outState);
         mainButtonController.saveState(outState);
     }
-
 
 
     private static class MainButtonController {

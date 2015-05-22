@@ -23,7 +23,7 @@ public class DashboardFragment extends BodyFragment<RoutinesActivity>{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_no_active_routine;
+        return R.layout.fragment_single_tile;
     }
     @Override
     protected boolean isHeaderSecondary() {

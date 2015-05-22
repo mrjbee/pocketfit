@@ -124,12 +124,12 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
                 .commit();
     }
 
-    final public void header(String headerText, boolean secondary) {
+    public void header(String headerText, boolean secondary) {
         HeaderContract fragment = getHeaderFragment();
         fragment.changeCaption(headerText, secondary, false);
     }
 
-    final public void animateHeader(String headerText, boolean secondary) {
+    public void animateHeader(String headerText, boolean secondary) {
         HeaderContract fragment = getHeaderFragment();
         fragment.changeCaption(headerText, secondary, true);
     }

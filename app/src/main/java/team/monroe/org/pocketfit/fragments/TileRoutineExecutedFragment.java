@@ -3,9 +3,7 @@ package team.monroe.org.pocketfit.fragments;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import org.monroe.team.android.box.data.Data;
@@ -15,7 +13,6 @@ import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
-import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
 public class TileRoutineExecutedFragment extends DashboardTileFragment {
 
@@ -39,7 +36,8 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
     }
 
 
-    private void onDaysText() {
+    private void onDescriptionLink() {
+        owner().openTrainingRunner();
     }
 
 
@@ -50,10 +48,18 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
         view(R.id.text_days_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onDaysText();
+                onDescriptionLink();
             }
         });
         view_text(R.id.text_days_left).setText("Continue Workout");
+        if (getArgument("auto_change")){
+            runLastOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  onDescriptionLink();
+                }
+            }, 700);
+        }
     }
 
     @Override

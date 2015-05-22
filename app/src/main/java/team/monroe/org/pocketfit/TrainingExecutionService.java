@@ -1,6 +1,7 @@
 package team.monroe.org.pocketfit;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -42,6 +43,7 @@ public class TrainingExecutionService extends Service {
             builder.setContentText(mRoutineDay.description);
             builder.setOngoing(true);
             builder.setTicker("Training ...");
+            builder.setContentIntent(PendingIntent.getActivity(service(),334,new Intent(service(),TrainingActivity.class),PendingIntent.FLAG_UPDATE_CURRENT));
 
             service().startInForeground(builder.getNotification());
         }

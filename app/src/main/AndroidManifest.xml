@@ -36,7 +36,13 @@
         </activity>
         <activity
             android:name=".RoutineDayEditActivity"
-            android:label="RoutineDayActivity"
+            android:label="Routine Day"
+            android:theme="@style/AnimationActivity" >
+        </activity>
+
+        <activity
+            android:name=".TrainingActivity"
+            android:label="Training"
             android:theme="@style/AnimationActivity" >
         </activity>
 

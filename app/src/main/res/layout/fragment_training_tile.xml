@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/panel_tile"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/tile.margin.side"
+        android:layout_marginRight="@dimen/tile.margin.side"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/tile_white"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>

@@ -42,6 +42,11 @@ public abstract class BodyFragment<OwnerActivity extends FragmentActivity>  exte
 
     public void onImageResult(Uri uri) {}
 
+    public <ArgType> ArgType getArgument(String key) {
+        if (getArguments() == null)return null;
+        return (ArgType) getArguments().getSerializable(key);
+    }
+
     public String getStringArgument(String key) {
        if (getArguments() == null)return null;
        return getArguments().getString(key);
