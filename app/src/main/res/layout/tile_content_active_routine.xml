@@ -64,8 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Example"
-            android:singleLine="false"
-            android:maxLines="3"
+            android:singleLine="true"
             style="@style/Text.Link"/>
 
     </RelativeLayout>

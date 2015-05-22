@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/item_caption"
+        android:layout_gravity="bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Text.Body.Light"
+        android:textStyle="bold"
+        android:text="Times"
+        />
+
+    <TextView
+        android:id="@+id/item_value"
+        android:layout_weight="1"
+        android:layout_marginLeft="30dp"
+        android:layout_gravity="bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@style/Text.Body.Light.Bigger"
+        android:text="times"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/item_measure"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        style="@style/Text.Body.Light"
+        android:text="times"
+        />
+</LinearLayout>

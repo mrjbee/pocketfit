@@ -7,8 +7,19 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import org.monroe.team.corebox.utils.DateUtils;
+import org.monroe.team.corebox.utils.Lists;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
+import team.monroe.org.pocketfit.presentations.RoutineExercise;
 
 public class TrainingExecutionService extends Service {
 
@@ -23,6 +34,8 @@ public class TrainingExecutionService extends Service {
         public void startExecution(Routine routine, RoutineDay dayIndex);
         String getRoutineId();
         String getRoutineDayId();
+        Routine getRoutine();
+        TrainingExecutionMangerBinder.ExerciseExecution getCurrentExecution();
     }
 
 
@@ -30,12 +43,17 @@ public class TrainingExecutionService extends Service {
 
         Routine mRoutine;
         RoutineDay mRoutineDay;
+        private ExerciseExecution currentExecution;
 
         @Override
         public void startExecution(Routine routine, RoutineDay routineDay) {
             if (mRoutine != null) throw new IllegalStateException("Routine is running");
             mRoutine = routine;
             mRoutineDay = routineDay;
+
+            if (!mRoutineDay.exerciseList.isEmpty()){
+                currentExecution = new ExerciseExecution(mRoutineDay.exerciseList.get(0));
+            }
 
             Notification.Builder builder = new Notification.Builder(service());
             builder.setSmallIcon(R.drawable.runner);
@@ -48,6 +66,10 @@ public class TrainingExecutionService extends Service {
             service().startInForeground(builder.getNotification());
         }
 
+        public ExerciseExecution getCurrentExecution() {
+            return currentExecution;
+        }
+
         @Override
         public String getRoutineId() {
             return mRoutine.id;
@@ -58,13 +80,61 @@ public class TrainingExecutionService extends Service {
             return mRoutineDay.id;
         }
 
+        @Override
+        public Routine getRoutine() {
+            return mRoutine;
+        }
+
         private TrainingExecutionService service() {
             return TrainingExecutionService.this;
+        }
+
+
+        public class ExerciseExecution {
+
+            public final RoutineExercise routineExercise;
+            private final List<Set> setList = new ArrayList<>();
+
+            public ExerciseExecution(RoutineExercise routineExercise) {
+                this.routineExercise = routineExercise;
+            }
+
+            public void addSet() {
+                setList.add(new Set());
+            }
+
+            public boolean isStarted() {
+                return setList.isEmpty();
+            }
+
+            public boolean isSetStarted() {
+                return isStarted() && Lists.getLast(setList).isStarted();
+            }
+
+            public class Set {
+
+                private Map<String, Object> results = new HashMap<>();
+                private Date startDate;
+
+                public Date getStartDate() {
+                    return startDate;
+                }
+
+                public Date start(){
+                    startDate = DateUtils.now();
+                    return getStartDate();
+                }
+
+                public boolean isStarted() {
+                    return startDate != null;
+                }
+            }
         }
     }
 
     private void startInForeground(Notification notification) {
         startForeground(101, notification);
     }
+
 
 }

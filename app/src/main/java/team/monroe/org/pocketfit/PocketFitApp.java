@@ -372,6 +372,14 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return new Pair<>(mTrainingExecutionManager.getRoutineId(), mTrainingExecutionManager.getRoutineDayId());
     }
 
+    public Routine getTrainingRoutine() {
+        return mTrainingExecutionManager.getRoutine();
+    }
+
+    public TrainingExecutionService.TrainingExecutionManager getExerciseExecutionManger() {
+        return mTrainingExecutionManager;
+    }
+
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
         final PocketFitApp owner;
