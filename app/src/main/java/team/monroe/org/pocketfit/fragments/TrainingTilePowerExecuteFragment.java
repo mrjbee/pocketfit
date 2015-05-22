@@ -26,7 +26,7 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileFragment {
         mSetClockPresenter = new ClockViewPresenter(view_text(R.id.exercise_timer));
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails;
-        view_text(R.id.exercise_description).setText(details.weight + " x " + details.times + " kg/times");
+        view_text(R.id.exercise_description).setText(details.times + " x " + details.weight + " times/kg");
         view_text(R.id.exercise_set).setText("Set " + (application().getTrainingPlan().getSetIndex() + 1));
         updateActionText();
         view(R.id.action_main).setOnClickListener(new View.OnClickListener() {

@@ -19,6 +19,7 @@ import static team.monroe.org.pocketfit.TrainingExecutionService.TrainingPlan.No
 public class TrainingActivity extends FragmentActivity{
 
     private ClockViewPresenter mTrainingDurationClockPresenter;
+    private ClockViewPresenter mTrainingPauseClockPresenter;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -49,6 +50,7 @@ public class TrainingActivity extends FragmentActivity{
         Routine mRoutine = application().getTrainingRoutine();
         view_text(R.id.text_routine_name).setText(mRoutine.title);
         mTrainingDurationClockPresenter = new ClockViewPresenter(view_text(R.id.text_clock));
+        mTrainingPauseClockPresenter = new ClockViewPresenter(view_text(R.id.text_pause_clock));
     }
 
     @Override
@@ -60,12 +62,25 @@ public class TrainingActivity extends FragmentActivity{
             public void onStartDateChanged(Date startDate) {
                 updateClock();
             }
+
+            @Override
+            public void onStartPauseDateChanged(Date pauseStartDate) {
+                updateClock();
+            }
         });
     }
+
 
     private void updateClock() {
         if (application().getTrainingPlan().isStarted()){
             mTrainingDurationClockPresenter.startClock(application().getTrainingPlan().getStartDate());
+        }else {
+            mTrainingDurationClockPresenter.resetClock();
+        }
+        if (application().getTrainingPlan().isPaused()){
+            mTrainingPauseClockPresenter.startClock(application().getTrainingPlan().getPauseStartDate());
+        }else {
+            mTrainingPauseClockPresenter.resetClock();
         }
     }
 
@@ -73,6 +88,7 @@ public class TrainingActivity extends FragmentActivity{
     protected void onStop() {
         super.onStop();
         mTrainingDurationClockPresenter.resetClock();
+        application().getTrainingPlan().setTrainingPlanListener(null);
     }
 
     private Class<? extends TrainingTileFragment> calculateCurrentFragment() {

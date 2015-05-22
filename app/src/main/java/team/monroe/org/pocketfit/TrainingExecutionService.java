@@ -99,6 +99,7 @@ public class TrainingExecutionService extends Service {
         private final Routine routine;
         private final RoutineDay routineDay;
         private Date startDate;
+        private Date pauseStartDate;
         private ExerciseExecution currentExecution;
         private TrainingPlanListener trainingPlanListener = new NoOpTrainingPlanListener();
 
@@ -169,18 +170,38 @@ public class TrainingExecutionService extends Service {
         }
 
         public void stopSet() {
-            Lists.getLast(currentExecution.setList).endDate = DateUtils.now();
+            Date date = DateUtils.now();
+            Lists.getLast(currentExecution.setList).endDate = date;
+            if (startDate != null){
+                pauseStartDate = date;
+                trainingPlanListener.onStartPauseDateChanged(pauseStartDate);
+            }
+        }
+
+        public boolean isPaused() {
+            return pauseStartDate != null;
+        }
+
+        public Date getPauseStartDate() {
+            return pauseStartDate;
         }
 
         public interface TrainingPlanListener{
 
             void onStartDateChanged(Date startDate);
+
+            void onStartPauseDateChanged(Date pauseStartDate);
         }
 
         public static class NoOpTrainingPlanListener implements TrainingPlanListener{
 
             @Override
             public void onStartDateChanged(Date startDate) {
+
+            }
+
+            @Override
+            public void onStartPauseDateChanged(Date pauseStartDate) {
 
             }
         }
