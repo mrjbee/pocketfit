@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTilePowerSetFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 
@@ -51,11 +52,24 @@ public class TrainingActivity extends FragmentActivity {
         }
 
         boolean started = exerciseExecution.isStarted();
-        if (started){
+        if (!started){
             return TrainingTileExerciseFragment.class;
+        }else{
+            if (!exerciseExecution.isSetFinished()){
+                switch (exerciseType){
+                    case weight_times:
+                        return TrainingTilePowerSetFragment.class;
+                }
+            }else {
+
+            }
         }
 
         return TrainingTileLoadingRoutineExerciseFragment.class;
     }
 
+    public void updateTile() {
+        Class<? extends TrainingTileFragment> nextTileFragment = calculateCurrentFragment();
+        replaceBodyFragment(new FragmentItem(nextTileFragment), animation_slide_from_right());
+    }
 }

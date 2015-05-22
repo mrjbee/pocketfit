@@ -61,7 +61,7 @@
         android:background="@color/text.color.day.short.training">
 
         <TextView
-            android:id="@+id/text_days_left"
+            android:id="@+id/action_main"
             style="@style/Text.Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

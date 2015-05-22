@@ -6,11 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.TrainingExecutionService;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 
 public class TrainingTileExerciseFragment extends TrainingTileFragment {
 
     private RoutineExercise mRoutineExercise;
+    private TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution mExerciseExecution;
 
     @Override
     protected int getTileLayoutId() {
@@ -20,6 +22,13 @@ public class TrainingTileExerciseFragment extends TrainingTileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        view(R.id.action_main).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                application().getExerciseExecution().startSet();
+                owner().updateTile();
+            }
+        });
         mRoutineExercise = application().getExerciseExecutionManger().getCurrentExecution().routineExercise;
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         view_text(R.id.exercise_description).setText(mRoutineExercise.exercise.description);
@@ -34,7 +43,6 @@ public class TrainingTileExerciseFragment extends TrainingTileFragment {
             default:
                 throw new IllegalStateException();
         }
-
     }
 
     private void addDetails(String caption, Object value, String measure) {

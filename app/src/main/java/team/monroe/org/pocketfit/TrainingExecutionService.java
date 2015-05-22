@@ -10,7 +10,6 @@ import android.os.IBinder;
 import org.monroe.team.corebox.utils.DateUtils;
 import org.monroe.team.corebox.utils.Lists;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,13 +61,13 @@ public class TrainingExecutionService extends Service {
             builder.setOngoing(true);
             builder.setTicker("Training ...");
             builder.setContentIntent(PendingIntent.getActivity(service(),334,new Intent(service(),TrainingActivity.class),PendingIntent.FLAG_UPDATE_CURRENT));
-
             service().startInForeground(builder.getNotification());
         }
 
         public ExerciseExecution getCurrentExecution() {
             return currentExecution;
         }
+
 
         @Override
         public String getRoutineId() {
@@ -104,17 +103,36 @@ public class TrainingExecutionService extends Service {
             }
 
             public boolean isStarted() {
-                return setList.isEmpty();
+                return !setList.isEmpty();
             }
 
-            public boolean isSetStarted() {
-                return isStarted() && Lists.getLast(setList).isStarted();
+            public boolean isSetFinished() {
+                return isStarted() && Lists.getLast(setList).isDone();
             }
+
+
+            public void stopSet() {
+               Set set = Lists.getLast(setList);
+               set.endDate = DateUtils.now();
+            }
+
+            public void startSet() {
+                Set set = new Set();
+                set.startDate = DateUtils.now();
+                setList.add(set);
+            }
+
+
+            public int getActiveSetIndex() {
+                return setList.size() - 1;
+            }
+
 
             public class Set {
 
                 private Map<String, Object> results = new HashMap<>();
                 private Date startDate;
+                private Date endDate;
 
                 public Date getStartDate() {
                     return startDate;
@@ -125,8 +143,8 @@ public class TrainingExecutionService extends Service {
                     return getStartDate();
                 }
 
-                public boolean isStarted() {
-                    return startDate != null;
+                public boolean isDone() {
+                    return startDate != null && endDate != null;
                 }
             }
         }

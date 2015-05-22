@@ -380,6 +380,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager;
     }
 
+    public TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution getExerciseExecution() {
+        return mTrainingExecutionManager.getCurrentExecution();
+    }
+
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
         final PocketFitApp owner;

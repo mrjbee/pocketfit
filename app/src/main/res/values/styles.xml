@@ -44,6 +44,22 @@
         <item name="android:textColor">#fffcfcfc</item>
     </style>
 
+
+    <style name="Text.Tile.Header.Light" parent="AppTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#fffcfcfc</item>
+    </style>
+
+    <style name="Text.Tile.Header.Bigger.Light" parent="AppTheme">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">#fffcfcfc</item>
+    </style>
+
+    <style name="Text.Tile.Clock.Light" parent="AppTheme">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">#fffcfcfc</item>
+    </style>
+
     <style name="Text.Section.Caption" parent="AppTheme">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">#ff7e7e7e</item>
