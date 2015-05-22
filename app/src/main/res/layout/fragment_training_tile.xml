@@ -5,8 +5,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_marginTop="@dimen/tile_training_margin_top"
+        android:layout_marginBottom="@dimen/tile_training_margin_bottom"
         android:id="@+id/panel_tile"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"
         android:layout_width="fill_parent"

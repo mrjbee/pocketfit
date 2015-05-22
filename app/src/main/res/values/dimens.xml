@@ -13,4 +13,6 @@
     <dimen name="button.margin.side">30dp</dimen>
 
     <dimen name="background.margin.bottom">100dp</dimen>
+    <dimen name="tile_training_margin_top">50dp</dimen>
+    <dimen name="tile_training_margin_bottom">70dp</dimen>
 </resources>

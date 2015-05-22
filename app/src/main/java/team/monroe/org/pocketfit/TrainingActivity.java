@@ -25,7 +25,8 @@ public class TrainingActivity extends FragmentActivity{
 
     @Override
     protected FragmentItem customize_startupFragment() {
-        return new FragmentItem(calculateCurrentFragment());
+        currentFragment =calculateCurrentFragment();
+        return new FragmentItem(currentFragment);
     }
 
 
@@ -121,8 +122,29 @@ public class TrainingActivity extends FragmentActivity{
         return TrainingTileLoadingRoutineExerciseFragment.class;
     }
 
+    //TODO: add back stack top
+    private Class currentFragment;
+
+    //TrainingTileExerciseFragment
+    //TrainingTilePowerAllResultFragment
+    //TrainingTilePowerExecuteFragment
+    //TrainingTilePowerResultFragment
     public void updateTile() {
         Class<? extends TrainingTileFragment> nextTileFragment = calculateCurrentFragment();
-        replaceBodyFragment(new FragmentItem(nextTileFragment), animation_slide_from_right());
+        BodyFragmentAnimationRequest animationRequest = animation_slide_from_right();
+        if (    nextTileFragment != TrainingTileExerciseFragment.class
+                && currentFragment != TrainingTileExerciseFragment.class
+                && nextTileFragment != TrainingTilePowerAllResultFragment.class){
+
+            if (currentFragment == TrainingTilePowerAllResultFragment.class){
+                animationRequest = animation_slide_from_left();
+            } else if (nextTileFragment == TrainingTilePowerExecuteFragment.class){
+                animationRequest = animation_flip_out();
+            } else if (nextTileFragment == TrainingTilePowerResultFragment.class){
+                animationRequest = animation_flip_in();
+            }
+        }
+        currentFragment = nextTileFragment;
+        replaceBodyFragment(new FragmentItem(nextTileFragment), animationRequest);
     }
 }
