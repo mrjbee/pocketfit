@@ -35,6 +35,8 @@ public class TrainingExecutionService extends Service {
         String getRoutineDayId();
         Routine getRoutine();
         TrainingExecutionMangerBinder.ExerciseExecution getCurrentExecution();
+
+        Date getStartDate();
     }
 
 
@@ -43,6 +45,7 @@ public class TrainingExecutionService extends Service {
         Routine mRoutine;
         RoutineDay mRoutineDay;
         private ExerciseExecution currentExecution;
+        Date startDate;
 
         @Override
         public void startExecution(Routine routine, RoutineDay routineDay) {
@@ -51,7 +54,7 @@ public class TrainingExecutionService extends Service {
             mRoutineDay = routineDay;
 
             if (!mRoutineDay.exerciseList.isEmpty()){
-                currentExecution = new ExerciseExecution(mRoutineDay.exerciseList.get(0));
+                currentExecution = new ExerciseExecution(this, mRoutineDay.exerciseList.get(0));
             }
 
             Notification.Builder builder = new Notification.Builder(service());
@@ -66,6 +69,11 @@ public class TrainingExecutionService extends Service {
 
         public ExerciseExecution getCurrentExecution() {
             return currentExecution;
+        }
+
+        @Override
+        public Date getStartDate() {
+            return startDate;
         }
 
 
@@ -93,8 +101,10 @@ public class TrainingExecutionService extends Service {
 
             public final RoutineExercise routineExercise;
             private final List<Set> setList = new ArrayList<>();
+            private final TrainingExecutionMangerBinder owner;
 
-            public ExerciseExecution(RoutineExercise routineExercise) {
+            public ExerciseExecution(TrainingExecutionMangerBinder trainingExecutionMangerBinder, RoutineExercise routineExercise) {
+                owner = trainingExecutionMangerBinder;
                 this.routineExercise = routineExercise;
             }
 
@@ -119,6 +129,9 @@ public class TrainingExecutionService extends Service {
             public void startSet() {
                 Set set = new Set();
                 set.startDate = DateUtils.now();
+                if (owner.startDate == null) {
+                    owner.startDate = set.startDate;
+                }
                 setList.add(set);
             }
 

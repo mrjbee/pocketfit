@@ -173,6 +173,12 @@
         <item name="android:textColor">#ffa8a8a8</item>
     </style>
 
+    <style name="Text.Training.Pause.Clock" parent="AppTheme">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#fd0b45</item>
+    </style>
+
     <style name="Text.Tile" parent="Text.Tile.Caption">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#ff7e7e7e</item>

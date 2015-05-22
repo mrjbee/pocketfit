@@ -10,8 +10,11 @@ import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFra
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerSetFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
 public class TrainingActivity extends FragmentActivity {
+
+    private ClockViewPresenter mTrainingDurationClockPresenter;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -41,7 +44,23 @@ public class TrainingActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Routine mRoutine = application().getTrainingRoutine();
         view_text(R.id.text_routine_name).setText(mRoutine.title);
+        mTrainingDurationClockPresenter = new ClockViewPresenter(view_text(R.id.text_clock));
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (application().getExerciseExecution().isStarted()){
+            mTrainingDurationClockPresenter.startClock(application().getExerciseExecutionManger().getStartDate());
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mTrainingDurationClockPresenter.resetClock();
+    }
+
     private Class<? extends TrainingTileFragment> calculateCurrentFragment() {
         TrainingExecutionService.TrainingExecutionMangerBinder.ExerciseExecution exerciseExecution =
                 application().getExerciseExecutionManger().getCurrentExecution();

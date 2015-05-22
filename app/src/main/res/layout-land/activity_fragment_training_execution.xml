@@ -26,6 +26,18 @@
         android:text="00:00:00"/>
 
 
+    <TextView
+        android:gravity="top"
+        android:id="@+id/text_pause_clock"
+        android:layout_toLeftOf="@+id/text_clock"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        style="@style/Text.Training.Pause.Clock"
+        android:text="00:00:00"/>
+
     <FrameLayout
         android:layout_below="@+id/text_routine_name"
         android:id="@+id/fragment_container_body"
