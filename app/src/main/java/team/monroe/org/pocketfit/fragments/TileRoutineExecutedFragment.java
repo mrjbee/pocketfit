@@ -52,14 +52,6 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
             }
         });
         view_text(R.id.text_days_left).setText("Continue Workout");
-        if (getArgument("auto_change")){
-            runLastOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  onDescriptionLink();
-                }
-            }, 700);
-        }
     }
 
     @Override

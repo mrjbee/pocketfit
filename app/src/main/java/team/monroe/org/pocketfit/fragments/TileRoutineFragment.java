@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.DateUtils;
 
+import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
@@ -68,10 +70,18 @@ public class TileRoutineFragment extends DashboardTileFragment {
                             @Override
                             public void run() {
                                 owner().switch_trainingExecution(true);
+
                             }
                         });
                     }
                 });
+                final DashboardActivity activity = owner();
+                activity.runLastOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.openTrainingRunner();
+                    }
+                }, 1000);
             }
         }
     }
