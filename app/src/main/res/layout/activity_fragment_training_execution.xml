@@ -31,9 +31,9 @@
     <TextView
         android:gravity="top"
         android:id="@+id/text_pause_clock"
-        android:layout_toLeftOf="@+id/text_clock"
+        android:layout_toRightOf="@+id/text_clock"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"

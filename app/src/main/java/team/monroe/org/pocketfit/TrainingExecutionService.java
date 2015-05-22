@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import org.monroe.team.corebox.utils.Closure;
 import org.monroe.team.corebox.utils.DateUtils;
 import org.monroe.team.corebox.utils.Lists;
 
@@ -155,6 +156,8 @@ public class TrainingExecutionService extends Service {
                 startDate = date;
                 trainingPlanListener.onStartDateChanged(startDate);
             }
+            pauseStartDate = null;
+            trainingPlanListener.onStartPauseDateChanged(pauseStartDate);
         }
 
         private boolean isMultiSetExercise() {
@@ -186,24 +189,51 @@ public class TrainingExecutionService extends Service {
             return pauseStartDate;
         }
 
+        public void commitPowerSet(float weight, int times) {
+            Lists.getLast(currentExecution.setList).results.put("weight",weight);
+            Lists.getLast(currentExecution.setList).results.put("times",times);
+            Lists.getLast(currentExecution.setList).results.put("description",times+" x "+weight);
+        }
+
+        public boolean hasMoreSetsScheduled() {
+            int requiredSets = 1;
+            Exercise.Type type = currentExecution.routineExercise.exercise.type;
+            switch (type){
+                case weight_times:
+                    requiredSets = ((RoutineExercise.PowerExerciseDetails) currentExecution.routineExercise.exerciseDetails).sets;
+                    break;
+            }
+
+            return (requiredSets - currentExecution.setList.size()) >0;
+        }
+
+        public List<String> getSetsDescriptionList() {
+            return Lists.collect(currentExecution.setList,new Closure<Set, String>() {
+                @Override
+                public String execute(Set arg) {
+                    return (String) arg.results.get("description");
+                }
+            });
+        }
+
+        public void nextExercise() {
+            currentExecution = new ExerciseExecution(routineDay.exerciseList.get(0));
+        }
+
+        public boolean isAllSetsCommited() {
+            return (currentExecution.setList.size() - currentExecution.commitedSetsCount()) <= 0;
+        }
+
         public interface TrainingPlanListener{
-
             void onStartDateChanged(Date startDate);
-
             void onStartPauseDateChanged(Date pauseStartDate);
         }
 
         public static class NoOpTrainingPlanListener implements TrainingPlanListener{
-
             @Override
-            public void onStartDateChanged(Date startDate) {
-
-            }
-
+            public void onStartDateChanged(Date startDate) {}
             @Override
-            public void onStartPauseDateChanged(Date pauseStartDate) {
-
-            }
+            public void onStartPauseDateChanged(Date pauseStartDate) {}
         }
 
         public class ExerciseExecution {
@@ -213,6 +243,14 @@ public class TrainingExecutionService extends Service {
 
             public ExerciseExecution(RoutineExercise routineExercise) {
                 this.routineExercise = routineExercise;
+            }
+
+            public int commitedSetsCount() {
+                int size = 0;
+                for (Set set : setList) {
+                    size += set.results.isEmpty()?0:1;
+                }
+                return size;
             }
         }
 

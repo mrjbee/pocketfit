@@ -9,7 +9,9 @@ import java.util.Date;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTilePowerResultFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
@@ -100,7 +102,14 @@ public class TrainingActivity extends FragmentActivity{
         }else{
             if (trainingPlan.isSetStarted() && trainingPlan.isSetDone()){
                 //set done, show set results
-
+                switch (exerciseType){
+                    case weight_times:
+                        if (trainingPlan.isAllSetsCommited()){
+                            return TrainingTilePowerAllResultFragment.class;
+                        }else {
+                            return TrainingTilePowerResultFragment.class;
+                        }
+                }
             }else {
                 //show set execution
                 switch (exerciseType){

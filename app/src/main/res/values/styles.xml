@@ -55,6 +55,14 @@
         <item name="android:textColor">#fffcfcfc</item>
     </style>
 
+    <style name="Text.Tile.Header" parent="Text.Tile.Header.Light">
+        <item name="android:textColor">#ff5d5d5d</item>
+    </style>
+
+    <style name="Text.Tile.Header.Bigger" parent="Text.Tile.Header.Bigger.Light">
+        <item name="android:textColor">#ff5d5d5d</item>
+    </style>
+
     <style name="Text.Tile.Clock.Light" parent="AppTheme">
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">#fffcfcfc</item>
