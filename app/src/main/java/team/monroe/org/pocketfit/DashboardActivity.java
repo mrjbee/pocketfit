@@ -3,6 +3,7 @@ package team.monroe.org.pocketfit;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,10 +14,13 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
+import team.monroe.org.pocketfit.fragments.TileRoutineExecutedFragment;
 import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileScheduleRoutineFragment;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
+import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class DashboardActivity extends FragmentActivity implements MainButtonOwnerContract {
 
@@ -83,7 +87,16 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     @Override
     protected FragmentItem customize_startupFragment() {
-        return new FragmentItem(application().hasActiveRoutine()? TileRoutineFragment.class : TileNoRoutineFragment.class);
+        FragmentItem fragmentItem;
+        if (application().isTrainingRunning()){
+            fragmentItem = new FragmentItem(TileRoutineExecutedFragment.class)
+                    .addArgument("auto_change",false);
+
+        }else {
+            fragmentItem = new FragmentItem(application().hasActiveRoutine()? TileRoutineFragment.class : TileNoRoutineFragment.class);
+        }
+
+        return fragmentItem;
     }
 
     @Override
@@ -132,7 +145,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         super.onResume();
     }
 
-    public void switchNoRoutineTile() {
+    public void switch_noRoutineTile() {
         mainButtonController.blockAppearance();
         replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), animation_flip_in());
         runLastOnUiThread(new Runnable() {
@@ -143,7 +156,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         },1000);
     }
 
-    public void switchRoutineTile() {
+    public void switch_routineTile() {
         mainButtonController.blockAppearance();
         replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), animation_flip_out());
         runLastOnUiThread(new Runnable() {
@@ -154,7 +167,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         }, 500);
     }
 
-    public void openActiveRoutineSchedule() {
+    public void switch_activeRoutineSchedule() {
         mainButtonController.blockAppearance();
         updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_flip_out()), animation_flip_in());
         runLastOnUiThread(new Runnable() {
@@ -163,6 +176,22 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
                 mainButtonController.applyAppearance();
             }
         }, 500);
+    }
+
+
+    public void switch_trainingExecution(boolean autoStart) {
+        mainButtonController.blockAppearance();
+        replaceBodyFragment(
+                new FragmentItem(TileRoutineExecutedFragment.class)
+                        .addArgument("auto_change",autoStart)
+                        .setBackAnimation(animation_flip_out()), animation_flip_in());
+        runLastOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainButtonController.applyAppearance();
+            }
+        }, 500);
+
     }
 
     @Override

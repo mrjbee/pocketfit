@@ -10,17 +10,15 @@ import android.widget.ImageView;
 
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.DateUtils;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
-import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
 public class TileRoutineFragment extends DashboardTileFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineObserver;
-    @Deprecated
-    private Routine mRoutine;
     private RoutineSchedule mSchedule;
 
     @Override
@@ -61,6 +59,20 @@ public class TileRoutineFragment extends DashboardTileFragment {
                     owner().openRoutineEditor(mSchedule.routine.id);
                 }
             });
+        } else {
+            if (mSchedule.getDaysBeforeNextTrainingDay() == 0){
+                owner().hideMainButton(new Runnable() {
+                    @Override
+                    public void run() {
+                        application().startTraining(mSchedule.routine, mSchedule.getTrainingDay(DateUtils.now()), new Runnable() {
+                            @Override
+                            public void run() {
+                                owner().switch_trainingExecution(true);
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -70,7 +82,7 @@ public class TileRoutineFragment extends DashboardTileFragment {
         owner().hideMainButton(new Runnable() {
             @Override
             public void run() {
-                owner().openActiveRoutineSchedule();
+                owner().switch_activeRoutineSchedule();
             }
         });
     }
@@ -80,7 +92,7 @@ public class TileRoutineFragment extends DashboardTileFragment {
         owner().hideMainButton(new Runnable() {
             @Override
             public void run() {
-                owner().openActiveRoutineSchedule();
+                owner().switch_activeRoutineSchedule();
             }
         });
     }
@@ -143,7 +155,7 @@ public class TileRoutineFragment extends DashboardTileFragment {
                     owner().hideMainButton(new Runnable() {
                         @Override
                         public void run() {
-                            owner().switchNoRoutineTile();
+                            owner().switch_noRoutineTile();
                         }
                     });
                 }else {
@@ -158,10 +170,10 @@ public class TileRoutineFragment extends DashboardTileFragment {
                         owner().showMainButton(R.drawable.round_btn_pen, null);
                     } else {
                         view(R.id.action_calendar).setVisibility(View.VISIBLE);
-                        owner().showMainButton(R.drawable.round_btn_play, null);
                         int daysBeforeTraining = schedule.getDaysBeforeNextTrainingDay();
                         if (daysBeforeTraining == 0){
                             view_text(R.id.text_days_left).setText("Today training");
+                            owner().showMainButton(R.drawable.round_btn_play, null);
                         }else{
                             view_text(R.id.text_days_left).setText(daysBeforeTraining+" days before training");
                         }

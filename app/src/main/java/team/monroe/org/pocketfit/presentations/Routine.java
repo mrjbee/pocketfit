@@ -1,5 +1,8 @@
 package team.monroe.org.pocketfit.presentations;
 
+import org.monroe.team.corebox.utils.Closure;
+import org.monroe.team.corebox.utils.Lists;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,5 +36,18 @@ public class Routine{
 
     public Routine(String id) {
         this.id = id;
+    }
+
+    public boolean isNull() {
+        return id == null;
+    }
+
+    public RoutineDay getRoutineDay(final String routineDayId) {
+        return Lists.find(trainingDays, new Closure<RoutineDay, Boolean>() {
+            @Override
+            public Boolean execute(RoutineDay arg) {
+                return routineDayId.equals(arg.id);
+            }
+        });
     }
 }

@@ -1,6 +1,10 @@
 package team.monroe.org.pocketfit;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.os.IBinder;
 import android.util.Pair;
 
 import org.monroe.team.android.box.BitmapUtils;
@@ -18,6 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import team.monroe.org.pocketfit.manage.Persist;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
@@ -40,9 +45,13 @@ import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
 public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     private Data<Routine> data_activeRoutine;
+    private Data<Pair> data_runningTraining;
     private Data<List> data_routines;
     private Data<List> data_exercises;
     private Data<RoutineSchedule> data_activeRoutineSchedule;
+
+    private ServiceConnection mServiceConnection;
+    private TrainingExecutionService.TrainingExecutionManager mTrainingExecutionManager;
 
     @Override
     protected PocketFitModel createModel() {
@@ -97,6 +106,16 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             }
         };
 
+        data_runningTraining = new Data<Pair> (Pair.class, model()) {
+            @Override
+            protected Pair provideData() {
+                if (!isTrainingRunning()) return new Pair(null,null);
+                String routineId = mTrainingExecutionManager.getRoutineId();
+                Routine routine = model().execute(GetRoutineById.class, routineId);
+                return new Pair(routine, routine.getRoutineDay(mTrainingExecutionManager.getRoutineDayId()));
+            }
+        };
+
     }
 
 
@@ -126,6 +145,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public Data<RoutineSchedule> data_activeRoutineSchedule() {
         return data_activeRoutineSchedule;
+    }
+
+    public Data<Pair> data_runningTraining() {
+        return data_runningTraining;
     }
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {
@@ -318,6 +341,35 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public boolean hasActiveRoutine() {
         return getSetting(Settings.ROUTINE_ACTIVE_ID) != null;
+    }
+
+    public boolean isTrainingRunning() {
+        return mTrainingExecutionManager != null;
+    }
+
+    public void startTraining(final Routine routine, final RoutineDay trainingDay, final Runnable postRunAction) {
+        if(mServiceConnection != null) throw new IllegalStateException("Already under execution");
+
+        mServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mTrainingExecutionManager = (TrainingExecutionService.TrainingExecutionManager) service;
+                mTrainingExecutionManager.startExecution(routine, trainingDay);
+                data_runningTraining().invalidate();
+                if (postRunAction != null) postRunAction.run();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mTrainingExecutionManager = null;
+                mServiceConnection = null;
+            }
+        };
+        bindService(new Intent(this, TrainingExecutionService.class),mServiceConnection,BIND_AUTO_CREATE);
+    }
+
+    public Pair<String, String> getTrainingIds() {
+        return new Pair<>(mTrainingExecutionManager.getRoutineId(), mTrainingExecutionManager.getRoutineDayId());
     }
 
 

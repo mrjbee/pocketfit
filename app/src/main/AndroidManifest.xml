@@ -7,42 +7,44 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
         <activity
-            android:theme="@style/AnimationActivity"
             android:name=".DashboardActivity"
-            android:label="Pocket Fit" >
+            android:label="Pocket Fit"
+            android:theme="@style/AnimationActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/AnimationActivity"
             android:name=".ExercisesActivity"
-            android:label="Exercises" >
+            android:label="Exercises"
+            android:theme="@style/AnimationActivity" >
         </activity>
         <activity
-            android:theme="@style/AnimationActivity"
             android:name=".RoutinesActivity"
-            android:label="Exercises" >
+            android:label="Exercises"
+            android:theme="@style/AnimationActivity" >
         </activity>
-
         <activity
-            android:theme="@style/AnimationActivity"
             android:name=".RoutineEditActivity"
-            android:label="Routine" >
+            android:label="Routine"
+            android:theme="@style/AnimationActivity" >
         </activity>
-
-
         <activity
-            android:theme="@style/AnimationActivity"
             android:name=".RoutineDayEditActivity"
-            android:label="RoutineDayActivity" >
+            android:label="RoutineDayActivity"
+            android:theme="@style/AnimationActivity" >
         </activity>
 
-
+        <service
+            android:name=".TrainingExecutionService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
