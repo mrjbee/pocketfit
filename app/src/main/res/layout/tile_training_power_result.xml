@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#fffdfdfd"
+    android:background="#ffededed"
     android:orientation="vertical">
 
     <TextView
@@ -93,24 +93,13 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:background="@color/text.color.day.short.training">
-        <ImageView
-            android:layout_above="@+id/text_days_left"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:src="@drawable/separator"
-            android:scaleType="centerCrop"
-            android:layout_margin="2dp"/>
+        android:background="#4d8cf5">
 
-        <TextView
+        <Button
             android:id="@+id/action_main"
-            style="@style/Text.Link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:singleLine="true"
+            style="@style/Button.Panel.Light"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:text="Save" />
 
     </RelativeLayout>

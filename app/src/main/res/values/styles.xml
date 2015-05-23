@@ -56,11 +56,11 @@
     </style>
 
     <style name="Text.Tile.Header" parent="Text.Tile.Header.Light">
-        <item name="android:textColor">#ff5d5d5d</item>
+        <item name="android:textColor">#ff757575</item>
     </style>
 
     <style name="Text.Tile.Header.Bigger" parent="Text.Tile.Header.Bigger.Light">
-        <item name="android:textColor">#ff5d5d5d</item>
+        <item name="android:textColor">#ff757575</item>
     </style>
 
     <style name="Text.Tile.Clock.Light" parent="AppTheme">
@@ -139,6 +139,10 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">#ff878787</item>
+    </style>
+
+    <style name="Button.Panel.Light" parent="Button.Panel">
+        <item name="android:textColor">#f6f6f6</item>
     </style>
 
     <style name="Button.Panel" parent="@android:style/Widget.Button">

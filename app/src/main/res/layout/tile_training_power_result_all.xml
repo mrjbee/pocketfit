@@ -47,36 +47,28 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@color/text.color.day.short.training">
 
-        <TextView
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/action_secondary"
+            style="@style/Button.Panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Extra Set" />
+
+        <Button
+            android:layout_weight="1"
             android:id="@+id/action_main"
-            style="@style/Text.Link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:singleLine="true"
+            style="@style/Button.Panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:text="Next exercise" />
 
-        <TextView
-            android:id="@+id/action_secondary"
-            style="@style/Text.Link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:singleLine="true"
-            android:text="Extra Set" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
