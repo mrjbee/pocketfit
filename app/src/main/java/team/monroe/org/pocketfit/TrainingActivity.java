@@ -131,7 +131,7 @@ public class TrainingActivity extends FragmentActivity{
     //TrainingTilePowerResultFragment
     public void updateTile() {
         Class<? extends TrainingTileFragment> nextTileFragment = calculateCurrentFragment();
-        BodyFragmentAnimationRequest animationRequest = animation_slide_from_right();
+        BodyFragmentAnimationRequest animationRequest = animation_slide_out_from_right();
         if (    nextTileFragment != TrainingTileExerciseFragment.class
                 && currentFragment != TrainingTileExerciseFragment.class
                 && nextTileFragment != TrainingTilePowerAllResultFragment.class){

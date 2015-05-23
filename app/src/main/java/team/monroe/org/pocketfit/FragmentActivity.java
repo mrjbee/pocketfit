@@ -87,6 +87,10 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         return new BodyFragmentAnimationRequest(R.animator.slide_in_from_left, R.animator.slide_out_to_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
 
+    final protected BodyFragmentAnimationRequest animation_slide_out_from_right() {
+        return new BodyFragmentAnimationRequest(R.animator.slide_in_from_left, R.animator.scale_out_to_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    }
+
     final protected BodyFragmentAnimationRequest animation_flip_in() {
         return new BodyFragmentAnimationRequest(R.animator.card_flip_in_right, R.animator.card_flip_out_right, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }

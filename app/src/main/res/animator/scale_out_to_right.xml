@@ -9,4 +9,19 @@
         android:valueTo="-1"
         android:valueType="floatType" />
 
+    <objectAnimator
+        android:duration="300"
+        android:propertyName="scaleX"
+        android:valueFrom="1"
+        android:valueTo="0.5"
+        android:valueType="floatType" />
+
+
+    <objectAnimator
+        android:duration="300"
+        android:propertyName="scaleY"
+        android:valueFrom="1"
+        android:valueTo="0.5"
+        android:valueType="floatType" />
+
 </set>
