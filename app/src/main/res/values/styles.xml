@@ -150,6 +150,20 @@
         <item name="android:clickable">true</item>
     </style>
 
+
+    <style name="Button.Action" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_action</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="Button.Action.Dark" parent="Button.Action">
+        <item name="android:background">@drawable/button_action_dark</item>
+    </style>
+
+
     <style name="Text.Link" parent="AppTheme">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#ff30addd</item>

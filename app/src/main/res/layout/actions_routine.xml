@@ -2,26 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingRight="20dp"
     >
 
-    <ImageView
+    <ImageButton
         android:id="@+id/action_edit_exercises"
         android:layout_toLeftOf="@+id/action_edit_routines"
         android:layout_centerVertical="true"
-        android:layout_width="35dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:padding="5dp"
+        style="@style/Button.Action.Dark"
         android:src="@drawable/runner"/>
 
     <ImageView
         android:id="@+id/action_edit_routines"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_width="35dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:padding="5dp"
+        style="@style/Button.Action.Dark"
         android:src="@drawable/gear"/>
 
 </RelativeLayout>

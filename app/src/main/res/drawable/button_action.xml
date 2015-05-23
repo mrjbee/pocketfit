@@ -4,7 +4,7 @@
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@color/button.pressed" />
+        android:drawable="@drawable/background_round_light" />
 
     <item
         android:drawable="@color/transperent" />
