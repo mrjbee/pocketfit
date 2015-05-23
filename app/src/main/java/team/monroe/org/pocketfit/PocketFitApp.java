@@ -372,6 +372,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     public void stopTraining() {
         List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
         mTrainingExecutionManager.stopExecution();
+        unbindService(mServiceConnection);
+        mTrainingExecutionManager = null;
+        mServiceConnection = null;
     }
 
     public Pair<String, String> getTrainingIds() {
@@ -383,6 +386,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public TrainingExecutionService.TrainingPlan getTrainingPlan() {
+        if (mTrainingExecutionManager == null) return null;
         return mTrainingExecutionManager.getTrainingPlan();
     }
 

@@ -6,9 +6,9 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
+import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -16,9 +16,8 @@ import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class TileRoutineExecutedFragment extends DashboardTileFragment {
 
-    private Data.DataChangeObserver<Pair> observer_activeRoutineObserver;
-    private Routine mRoutine;
     private RoutineDay mDay;
+    private Routine mRoutine;
 
     @Override
     protected String getHeaderName() {
@@ -57,51 +56,30 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
     @Override
     public void onStart() {
         super.onStart();
-        observer_activeRoutineObserver = observe_data_change(State.STOP, new Data.DataChangeObserver<Pair>() {
-
-            @Override
-            public void onDataInvalid() {
-                fetch_ActiveRoutine();
-            }
-
-            @Override
-            public void onData(Pair routine) {
-
-            }
-        });
-        application().data_runningTraining().addDataChangeObserver(observer_activeRoutineObserver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        fetch_ActiveRoutine();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        application().data_runningTraining().removeDataChangeObserver(observer_activeRoutineObserver);
-    }
-
-    private void fetch_ActiveRoutine() {
-        application().data_runningTraining().fetch(true, observe_data_fetch(State.STOP, new PocketFitApp.DataAction<Pair>() {
-            @Override
-            public void data(Pair pair) {
-                Pair<Routine,RoutineDay> trainingPair = pair;
-                mRoutine = trainingPair.first;
-                mDay = trainingPair.second;
-                if (mRoutine.isNull()){
-                    application().error(new IllegalStateException());
+        if (application().getTrainingPlan()!=null) {
+            mRoutine = application().getTrainingPlan().getRoutine();
+            mDay = application().getTrainingPlan().getRoutineDay();
+            updateUI();
+        }else {
+            final DashboardActivity activity = owner();
+            activity.runLastOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.switch_toRoutines();
                 }
+            }, 500);
+        }
+    }
 
-                view_text(R.id.text_title).setText(mRoutine.title);
-                view_text(R.id.text_description).setText(mRoutine.description);
+    private void updateUI() {
+        if (mRoutine == null){
+            application().error(new IllegalStateException());
+        }
 
-                updateRoutineCover();
-            }
-        }));
+        view_text(R.id.text_title).setText(mRoutine.title);
+        view_text(R.id.text_description).setText("Training Description. "+mDay.description);
 
+        updateRoutineCover();
     }
 
     private void updateRoutineCover() {

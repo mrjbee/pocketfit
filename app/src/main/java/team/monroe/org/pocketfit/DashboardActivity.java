@@ -200,6 +200,18 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     }
 
+    public void switch_toRoutines() {
+        FragmentItem item = customize_startupFragment();
+        mainButtonController.blockAppearance();
+        replaceBodyFragment(item.setBackAnimation(animation_flip_in()), animation_flip_out());
+        runLastOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainButtonController.applyAppearance();
+            }
+        }, 500);
+    }
+
     @Override
     public void showMainButton(int resource, Runnable action) {
         mainButtonController.show(resource, action);
@@ -215,6 +227,8 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         super.onSaveInstanceState(outState);
         mainButtonController.saveState(outState);
     }
+
+
 
 
     private static class MainButtonController {

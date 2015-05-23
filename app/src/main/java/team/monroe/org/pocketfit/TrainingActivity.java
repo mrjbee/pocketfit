@@ -139,7 +139,9 @@ public class TrainingActivity extends FragmentActivity{
     protected void onStop() {
         super.onStop();
         mTrainingDurationClockPresenter.resetClock();
-        application().getTrainingPlan().setTrainingPlanListener(null);
+        if (application().getTrainingPlan() != null) {
+            application().getTrainingPlan().setTrainingPlanListener(null);
+        }
     }
 
     private Class<? extends BodyFragment> calculateCurrentFragment() {
@@ -203,5 +205,11 @@ public class TrainingActivity extends FragmentActivity{
         currentFragment = nextTileFragment;
         replaceBodyFragment(new FragmentItem(nextTileFragment), animationRequest);
         updateClock(true);
+    }
+
+    public void stopTraining() {
+        application().getTrainingPlan().setTrainingPlanListener(null);
+        application().stopTraining();
+        finish();
     }
 }

@@ -296,6 +296,14 @@ public class TrainingExecutionService extends Service {
             return resultRecordList;
         }
 
+        public Routine getRoutine() {
+            return routine;
+        }
+
+        public RoutineDay getRoutineDay() {
+            return routineDay;
+        }
+
         public interface TrainingPlanListener{
             void onStartDateChanged(Date startDate);
             void onStartPauseDateChanged(Date pauseStartDate);
