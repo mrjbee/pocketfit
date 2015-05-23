@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
+
 import java.util.Date;
 
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
@@ -22,6 +26,7 @@ public class TrainingActivity extends FragmentActivity{
 
     private ClockViewPresenter mTrainingDurationClockPresenter;
     private ClockViewPresenter mTrainingPauseClockPresenter;
+    private AppearanceController mPauseClockAnimator;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -54,35 +59,50 @@ public class TrainingActivity extends FragmentActivity{
         view_text(R.id.text_routine_name).setText(mRoutine.title);
         mTrainingDurationClockPresenter = new ClockViewPresenter(view_text(R.id.text_clock));
         mTrainingPauseClockPresenter = new ClockViewPresenter(view_text(R.id.text_pause_clock));
+        mPauseClockAnimator = animateAppearance(view(R.id.text_pause_clock), scale(1f,0f))
+                .showAnimation(duration_constant(300),interpreter_overshot())
+                .hideAndGone()
+                .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
+                .build();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        updateClock();
+        updateClock(false);
         application().getTrainingPlan().setTrainingPlanListener(new NoOpTrainingPlanListener(){
             @Override
             public void onStartDateChanged(Date startDate) {
-                updateClock();
+                updateClock(true);
             }
 
             @Override
             public void onStartPauseDateChanged(Date pauseStartDate) {
-                updateClock();
+                updateClock(true);
             }
         });
     }
 
 
-    private void updateClock() {
+    private void updateClock(boolean animate) {
         if (application().getTrainingPlan().isStarted()){
             mTrainingDurationClockPresenter.startClock(application().getTrainingPlan().getStartDate());
         }else {
             mTrainingDurationClockPresenter.resetClock();
         }
         if (application().getTrainingPlan().isPaused()){
+            if (animate) {
+                mPauseClockAnimator.show();
+            }else {
+                mPauseClockAnimator.showWithoutAnimation();
+            }
             mTrainingPauseClockPresenter.startClock(application().getTrainingPlan().getPauseStartDate());
         }else {
+            if (animate) {
+                mPauseClockAnimator.hide();
+            }else {
+                mPauseClockAnimator.hideWithoutAnimation();
+            }
             mTrainingPauseClockPresenter.resetClock();
         }
     }
