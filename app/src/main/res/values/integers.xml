@@ -11,4 +11,7 @@
     <color name="text.color.day.short">#ff777777</color>
     <color name="text.color.day.short.training">#fffdfdfd</color>
 
+    <color name="button.panel.color">#00ffffff</color>
+    <color name="button.panel.color.pressed">#ffdddddd</color>
+
 </resources>

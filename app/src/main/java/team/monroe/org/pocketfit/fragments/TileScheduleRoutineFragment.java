@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,18 +51,17 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                             text.setVisibility(View.VISIBLE);
                             dayBackground.setImageResource(R.drawable.day_training);
                             caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
-                            dayBackground.setOnClickListener(new View.OnClickListener() {
+                            /*button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     onRoutineDaySelect(day.id);
                                 }
-                            });
+                            });*/
                         }else{
                             shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short));
                             dayBackground.setImageResource(R.drawable.day_not_training);
                             text.setVisibility(View.INVISIBLE);
                             caption.setTextColor(getResources().getColor(R.color.text_color_date));
-                            dayBackground.setOnClickListener(null);
                         }
 
                         if (day.dayDateString.equals("Today")){
@@ -72,7 +72,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                         caption.setText(day.dayDateString);
                         text.setText(day.dayDescription);
                         shortDay.setText(day.shortDay);
-
+                        convertView.requestLayout();
                     }
                 };
             }
@@ -91,9 +91,28 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
             public boolean isEmpty() {
                 return !isScheduleAvailable();
             }
+
+            @Override
+            public boolean areAllItemsEnabled() {
+                return false;
+            }
+
+            @Override
+            public boolean isEnabled(int position) {
+                return getItem(position).id != null;
+            }
         };
 
         view_list(R.id.list_items).setAdapter(mDayListViewAdapter);
+        view_list(R.id.list_items).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Day day = mDayListViewAdapter.getItem(position);
+                if (day.id != null){
+                    onRoutineDaySelect(day.id);
+                }
+            }
+        });
     }
 
     private void onRoutineDaySelect(String id) {

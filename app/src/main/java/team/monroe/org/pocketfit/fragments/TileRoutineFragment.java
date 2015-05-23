@@ -175,17 +175,17 @@ public class TileRoutineFragment extends DashboardTileFragment {
                     updateRoutineCover();
 
                     if (!mSchedule.isDefined()){
-                        view_text(R.id.text_days_left).setText("Routine has no trainings");
+                        view_button(R.id.text_days_left).setText("Routine has no trainings");
                         view(R.id.action_calendar).setVisibility(View.GONE);
                         owner().showMainButton(R.drawable.round_btn_pen, null);
                     } else {
                         view(R.id.action_calendar).setVisibility(View.VISIBLE);
                         int daysBeforeTraining = schedule.getDaysBeforeNextTrainingDay();
                         if (daysBeforeTraining == 0){
-                            view_text(R.id.text_days_left).setText("Today training");
+                            view_button(R.id.text_days_left).setText("Today training");
                             owner().showMainButton(R.drawable.round_btn_play, null);
                         }else{
-                            view_text(R.id.text_days_left).setText(daysBeforeTraining+" days before training");
+                            view_button(R.id.text_days_left).setText(daysBeforeTraining+" days before training");
                         }
                     }
                 }

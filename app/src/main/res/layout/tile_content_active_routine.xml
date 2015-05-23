@@ -55,17 +55,17 @@
             android:layout_margin="2dp"/>
 
 
-        <TextView
+        <Button
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/text_days_left"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            android:layout_width="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="13dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Example"
-            android:singleLine="true"
-            style="@style/Text.Link"/>
+            style="@style/Button.Panel"/>
 
     </RelativeLayout>
 </LinearLayout>

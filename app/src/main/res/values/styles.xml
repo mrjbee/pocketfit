@@ -141,6 +141,15 @@
         <item name="android:textColor">#ff878787</item>
     </style>
 
+    <style name="Button.Panel" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#ff30addd</item>
+        <item name="android:textSize">15dip</item>
+        <item name="android:background">@drawable/button_panel</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="Text.Link" parent="AppTheme">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#ff30addd</item>

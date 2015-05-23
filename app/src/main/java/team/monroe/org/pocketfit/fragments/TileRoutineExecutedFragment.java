@@ -51,7 +51,7 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
                 onDescriptionLink();
             }
         });
-        view_text(R.id.text_days_left).setText("Continue Workout");
+        view_button(R.id.text_days_left).setText("Continue Workout");
     }
 
     @Override
