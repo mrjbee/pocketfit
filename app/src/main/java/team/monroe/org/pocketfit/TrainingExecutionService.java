@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 
 import org.monroe.team.corebox.utils.Closure;
@@ -55,14 +56,17 @@ public class TrainingExecutionService extends Service {
         public void startExecution(Routine routine, RoutineDay routineDay) {
             if (trainingPlan != null) throw new IllegalStateException("Routine is running");
             trainingPlan = new TrainingPlan(routine, routineDay);
+
             Notification.Builder builder = new Notification.Builder(service());
             builder.setSmallIcon(R.drawable.runner);
             builder.setContentTitle(routine.title);
             builder.setContentText(routineDay.description);
             builder.setOngoing(true);
             builder.setTicker("Training ...");
-            builder.setContentIntent(PendingIntent.getActivity(service(),334,new Intent(service(),TrainingActivity.class),PendingIntent.FLAG_UPDATE_CURRENT));
+            builder.setContentIntent(PendingIntent.getActivity(service(),334,new Intent(service(),TrainingActivity.class),PendingIntent.FLAG_CANCEL_CURRENT));
+
             service().startInForeground(builder.getNotification());
+
         }
 
         public TrainingPlan getTrainingPlan() {
