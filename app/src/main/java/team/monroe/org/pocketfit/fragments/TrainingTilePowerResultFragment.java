@@ -11,7 +11,6 @@ import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 public class TrainingTilePowerResultFragment extends TrainingTileFragment {
 
     private RoutineExercise mRoutineExercise;
-    private ClockViewPresenter mSetClockPresenter;
 
     @Override
     protected int getTileLayoutId() {
@@ -24,7 +23,6 @@ public class TrainingTilePowerResultFragment extends TrainingTileFragment {
         super.onActivityCreated(savedInstanceState);
 
         mRoutineExercise= application().getTrainingPlan().getCurrentExercise();
-        mSetClockPresenter = new ClockViewPresenter(view_text(R.id.exercise_timer));
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails;
         view_text(R.id.exercise_set).setText("Set " + (application().getTrainingPlan().getSetIndex() + 1));
