@@ -115,6 +115,7 @@
                         </RelativeLayout>
 
                         <TextView
+                            android:layout_gravity="center_vertical"
                             android:layout_column="1"
                             android:layout_row="1"
                             android:layout_columnSpan="2"
@@ -132,7 +133,8 @@
                             android:layout_column="4"
                             android:layout_row="1"
                             android:layout_width="40dp"
-                            android:layout_height="22dp"
+                            android:layout_height="40dp"
+                            style="@style/Button.Action"
                             android:src="@drawable/cross_thin"/>
 
                     </GridLayout>
