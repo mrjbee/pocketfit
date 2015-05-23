@@ -37,14 +37,11 @@ public class TrainingExecutionService extends Service {
 
     public interface TrainingExecutionManager {
         public void startExecution(Routine routine, RoutineDay dayIndex);
-
         String getRoutineId();
-
         String getRoutineDayId();
-
         Routine getRoutine();
-
         public TrainingPlan getTrainingPlan();
+        void stopExecution();
     }
 
 
@@ -71,6 +68,12 @@ public class TrainingExecutionService extends Service {
 
         public TrainingPlan getTrainingPlan() {
             return trainingPlan;
+        }
+
+        @Override
+        public void stopExecution() {
+            service().stopForeground(true);
+            service().stopSelf();
         }
 
         @Deprecated
@@ -287,6 +290,10 @@ public class TrainingExecutionService extends Service {
                 exerciseSet.add(resultRecord.exercise.exercise);
             }
             return answer;
+        }
+
+        public List<ResultRecord> getResultRecords() {
+            return resultRecordList;
         }
 
         public interface TrainingPlanListener{

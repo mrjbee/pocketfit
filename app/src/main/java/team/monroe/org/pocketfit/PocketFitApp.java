@@ -347,6 +347,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager != null;
     }
 
+
     public void startTraining(final Routine routine, final RoutineDay trainingDay, final Runnable postRunAction) {
         if(mServiceConnection != null) throw new IllegalStateException("Already under execution");
 
@@ -368,6 +369,11 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         bindService(new Intent(this, TrainingExecutionService.class),mServiceConnection,BIND_AUTO_CREATE);
     }
 
+    public void stopTraining() {
+        List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
+        mTrainingExecutionManager.stopExecution();
+    }
+
     public Pair<String, String> getTrainingIds() {
         return new Pair<>(mTrainingExecutionManager.getRoutineId(), mTrainingExecutionManager.getRoutineDayId());
     }
@@ -376,13 +382,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager.getRoutine();
     }
 
-    public TrainingExecutionService.TrainingExecutionManager getExerciseExecutionManger() {
-        return mTrainingExecutionManager;
-    }
-
     public TrainingExecutionService.TrainingPlan getTrainingPlan() {
         return mTrainingExecutionManager.getTrainingPlan();
     }
+
 
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
