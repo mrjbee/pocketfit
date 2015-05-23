@@ -10,8 +10,9 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 
 import java.util.Date;
 
+import team.monroe.org.pocketfit.fragments.BodyFragment;
+import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
-import team.monroe.org.pocketfit.fragments.TrainingTileFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
@@ -27,6 +28,7 @@ public class TrainingActivity extends FragmentActivity{
     private ClockViewPresenter mTrainingDurationClockPresenter;
     private ClockViewPresenter mTrainingPauseClockPresenter;
     private AppearanceController mPauseClockAnimator;
+    private AppearanceController mTrainingClockAnimator;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -64,6 +66,12 @@ public class TrainingActivity extends FragmentActivity{
                 .hideAndGone()
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
+
+        mTrainingClockAnimator = animateAppearance(view(R.id.text_clock), scale(1f,0f))
+                .showAnimation(duration_constant(300),interpreter_overshot())
+                .hideAndGone()
+                .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
+                .build();
     }
 
     @Override
@@ -90,6 +98,7 @@ public class TrainingActivity extends FragmentActivity{
         }else {
             mTrainingDurationClockPresenter.resetClock();
         }
+
         if (application().getTrainingPlan().isPaused()){
             if (animate) {
                 mPauseClockAnimator.show();
@@ -105,6 +114,25 @@ public class TrainingActivity extends FragmentActivity{
             }
             mTrainingPauseClockPresenter.resetClock();
         }
+
+        if (application().getTrainingPlan().hasMoreExercises()){
+            if (animate) {
+                mTrainingClockAnimator.show();
+                mPauseClockAnimator.show();
+            }else {
+                mTrainingClockAnimator.showWithoutAnimation();
+                mPauseClockAnimator.showWithoutAnimation();
+            }
+        } else {
+            if (animate) {
+                mTrainingClockAnimator.hide();
+                mPauseClockAnimator.hide();
+            }else {
+                mTrainingClockAnimator.hideWithoutAnimation();
+                mPauseClockAnimator.hideWithoutAnimation();
+            }
+        }
+
     }
 
     @Override
@@ -114,9 +142,15 @@ public class TrainingActivity extends FragmentActivity{
         application().getTrainingPlan().setTrainingPlanListener(null);
     }
 
-    private Class<? extends TrainingTileFragment> calculateCurrentFragment() {
+    private Class<? extends BodyFragment> calculateCurrentFragment() {
         TrainingExecutionService.TrainingPlan trainingPlan = application().getTrainingPlan();
+
+        if (!application().getTrainingPlan().hasMoreExercises()){
+            return TrainingEndFragment.class;
+        }
+
         Exercise.Type exerciseType = trainingPlan.getCurrentExercise().exercise.type;
+
         if (!trainingPlan.isExerciseStarted()){
             //show exercise fragment
             return TrainingTileExerciseFragment.class;
@@ -125,7 +159,7 @@ public class TrainingActivity extends FragmentActivity{
                 //set done, show set results
                 switch (exerciseType){
                     case weight_times:
-                        if (trainingPlan.isAllSetsCommited()){
+                        if (trainingPlan.isAllSetsCommitted()){
                             return TrainingTilePowerAllResultFragment.class;
                         }else {
                             return TrainingTilePowerResultFragment.class;
@@ -149,12 +183,14 @@ public class TrainingActivity extends FragmentActivity{
     //TrainingTilePowerAllResultFragment
     //TrainingTilePowerExecuteFragment
     //TrainingTilePowerResultFragment
+    //TrainingEndFragment
     public void updateTile() {
-        Class<? extends TrainingTileFragment> nextTileFragment = calculateCurrentFragment();
+        Class<? extends BodyFragment> nextTileFragment = calculateCurrentFragment();
         BodyFragmentAnimationRequest animationRequest = animation_slide_out_from_right();
         if (    nextTileFragment != TrainingTileExerciseFragment.class
                 && currentFragment != TrainingTileExerciseFragment.class
-                && nextTileFragment != TrainingTilePowerAllResultFragment.class){
+                && nextTileFragment != TrainingTilePowerAllResultFragment.class
+                && nextTileFragment != TrainingEndFragment.class){
 
             if (currentFragment == TrainingTilePowerAllResultFragment.class){
                 animationRequest = animation_slide_from_left();
@@ -166,5 +202,6 @@ public class TrainingActivity extends FragmentActivity{
         }
         currentFragment = nextTileFragment;
         replaceBodyFragment(new FragmentItem(nextTileFragment), animationRequest);
+        updateClock(true);
     }
 }

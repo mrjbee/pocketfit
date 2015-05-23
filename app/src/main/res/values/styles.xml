@@ -193,30 +193,36 @@
         <item name="android:textColor">#ff9a9a9a</item>
     </style>
 
-    <style name="Text.Tile.Caption" parent="AppTheme">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#ff575757</item>
-    </style>
+
 
     <style name="Text.Training.Title" parent="AppTheme">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#ff626262</item>
+        <item name="android:textColor">#ff6e6e6e</item>
+    </style>
+
+    <style name="Text.Training.Prompt" parent="AppTheme">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#ff6e6e6e</item>
     </style>
 
     <style name="Text.Training.Clock" parent="AppTheme">
         <item name="android:textSize">25sp</item>
         <item name="android:textColor">#ffa8a8a8</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Text.Training.Pause.Clock" parent="AppTheme">
         <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">#fd0b45</item>
+    </style>
+
+    <style name="Text.Tile.Caption" parent="AppTheme">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#ff575757</item>
     </style>
 
     <style name="Text.Tile" parent="Text.Tile.Caption">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#ff7e7e7e</item>
     </style>
 
 </resources>

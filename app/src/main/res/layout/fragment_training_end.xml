@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:layout_marginTop="@dimen/tile_training_margin_top"
+        android:layout_marginBottom="@dimen/tile_training_margin_bottom"
+        android:id="@+id/panel_tile"
+        android:layout_marginLeft="@dimen/tile.margin.side"
+        android:layout_marginRight="@dimen/tile.margin.side"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_marginBottom="30dp"
+                android:layout_above="@+id/panel_results"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="That's all for today"
+                style="@style/Text.Training.Prompt"/>
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:id="@+id/panel_results"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_gravity="right"
+            android:id="@+id/panel_main_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            >
+            <Button
+                android:id="@+id/main_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/button_round"/>
+
+            <ImageView
+                android:id="@+id/image_main_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/round_btn_stop"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>

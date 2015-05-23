@@ -11,11 +11,14 @@ import org.monroe.team.corebox.utils.Closure;
 import org.monroe.team.corebox.utils.DateUtils;
 import org.monroe.team.corebox.utils.Lists;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -103,11 +106,14 @@ public class TrainingExecutionService extends Service {
         private Date pauseStartDate;
         private ExerciseExecution currentExecution;
         private TrainingPlanListener trainingPlanListener = new NoOpTrainingPlanListener();
+        private List<ResultRecord> resultRecordList = new ArrayList<>();
 
         public TrainingPlan(Routine routine, RoutineDay routineDay) {
             this.routine = routine;
             this.routineDay = routineDay;
-            currentExecution = new ExerciseExecution(routineDay.exerciseList.get(0));
+            if (!routineDay.exerciseList.isEmpty()) {
+                currentExecution = new ExerciseExecution(routineDay.exerciseList.get(0));
+            }
         }
 
         public TrainingPlanListener getTrainingPlanListener() {
@@ -217,11 +223,66 @@ public class TrainingExecutionService extends Service {
         }
 
         public void nextExercise() {
-            currentExecution = new ExerciseExecution(routineDay.exerciseList.get(0));
+            int index = routineDay.exerciseList.indexOf(currentExecution.routineExercise);
+            for (int i = 0; i < currentExecution.setList.size(); i++) {
+                Set set = currentExecution.setList.get(i);
+                ResultRecord resultRecord = new ResultRecord(
+                        set.startDate,
+                        set.endDate,
+                        currentExecution.routineExercise,
+                        i,
+                        set.results);
+                resultRecordList.add(resultRecord);
+            }
+
+            index++;
+            if (index < routineDay.exerciseList.size()){
+                currentExecution = new ExerciseExecution(routineDay.exerciseList.get(index));
+            }else {
+                currentExecution = null;
+            }
         }
 
-        public boolean isAllSetsCommited() {
+        public boolean isAllSetsCommitted() {
             return (currentExecution.setList.size() - currentExecution.commitedSetsCount()) <= 0;
+        }
+
+        public boolean hasMoreExercises() {
+            return currentExecution != null;
+        }
+
+        public long getDurationMs() {
+            if (startDate == null){
+                return 0;
+            }
+            if (resultRecordList.isEmpty()){
+                return 0;
+            }
+            Date endDate = Lists.getLast(resultRecordList).endDate;
+            return endDate.getTime() - startDate.getTime();
+        }
+
+        public float getLiftedUpWeight() {
+            float answer = 0;
+            for (ResultRecord resultRecord : resultRecordList) {
+                if (resultRecord.exercise.exercise.type == Exercise.Type.weight_times){
+                    answer += ((Integer)resultRecord.results.get("times")) *
+                            ((Float)resultRecord.results.get("weight"));
+                }
+            }
+            return answer;
+        }
+
+        public int getExerciseCount() {
+            int answer = 0;
+            java.util.Set<Exercise> exerciseSet = new HashSet<>();
+            for (ResultRecord resultRecord : resultRecordList) {
+                if (!exerciseSet.contains(resultRecord.exercise.exercise)){
+                    answer++;
+                }
+                exerciseSet.add(resultRecord.exercise.exercise);
+            }
+            return answer;
         }
 
         public interface TrainingPlanListener{
@@ -254,11 +315,27 @@ public class TrainingExecutionService extends Service {
             }
         }
 
-
         public class Set {
             private Map<String, Object> results = new HashMap<>();
             private Date startDate;
             private Date endDate;
+        }
+
+        public static class ResultRecord {
+
+            public final Date startDate;
+            public final Date endDate;
+            public final RoutineExercise exercise;
+            public final int setNumber;
+            public final Map<String, Object> results;
+
+            public ResultRecord(Date startDate, Date endDate, RoutineExercise exercise, int setNumber, Map<String, Object> results) {
+                this.startDate = startDate;
+                this.endDate = endDate;
+                this.exercise = exercise;
+                this.setNumber = setNumber;
+                this.results = results;
+            }
         }
 
     }
