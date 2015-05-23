@@ -68,7 +68,7 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
                     view.findViewById(R.id.item_image).setBackgroundResource(R.drawable.step);
                 }
 
-                view.setOnClickListener(new View.OnClickListener() {
+                view.findViewById(R.id.item_action).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         owner(RoutinesActivity.class).open_RoutineDay(mRoutine.id, routineDay.id);

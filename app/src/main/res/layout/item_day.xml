@@ -4,6 +4,12 @@
     android:layout_height="110dp"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/item_action"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        style="@style/Button.Panel"/>
+
     <RelativeLayout
         android:id="@+id/item_panel_image"
         android:layout_marginLeft="20dp"
@@ -40,13 +46,14 @@
         android:singleLine="true"
         android:text="Example" />
 
-    <ImageView
+    <ImageButton
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/item_sub_caption"
         android:layout_marginRight="15dp"
         android:id="@+id/item_trash"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        style="@style/Button.Action"
         android:src="@drawable/trash"
         android:scaleType="centerCrop"/>
 
