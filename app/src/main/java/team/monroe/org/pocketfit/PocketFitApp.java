@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import team.monroe.org.pocketfit.manage.Persist;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
@@ -65,7 +64,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             @Override
             protected RoutineSchedule provideData() {
                 RoutineSchedule routineSchedule = model().execute(GetActiveRoutineSchedule.class, null);
-                if (routineSchedule == null) routineSchedule = new RoutineSchedule(null, DateUtils.today());
+                if (routineSchedule == null) routineSchedule = new RoutineSchedule(null, -1, DateUtils.today());
                 return routineSchedule;
             }
         };
@@ -73,7 +72,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         data_activeRoutine = new Data<Routine>(Routine.class, model()) {
             @Override
             protected Routine provideData() {
-                String routineId = getSetting(Settings.ROUTINE_ACTIVE_ID);
+                String routineId = getSetting(Settings.ID_ACtIVE_ROUTINE);
                 if (routineId == null) return new Routine(null);
                 Routine routine = model().execute(GetRoutineById.class, routineId);
                 return routine;
@@ -340,7 +339,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public boolean hasActiveRoutine() {
-        return getSetting(Settings.ROUTINE_ACTIVE_ID) != null;
+        return getSetting(Settings.ID_ACtIVE_ROUTINE) != null;
     }
 
     public boolean isTrainingRunning() {
@@ -370,6 +369,20 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public void stopTraining() {
+
+        String routineId = getTrainingPlan().getRoutine().id;
+        String routineDayId = getTrainingPlan().getRoutineDay().id;
+        if (hasActiveRoutine()){
+            String activeRoutineId = getSetting(Settings.ID_ACtIVE_ROUTINE);
+            if (routineId.equals(activeRoutineId)){
+                setSetting(Settings.ID_ACTIVE_ROUTINE_LAST_DAY, routineDayId);
+                setSetting(Settings.DATE_ACTIVE_ROUTINE_LAST_TRAINING, DateUtils.now().getTime());
+            }
+        }
+
+        data_activeRoutineSchedule().invalidate();
+
+        //TODO: store results
         List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
         mTrainingExecutionManager.stopExecution();
         unbindService(mServiceConnection);

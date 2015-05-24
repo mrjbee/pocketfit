@@ -33,9 +33,9 @@ public class UpdateRoutine extends UserCaseSupport<Routine, Void>{
 
         if (update.active != null) {
             if (update.active) {
-                using(SettingManager.class).set(Settings.ROUTINE_ACTIVE_ID, updatePersist.id);
-            } else if (updatePersist.id.equals(using(SettingManager.class).get(Settings.ROUTINE_ACTIVE_ID))) {
-                using(SettingManager.class).set(Settings.ROUTINE_ACTIVE_ID, null);
+                using(SettingManager.class).set(Settings.ID_ACtIVE_ROUTINE, updatePersist.id);
+            } else if (updatePersist.id.equals(using(SettingManager.class).get(Settings.ID_ACtIVE_ROUTINE))) {
+                using(SettingManager.class).set(Settings.ID_ACtIVE_ROUTINE, null);
             }
         }
 
@@ -58,8 +58,8 @@ public class UpdateRoutine extends UserCaseSupport<Routine, Void>{
     private void checkForRemove(Persist.Routine origin) {
         if (!isDefined(origin)){
             using(PersistManager.class).remove(origin.id);
-            if (origin.id.equals(using(SettingManager.class).get(Settings.ROUTINE_ACTIVE_ID))){
-                using(SettingManager.class).set(Settings.ROUTINE_ACTIVE_ID, null);
+            if (origin.id.equals(using(SettingManager.class).get(Settings.ID_ACtIVE_ROUTINE))){
+                using(SettingManager.class).set(Settings.ID_ACtIVE_ROUTINE, null);
             }
         }
     }

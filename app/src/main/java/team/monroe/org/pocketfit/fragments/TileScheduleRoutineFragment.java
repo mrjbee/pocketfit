@@ -84,7 +84,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
             @Override
             public Day getItem(int position) {
-                return buildDayFor(DateUtils.mathDays(getStartDate(), -1 + position));
+                return buildDayFor(DateUtils.mathDays(getStartDate(), position));
             }
 
             @Override
@@ -116,7 +116,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
     }
 
     private void onRoutineDaySelect(String id) {
-        owner().openDayEditor(mSchedule.routine.id, id);
+        owner().openDayEditor(mSchedule.mRoutine.id, id);
     }
 
 
@@ -155,7 +155,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
         view.findViewById(R.id.action_edit_routine).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner().openRoutineEditor(mSchedule.routine.id);
+                owner().openRoutineEditor(mSchedule.mRoutine.id);
             }
         });
 
@@ -208,7 +208,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
     }
 
     public Date getStartDate() {
-        return mSchedule.startDate;
+        return DateUtils.today();
     }
 
 

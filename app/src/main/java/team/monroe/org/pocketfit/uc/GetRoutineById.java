@@ -28,7 +28,7 @@ public class GetRoutineById extends UserCaseSupport<String, Routine>{
         answer.title = routinePersist.title;
         answer.imageId = routinePersist.imageId;
         answer.description = routinePersist.description;
-        answer.active = routinePersist.id.equals(using(SettingManager.class).get(Settings.ROUTINE_ACTIVE_ID));
+        answer.active = routinePersist.id.equals(using(SettingManager.class).get(Settings.ID_ACtIVE_ROUTINE));
 
         answer.trainingDays = new ArrayList<>();
         for (String dayId : routinePersist.routineDaysIdList) {

@@ -10,6 +10,7 @@ import java.util.Date;
 
 import team.monroe.org.pocketfit.Settings;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
 public class GetActiveRoutineSchedule extends UserCaseSupport<Void, RoutineSchedule> {
@@ -21,19 +22,29 @@ public class GetActiveRoutineSchedule extends UserCaseSupport<Void, RoutineSched
     @Override
     protected RoutineSchedule executeImpl(Void request) {
 
-        String activeRoutineId = using(SettingManager.class).get(Settings.ROUTINE_ACTIVE_ID);
+        String activeRoutineId = using(SettingManager.class).get(Settings.ID_ACtIVE_ROUTINE);
         if (activeRoutineId == null) return null;
 
-        String startedRoutineId = using(SettingManager.class).get(Settings.ROUTINE_STARTED_ID);
-        Long routineStartDate = using(SettingManager.class).get(Settings.ROUTINE_START_DATE);
+        Routine routine = using(Model.class).execute(GetRoutineById.class, activeRoutineId);
+        if (routine == null) throw new IllegalStateException("Routine Schedule: Routine not available. Wrong id");
 
-        if (routineStartDate == null || activeRoutineId.equals(startedRoutineId)){
-            routineStartDate = DateUtils.today().getTime();
+        int lastTrainingDayIndex = -1;
+        long lastTrainingDate = -1;
+        String lastActiveRoutineDayId = using(SettingManager.class).get(Settings.ID_ACTIVE_ROUTINE_LAST_DAY);
+        if (lastActiveRoutineDayId != null){
+            for (int i = 0; i < routine.trainingDays.size(); i++) {
+                if (lastActiveRoutineDayId.equals(routine.trainingDays.get(i).id)){
+                    lastTrainingDayIndex = i;
+                    lastTrainingDate = using(SettingManager.class).get(Settings.DATE_ACTIVE_ROUTINE_LAST_TRAINING);
+                    break;
+                }
+            }
         }
 
-        Routine routine = using(Model.class).execute(GetRoutineById.class, activeRoutineId);
-        if (routine == null) throw new IllegalStateException();
+        if (lastTrainingDate == -1){
+            lastTrainingDate = DateUtils.today().getTime();
+        }
 
-        return new RoutineSchedule(routine, new Date(routineStartDate));
+        return new RoutineSchedule(routine, lastTrainingDayIndex,  new Date(lastTrainingDate));
     }
 }

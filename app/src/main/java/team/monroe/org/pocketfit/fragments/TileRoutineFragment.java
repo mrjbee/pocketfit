@@ -58,7 +58,7 @@ public class TileRoutineFragment extends DashboardTileFragment {
             owner().hideMainButton(new Runnable() {
                 @Override
                 public void run() {
-                    owner().openRoutineEditor(mSchedule.routine.id);
+                    owner().openRoutineEditor(mSchedule.mRoutine.id);
                 }
             });
         } else {
@@ -66,7 +66,7 @@ public class TileRoutineFragment extends DashboardTileFragment {
                 owner().hideMainButton(new Runnable() {
                     @Override
                     public void run() {
-                        application().startTraining(mSchedule.routine, mSchedule.getTrainingDay(DateUtils.now()), new Runnable() {
+                        application().startTraining(mSchedule.mRoutine, mSchedule.getTrainingDay(DateUtils.now()), new Runnable() {
                             @Override
                             public void run() {
                                 owner().switch_trainingExecution(true);
@@ -169,8 +169,8 @@ public class TileRoutineFragment extends DashboardTileFragment {
                         }
                     });
                 }else {
-                    view_text(R.id.text_title).setText(mSchedule.routine.title);
-                    view_text(R.id.text_description).setText(mSchedule.routine.description);
+                    view_text(R.id.text_title).setText(mSchedule.mRoutine.title);
+                    view_text(R.id.text_description).setText(mSchedule.mRoutine.description);
 
                     updateRoutineCover();
 
@@ -195,11 +195,11 @@ public class TileRoutineFragment extends DashboardTileFragment {
     }
 
     private void updateRoutineCover() {
-        if (mSchedule.routine.imageId != null) {
+        if (mSchedule.mRoutine.imageId != null) {
             String wasId = (String) view(R.id.image_cover, ImageView.class).getTag();
-            if (mSchedule.routine.imageId.equals(wasId)) return;
+            if (mSchedule.mRoutine.imageId.equals(wasId)) return;
             view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.covert_loading);
-            application().loadToBitmap(mSchedule.routine.imageId,
+            application().loadToBitmap(mSchedule.mRoutine.imageId,
                     DisplayUtils.screenHeight(getResources()),
                     DisplayUtils.screenHeight(getResources()), new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
                         @Override
