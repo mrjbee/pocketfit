@@ -14,7 +14,7 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
-public class TileRoutineExecutedFragment extends DashboardTileFragment {
+public class TileTrainingInProgressFragment extends DashboardTileFragment {
 
     private RoutineDay mDay;
     private Routine mRoutine;
@@ -26,13 +26,12 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
 
     @Override
     protected int getTileLayoutId() {
-        return R.layout.tile_content_active_routine;
+        return R.layout.tile_content_trainining_in_progress;
     }
 
 
     @Override
-    public void onMainButton() {
-    }
+    public void onMainButton() {}
 
 
     private void onDescriptionLink() {
@@ -43,7 +42,6 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        view(R.id.action_calendar).setVisibility(View.INVISIBLE);
         view(R.id.text_days_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +75,7 @@ public class TileRoutineExecutedFragment extends DashboardTileFragment {
         }
 
         view_text(R.id.text_title).setText(mRoutine.title);
-        view_text(R.id.text_description).setText("Training Description. "+mDay.description);
+        view_text(R.id.text_description).setText(mDay.description);
 
         updateRoutineCover();
     }

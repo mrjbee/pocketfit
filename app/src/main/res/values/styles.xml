@@ -86,6 +86,10 @@
         <item name="android:shadowColor">#ffffffff</item>
     </style>
 
+    <style name="Text.Body.Caption.Bigger" parent="Text.Body.Caption">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="Text.Body.Section.Caption" parent="AppTheme">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#ff595959</item>

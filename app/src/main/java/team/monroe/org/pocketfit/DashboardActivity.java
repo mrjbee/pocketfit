@@ -3,7 +3,6 @@ package team.monroe.org.pocketfit;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,13 +13,11 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
-import team.monroe.org.pocketfit.fragments.TileRoutineExecutedFragment;
+import team.monroe.org.pocketfit.fragments.TileTrainingInProgressFragment;
 import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileScheduleRoutineFragment;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
-import team.monroe.org.pocketfit.presentations.Routine;
-import team.monroe.org.pocketfit.presentations.RoutineDay;
 
 public class DashboardActivity extends FragmentActivity implements MainButtonOwnerContract {
 
@@ -89,7 +86,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
     protected FragmentItem customize_startupFragment() {
         FragmentItem fragmentItem;
         if (application().isTrainingRunning()){
-            fragmentItem = new FragmentItem(TileRoutineExecutedFragment.class)
+            fragmentItem = new FragmentItem(TileTrainingInProgressFragment.class)
                     .addArgument("auto_change",false);
 
         }else {
@@ -188,7 +185,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
     public void switch_trainingExecution(boolean autoStart) {
         mainButtonController.blockAppearance();
         replaceBodyFragment(
-                new FragmentItem(TileRoutineExecutedFragment.class)
+                new FragmentItem(TileTrainingInProgressFragment.class)
                         .addArgument("auto_change",autoStart)
                         .setBackAnimation(animation_flip_out()), animation_flip_in());
         runLastOnUiThread(new Runnable() {
