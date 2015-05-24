@@ -41,6 +41,7 @@
         </activity>
 
         <activity
+            android:launchMode="singleInstance"
             android:name=".TrainingActivity"
             android:label="Training"
             android:theme="@style/AnimationActivity" >

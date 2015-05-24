@@ -149,6 +149,9 @@
         <item name="android:textColor">#f6f6f6</item>
     </style>
 
+    <style name="Button.Panel.Dark.Text" parent="Button.Panel">
+        <item name="android:textColor">#ff5d5d5d</item>
+    </style>
     <style name="Button.Panel" parent="@android:style/Widget.Button">
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textColor">#ff30addd</item>

@@ -3,8 +3,10 @@ package team.monroe.org.pocketfit;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
@@ -72,6 +74,33 @@ public class TrainingActivity extends FragmentActivity{
                 .hideAndGone()
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
+
+        view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View view = getLayoutInflater().inflate(R.layout.panel_popup_training, null);
+                view.findViewById(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cancelTraining();
+                    }
+                });
+                view.findViewById(R.id.action_stop).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        stopTraining(false);
+                    }
+                });
+                PopupWindow popupWindow = new PopupWindow(view,
+                        (int) DisplayUtils.dpToPx(200, getResources()),
+                        (int) DisplayUtils.dpToPx(120, getResources()),
+                        true);
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.tile_white));
+                popupWindow.showAsDropDown(view(R.id.action_options));
+            }
+        });
     }
 
     @Override
@@ -209,9 +238,16 @@ public class TrainingActivity extends FragmentActivity{
         updateClock(true);
     }
 
-    public void stopTraining() {
+    public void stopTraining(boolean completelyDone) {
         application().getTrainingPlan().setTrainingPlanListener(null);
-        application().stopTraining();
+        application().stopTraining(completelyDone);
         finish();
     }
+
+    public void cancelTraining() {
+        application().getTrainingPlan().setTrainingPlanListener(null);
+        application().cancelTraining();
+        finish();
+    }
+
 }

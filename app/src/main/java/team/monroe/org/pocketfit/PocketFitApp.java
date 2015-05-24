@@ -368,22 +368,33 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         bindService(new Intent(this, TrainingExecutionService.class),mServiceConnection,BIND_AUTO_CREATE);
     }
 
-    public void stopTraining() {
+    public void stopTraining(boolean completelyDone) {
 
-        String routineId = getTrainingPlan().getRoutine().id;
-        String routineDayId = getTrainingPlan().getRoutineDay().id;
-        if (hasActiveRoutine()){
-            String activeRoutineId = getSetting(Settings.ID_ACtIVE_ROUTINE);
-            if (routineId.equals(activeRoutineId)){
-                setSetting(Settings.ID_ACTIVE_ROUTINE_LAST_DAY, routineDayId);
-                setSetting(Settings.DATE_ACTIVE_ROUTINE_LAST_TRAINING, DateUtils.now().getTime());
+        List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
+
+        if (completelyDone || !resultRecords.isEmpty()) {
+            String routineId = getTrainingPlan().getRoutine().id;
+            String routineDayId = getTrainingPlan().getRoutineDay().id;
+            if (hasActiveRoutine()) {
+                String activeRoutineId = getSetting(Settings.ID_ACtIVE_ROUTINE);
+                if (routineId.equals(activeRoutineId)) {
+                    setSetting(Settings.ID_ACTIVE_ROUTINE_LAST_DAY, routineDayId);
+                    setSetting(Settings.DATE_ACTIVE_ROUTINE_LAST_TRAINING, DateUtils.now().getTime());
+                }
             }
         }
 
         data_activeRoutineSchedule().invalidate();
 
-        //TODO: store results
-        List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
+        //TODO: store exercise results
+        if (completelyDone){
+            //TODO: store routine results
+        }
+
+        cancelTraining();
+    }
+
+    public void cancelTraining() {
         mTrainingExecutionManager.stopExecution();
         unbindService(mServiceConnection);
         mTrainingExecutionManager = null;

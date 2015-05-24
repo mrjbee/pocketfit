@@ -46,7 +46,7 @@ public class TrainingEndFragment extends BodyFragment<TrainingActivity>{
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               owner().stopTraining();
+               owner().stopTraining(true);
             }
         });
     }
