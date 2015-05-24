@@ -93,6 +93,8 @@ public class TrainingActivity extends FragmentActivity{
 
 
     private void updateClock(boolean animate) {
+
+
         if (application().getTrainingPlan().isStarted()){
             mTrainingDurationClockPresenter.startClock(application().getTrainingPlan().getStartDate());
         }else {
@@ -118,10 +120,10 @@ public class TrainingActivity extends FragmentActivity{
         if (application().getTrainingPlan().hasMoreExercises()){
             if (animate) {
                 mTrainingClockAnimator.show();
-                mPauseClockAnimator.show();
+                if (application().getTrainingPlan().isPaused())mPauseClockAnimator.show();
             }else {
                 mTrainingClockAnimator.showWithoutAnimation();
-                mPauseClockAnimator.showWithoutAnimation();
+                if (application().getTrainingPlan().isPaused())mPauseClockAnimator.showWithoutAnimation();
             }
         } else {
             if (animate) {

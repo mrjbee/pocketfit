@@ -70,18 +70,10 @@ public class TileRoutineFragment extends DashboardTileFragment {
                             @Override
                             public void run() {
                                 owner().switch_trainingExecution(true);
-
                             }
                         });
                     }
                 });
-                final DashboardActivity activity = owner();
-                activity.runLastOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        activity.openTrainingRunner();
-                    }
-                }, 1000);
             }
         }
     }

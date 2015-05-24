@@ -19,6 +19,7 @@ import java.util.Date;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
@@ -42,26 +43,39 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                     TextView text = (TextView) convertView.findViewById(R.id.item_text);
                     TextView shortDay = (TextView) convertView.findViewById(R.id.item_day);
                     ImageView dayBackground = (ImageView) convertView.findViewById(R.id.item_day_background);
+                    View play = convertView.findViewById(R.id.action_play);
 
                     @Override
                     public void update(final Day day, int position) {
-
-                        if (day.id != null){
+                        play.setFocusable(false);
+                        if (day.routineDay != null){
                             shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
                             text.setVisibility(View.VISIBLE);
                             dayBackground.setImageResource(R.drawable.day_training);
                             caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
-                            /*button.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    onRoutineDaySelect(day.id);
-                                }
-                            });*/
-                        }else{
+                        } else {
                             shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short));
                             dayBackground.setImageResource(R.drawable.day_not_training);
                             text.setVisibility(View.INVISIBLE);
                             caption.setTextColor(getResources().getColor(R.color.text_color_date));
+                        }
+
+                        if (day.isPlayAvailable()){
+                            play.setVisibility(View.VISIBLE);
+                            play.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    application().startTraining(day.routine, day.routineDay, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            owner().switch_trainingExecution(true);
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            play.setVisibility(View.INVISIBLE);
+                            play.setOnClickListener(null);
                         }
 
                         if (day.dayDateString.equals("Today")){
@@ -99,7 +113,8 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position).id != null;
+                Day day = getItem(position);
+                return day.routineDay != null;
             }
         };
 
@@ -108,8 +123,8 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Day day = mDayListViewAdapter.getItem(position);
-                if (day.id != null){
-                    onRoutineDaySelect(day.id);
+                if (day.routineDay != null){
+                    onRoutineDaySelect(day.routineDay.id);
                 }
             }
         });
@@ -132,7 +147,10 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
 
         RoutineDay routineDay = mSchedule.getTrainingDay(date);
         String description = routineDay != null ? routineDay.description:"";
-        return new Day(dateString, description, shortDay, routineDay==null?null:routineDay.id);
+
+        return new Day(dateString, description, shortDay, routineDay == null ? null : routineDay,
+                mSchedule.mRoutine,
+                mSchedule.wasLastTrainingOn(date));
     }
 
     private boolean isScheduleAvailable() {
@@ -217,14 +235,22 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
         private final String dayDateString;
         private final String shortDay;
         private final String dayDescription;
-        private final String id;
+        private final RoutineDay routineDay;
+        private final Routine routine;
+        private final boolean doneInThisDay;
 
 
-        private Day(String dateString, String trainingDescription, String shortDay, String id) {
+        private Day(String dateString, String trainingDescription, String shortDay, RoutineDay routineDay, Routine routine, boolean doneInThisDay) {
             this.dayDateString = dateString;
             this.shortDay = shortDay;
             this.dayDescription = trainingDescription;
-            this.id = id;
+            this.routineDay = routineDay;
+            this.routine = routine;
+            this.doneInThisDay = doneInThisDay;
+        }
+
+        public boolean isPlayAvailable() {
+            return routineDay != null && !doneInThisDay;
         }
     }
 }

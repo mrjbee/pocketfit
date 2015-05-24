@@ -197,7 +197,14 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
                 mainButtonController.applyAppearance();
             }
         }, 500);
-
+        if (autoStart){
+            runLastOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    openTrainingRunner();
+                }
+            }, 1000);
+        }
     }
 
     public void switch_toRoutines() {

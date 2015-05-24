@@ -6,6 +6,7 @@
     >
 
     <LinearLayout
+        android:layout_toLeftOf="@+id/action_play"
         android:id="@+id/item_panel_details"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -71,4 +72,12 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/action_play"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/play_dark"
+        style="@style/Button.Action"/>
 </RelativeLayout>

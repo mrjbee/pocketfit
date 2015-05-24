@@ -49,7 +49,7 @@ public class RoutineSchedule {
         int daysPastLastTrainingStart = (int) DateUtils.asDays(today.getTime() - lastTariningTime.getTime(), false);
         if (daysPastLastTrainingStart < 0 ) daysPastLastTrainingStart =0;
         int lastTrainingIndex = mLastTrainingIndex;
-        if (mLastTrainingIndex != -1 && today.getTime() == lastTariningTime.getTime()){
+        if (mLastTrainingIndex != -1 && wasLastTrainingOn(today)){
             lastTrainingIndex++;
         }
         if (mLastTrainingIndex == -1){
@@ -74,4 +74,7 @@ public class RoutineSchedule {
         return mRoutineByDays.get((daysPastTraining + lastTrainingIndex) % mRoutineByDays.size());
     }
 
+    public boolean wasLastTrainingOn(Date date) {
+        return  date.getTime() == lastTariningTime.getTime();
+    }
 }
