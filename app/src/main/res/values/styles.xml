@@ -217,7 +217,8 @@
 
     <style name="Text.Training.Pause.Clock" parent="AppTheme">
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#fd0b45</item>
+        <item name="android:textColor">#ffa8a8a8</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Text.Tile.Caption" parent="AppTheme">

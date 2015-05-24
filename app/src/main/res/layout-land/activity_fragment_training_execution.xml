@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard"
-    style="@style/Panel.Base">
+    style="@style/Panel.Base"
+    android:paddingTop="15dp">
 
     <TextView
         android:gravity="center"
@@ -15,19 +16,19 @@
 
 
     <TextView
+        android:layout_toLeftOf="@+id/action_options"
         android:gravity="center"
         android:id="@+id/text_clock"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        style="@style/Text.Training.Clock"
+        style="@style/Text.Training.Pause.Clock"
         android:text="00:00:00"/>
 
 
     <TextView
-        android:gravity="top"
+        android:gravity="bottom"
         android:id="@+id/text_pause_clock"
         android:layout_toLeftOf="@+id/text_clock"
         android:layout_marginTop="5dp"
@@ -35,7 +36,7 @@
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        style="@style/Text.Training.Pause.Clock"
+        style="@style/Text.Training.Clock"
         android:text="00:00:00"/>
 
     <FrameLayout
@@ -44,5 +45,15 @@
         android:layout_height="match_parent"
        >
     </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/action_options"
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/options"
+        style="@style/Button.Action"
+        android:layout_alignParentRight="true"
+        />
 
 </RelativeLayout>

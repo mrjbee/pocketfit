@@ -68,6 +68,7 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
                                     application().startTraining(day.routine, day.routineDay, new Runnable() {
                                         @Override
                                         public void run() {
+                                            owner().removeTopFromHistory();
                                             owner().switch_trainingExecution(true);
                                         }
                                     });

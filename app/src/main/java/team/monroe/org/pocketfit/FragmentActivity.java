@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.monroe.team.android.box.app.ActivitySupport;
+import org.monroe.team.corebox.utils.Lists;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -181,6 +182,10 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         }
     }
 
+    public FragmentItem dropTopBackStack() {
+        if (backStack.isEmpty()) return null;
+        return backStack.remove(backStack.size() - 1);
+    }
 
 
     public static class FragmentItem implements Serializable{

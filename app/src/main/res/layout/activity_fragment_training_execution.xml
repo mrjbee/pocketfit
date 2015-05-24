@@ -15,7 +15,6 @@
         style="@style/Text.Training.Title"
         android:text="Example"/>
 
-
     <TextView
         android:gravity="center"
         android:id="@+id/text_clock"
@@ -25,7 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        style="@style/Text.Training.Clock"
+        style="@style/Text.Training.Pause.Clock"
         android:text="00:00:00"/>
 
     <TextView
@@ -39,7 +38,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        style="@style/Text.Training.Pause.Clock"
+        style="@style/Text.Training.Clock"
         android:text="00:00:00"/>
 
 
@@ -49,5 +48,16 @@
         android:layout_height="match_parent"
         >
     </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/action_options"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:src="@drawable/options"
+        style="@style/Button.Action"
+        android:layout_alignParentRight="true"
+        />
 
 </RelativeLayout>

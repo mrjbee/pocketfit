@@ -232,7 +232,9 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         mainButtonController.saveState(outState);
     }
 
-
+    public void removeTopFromHistory() {
+       FragmentItem item = super.dropTopBackStack();
+    }
 
 
     private static class MainButtonController {
