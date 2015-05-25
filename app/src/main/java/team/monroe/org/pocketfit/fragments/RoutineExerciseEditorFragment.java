@@ -69,12 +69,12 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
         timeExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimeExerciseDetails>(view(R.id.panel_time)) {
             @Override
             public void fillDetails(RoutineExercise.TimeExerciseDetails details) {
-
+                details.time  = readPositiveFloat(R.id.edit_time);
             }
 
             @Override
             protected void fillUI(RoutineExercise.TimeExerciseDetails details) {
-
+                updateTextView(R.id.edit_time, details.time);
             }
         };
         timesExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails>(view(R.id.panel_times)) {
