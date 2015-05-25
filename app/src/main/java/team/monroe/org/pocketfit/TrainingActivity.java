@@ -19,6 +19,8 @@ import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFra
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerResultFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTileTimeExecuteFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTileTimeResultFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
@@ -197,7 +199,10 @@ public class TrainingActivity extends FragmentActivity{
                         }else {
                             return TrainingTilePowerResultFragment.class;
                         }
+                    case time:
+                        return TrainingTileTimeResultFragment.class;
                     default:
+                        //TOTODODO
                         throw new IllegalStateException();
                 }
             }else {
@@ -205,6 +210,8 @@ public class TrainingActivity extends FragmentActivity{
                 switch (exerciseType){
                     case weight_times:
                         return TrainingTilePowerExecuteFragment.class;
+                    case time:
+                        return TrainingTileTimeExecuteFragment.class;
                     default:
                         throw new IllegalStateException();
                 }

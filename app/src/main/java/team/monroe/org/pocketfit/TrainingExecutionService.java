@@ -185,6 +185,17 @@ public class TrainingExecutionService extends Service {
             return Lists.getLast(currentExecution.setList).startDate;
         }
 
+
+        public long getSetDuration() {
+            Date date = Lists.getLast(currentExecution.setList).startDate;
+            Date endDate = Lists.getLast(currentExecution.setList).endDate;
+            if (date == null || endDate == null){
+                return 0;
+            }
+            return endDate.getTime() - date.getTime();
+        }
+
+
         public void stopSet() {
             Date date = DateUtils.now();
             Lists.getLast(currentExecution.setList).endDate = date;
@@ -206,6 +217,10 @@ public class TrainingExecutionService extends Service {
             Lists.getLast(currentExecution.setList).results.put("weight",weight);
             Lists.getLast(currentExecution.setList).results.put("times",times);
             Lists.getLast(currentExecution.setList).results.put("description",times+" x "+weight);
+        }
+
+        public void commitTimeSet(Float duration) {
+            Lists.getLast(currentExecution.setList).results.put("duration", duration);
         }
 
         public boolean hasMoreSetsScheduled() {
@@ -303,6 +318,8 @@ public class TrainingExecutionService extends Service {
         public RoutineDay getRoutineDay() {
             return routineDay;
         }
+
+
 
         public interface TrainingPlanListener{
             void onStartDateChanged(Date startDate);

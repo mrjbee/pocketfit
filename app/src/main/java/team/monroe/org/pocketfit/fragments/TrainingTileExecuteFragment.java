@@ -10,7 +10,6 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
-import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.combine;
@@ -45,7 +44,7 @@ public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
         mRoutineExercise = application().getTrainingPlan().getCurrentExercise();
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         view_text(R.id.exercise_description).setText(createExerciseDescription(mRoutineExercise));
-        view_text(R.id.exercise_set).setText(getSetIndexText());
+        view_text(R.id.exercise_set).setText(getSetDescription());
 
         view(R.id.action_stop).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +102,7 @@ public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
         }
     }
 
-    protected String getSetIndexText() {
+    protected String getSetDescription() {
         return "Set " + (application().getTrainingPlan().getSetIndex() + 1);
     }
 
