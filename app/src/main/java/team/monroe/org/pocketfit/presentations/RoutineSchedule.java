@@ -49,8 +49,10 @@ public class RoutineSchedule {
         int daysPastLastTrainingStart = (int) DateUtils.asDays(today.getTime() - lastTariningTime.getTime(), false);
         if (daysPastLastTrainingStart < 0 ) daysPastLastTrainingStart =0;
         int lastTrainingIndex = mLastTrainingIndex;
+        int addToAnswer = 0;
         if (mLastTrainingIndex != -1 && wasLastTrainingOn(today)){
             lastTrainingIndex++;
+            addToAnswer = 1;
         }
         if (mLastTrainingIndex == -1){
             lastTrainingIndex = 0;
@@ -61,7 +63,7 @@ public class RoutineSchedule {
             if (mRoutineByDays.get(i) != null) break;
             daysBeforeTraining ++;
         }
-        return daysBeforeTraining;
+        return daysBeforeTraining + addToAnswer;
     }
 
     public RoutineDay getTrainingDay(Date date) {
