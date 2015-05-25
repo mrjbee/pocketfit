@@ -197,16 +197,20 @@ public class TrainingActivity extends FragmentActivity{
                         }else {
                             return TrainingTilePowerResultFragment.class;
                         }
+                    default:
+                        throw new IllegalStateException();
                 }
             }else {
                 //show set execution
                 switch (exerciseType){
                     case weight_times:
                         return TrainingTilePowerExecuteFragment.class;
+                    default:
+                        throw new IllegalStateException();
                 }
             }
         }
-        return TrainingTileLoadingRoutineExerciseFragment.class;
+        //return TrainingTileLoadingRoutineExerciseFragment.class;
     }
 
     //TODO: add back stack top

@@ -1,33 +1,36 @@
 package team.monroe.org.pocketfit.fragments;
+
+import android.animation.Animator;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+
+import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
+import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+
+import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
-public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragment {
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.combine;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_decelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_overshot;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.ySlide;
 
-    private ClockViewPresenter mSetClockPresenter;
+public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
 
-    @Override
-    protected void initializeSetProgressView(TextView textView) {
-        mSetClockPresenter = new ClockViewPresenter(textView);
-        mSetClockPresenter.show();
-        mSetClockPresenter.startClock(application().getTrainingPlan().getSetStartDate());
-    }
-
-    @Override
-    protected String createExerciseDescription(RoutineExercise exercise) {
-        RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) exercise.exerciseDetails;
-        return details.times + " x " + details.weight + " times/kg";
-    }
-
-/*
-    private RoutineExercise mRoutineExercise;
-    private ClockViewPresenter mSetClockPresenter;
+    protected RoutineExercise mRoutineExercise;
     private AppearanceController mStopPanelAnimation;
 
     @Override
     protected int getTileLayoutId() {
-        return R.layout.tile_training_power_execute;
+        return R.layout.tile_training_execute;
     }
 
     @Override
@@ -38,15 +41,16 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
                 .showAnimation(duration_constant(200),interpreter_accelerate_decelerate())
                 .hideAndGone()
                 .build();
-        mRoutineExercise= application().getTrainingPlan().getCurrentExercise();
+
+        mRoutineExercise = application().getTrainingPlan().getCurrentExercise();
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
-        RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails;
-        view_text(R.id.exercise_description).setText(details.times + " x " + details.weight + " times/kg");
-        view_text(R.id.exercise_set).setText("Set " + (application().getTrainingPlan().getSetIndex() + 1));
+        view_text(R.id.exercise_description).setText(createExerciseDescription(mRoutineExercise));
+        view_text(R.id.exercise_set).setText(getSetIndexText());
 
         view(R.id.action_stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onStopExercise();
                 application().getTrainingPlan().stopSet();
                 owner().updateTile();
             }
@@ -54,9 +58,7 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
 
         if (isSetStarted()){
             view(R.id.exercise_start_time).setVisibility(View.GONE);
-            mSetClockPresenter = new ClockViewPresenter(view_text(R.id.exercise_timer_anchor));
-            mSetClockPresenter.show();
-            startTimer();
+            initializeSetProgressView(view_text(R.id.exercise_timer_anchor));
             mStopPanelAnimation.showWithoutAnimation();
         }else{
             mStopPanelAnimation.hideWithoutAnimation();
@@ -85,8 +87,7 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
                                 @Override
                                 public void onAnimationEnd(final Animator animation) {
                                     super.onAnimationEnd(animation);
-                                    mSetClockPresenter = new ClockViewPresenter((android.widget.TextView) v);
-                                    startTimer();
+                                    initializeSetProgressView((android.widget.TextView) v);
                                     mStopPanelAnimation.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                                         @Override
                                         public void customize(Animator anim) {
@@ -102,18 +103,24 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
         }
     }
 
+    protected String getSetIndexText() {
+        return "Set " + (application().getTrainingPlan().getSetIndex() + 1);
+    }
+
+    protected abstract void initializeSetProgressView(TextView textView);
+
+    protected void onStopExercise() {}
+
+    protected abstract String createExerciseDescription(RoutineExercise exercise);
+
     private int[] getViewLocationOnScreen(View v) {
         int[] locationOnScreen = new int[2];
         v.getLocationOnScreen(locationOnScreen);
         return locationOnScreen;
     }
 
-    private void startTimer() {
-       mSetClockPresenter.startClock(application().getTrainingPlan().getSetStartDate());
-    }
-
     private boolean isSetStarted() {
         return application().getTrainingPlan().isSetStarted();
     }
-*/
+
 }

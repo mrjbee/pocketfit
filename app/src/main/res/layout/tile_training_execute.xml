@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#4d8cf5"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/exercise_name"
+        style="@style/Text.Tile.Header.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Example"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/exercise_description"
+        android:layout_below="@+id/exercise_name"
+        style="@style/Text.Tile.Header.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="Set 1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_below="@+id/exercise_description"
+        android:id="@+id/exercise_set"
+        style="@style/Text.Tile.Header.Bigger.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:text="Set 1"
+        android:textStyle="bold" />
+
+
+    <TextView
+            android:visibility="invisible"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:id="@+id/exercise_timer_anchor"
+            style="@style/Text.Tile.Clock.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/panel_stop"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/text.color.day.short.training">
+
+        <Button
+            android:id="@+id/action_stop"
+            style="@style/Button.Panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Done" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/exercise_start_time"
+        style="@style/Text.Tile.Clock.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:textStyle="bold" />
+
+</RelativeLayout>
