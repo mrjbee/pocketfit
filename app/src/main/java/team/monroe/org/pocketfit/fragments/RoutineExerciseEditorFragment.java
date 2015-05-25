@@ -29,7 +29,6 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
     private ExerciseDetailsViewPresenter<RoutineExercise.PowerExerciseDetails> powerExerciseDetailsViewPresenter;
     private ExerciseDetailsViewPresenter<RoutineExercise.DistanceExerciseDetails> distanceExerciseDetailsViewPresenter;
     private ExerciseDetailsViewPresenter<RoutineExercise.TimeExerciseDetails> timeExerciseDetailsViewPresenter;
-    private ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails> timesExerciseDetailsViewPresenter;
 
     private ExerciseDetailsViewPresenter mDetailsViewPresenter;
 
@@ -77,17 +76,7 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
                 updateTextView(R.id.edit_time, details.time);
             }
         };
-        timesExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails>(view(R.id.panel_times)) {
-            @Override
-            public void fillDetails(RoutineExercise.TimesExerciseDetails details) {
-                details.times  = readPositiveInteger(R.id.edit_times);
-            }
 
-            @Override
-            protected void fillUI(RoutineExercise.TimesExerciseDetails details) {
-                updateTextView(R.id.edit_times, details.times);
-            }
-        };
 
         mPositionSpinner = view(R.id.spinner_position, Spinner.class);
         mPositionAdapter = new GenericListViewAdapter<PositionDescription,GetViewImplementation.ViewHolder<PositionDescription>>(activity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<PositionDescription>>() {
