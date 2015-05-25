@@ -252,6 +252,15 @@
                             android:text="sets"
                             />
                     </GridLayout>
+
+                    <include
+                        android:visibility="gone"
+                        android:id="@+id/panel_time_2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        layout="@layout/panel_time_picker"/>
+
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

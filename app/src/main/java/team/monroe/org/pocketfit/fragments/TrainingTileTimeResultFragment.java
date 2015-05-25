@@ -6,10 +6,12 @@ import android.widget.EditText;
 
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
+import team.monroe.org.pocketfit.view.presenter.TimePickPresenter;
 
 public class TrainingTileTimeResultFragment extends TrainingTileFragment {
 
     private RoutineExercise mRoutineExercise;
+    private TimePickPresenter mTimePickPresenter;
 
     @Override
     protected int getTileLayoutId() {
@@ -20,18 +22,19 @@ public class TrainingTileTimeResultFragment extends TrainingTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
+        mTimePickPresenter = new TimePickPresenter(view(R.id.panel_time_edit));
 
         mRoutineExercise= application().getTrainingPlan().getCurrentExercise();
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         long durationMs = application().getTrainingPlan().getSetDuration();
         double duration =  (double)durationMs / (60d*1000d);
 
-        view(R.id.edit_time, EditText.class).setText(String.format("%.2f", duration));
+        mTimePickPresenter.setMinutes((float) duration);
 
         view(R.id.action_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Float duration = readPositiveFloat(R.id.edit_time);
+                Float duration = mTimePickPresenter.getMinutes();
                 application().getTrainingPlan().commitTimeSet(duration);
                 application().getTrainingPlan().nextExercise();
                 owner().updateTile();

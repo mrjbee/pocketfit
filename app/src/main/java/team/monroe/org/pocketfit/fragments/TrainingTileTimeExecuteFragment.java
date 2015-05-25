@@ -22,7 +22,7 @@ public class TrainingTileTimeExecuteFragment extends TrainingTileExecuteFragment
     @Override
     protected String createExerciseDescription(RoutineExercise exercise) {
         RoutineExercise.TimeExerciseDetails details = (RoutineExercise.TimeExerciseDetails) exercise.exerciseDetails;
-        return details.time + " min";
+        return details.detailsString();
     }
 
     @Override

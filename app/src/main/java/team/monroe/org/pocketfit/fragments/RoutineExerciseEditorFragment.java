@@ -2,6 +2,7 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
+import team.monroe.org.pocketfit.view.presenter.TimePickPresenter;
 import team.monroe.org.pocketfit.view.presenter.ViewPresenter;
 
 public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity> {
@@ -34,10 +36,14 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
 
     private GenericListViewAdapter<PositionDescription, GetViewImplementation.ViewHolder<PositionDescription>> mPositionAdapter;
     private Spinner mPositionSpinner;
+    private TimePickPresenter mTimePickPresenter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mTimePickPresenter = new TimePickPresenter(view(R.id.panel_time_2));
+
         powerExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.PowerExerciseDetails>(view(R.id.panel_power)) {
             @Override
             public void fillDetails(RoutineExercise.PowerExerciseDetails details) {
@@ -65,15 +71,16 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
                 updateTextView(R.id.edit_disatnce, details.distance);
             }
         };
-        timeExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimeExerciseDetails>(view(R.id.panel_time)) {
+        timeExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimeExerciseDetails>(view(R.id.panel_time_2)) {
             @Override
             public void fillDetails(RoutineExercise.TimeExerciseDetails details) {
-                details.time  = readPositiveFloat(R.id.edit_time);
+                details.time  = mTimePickPresenter.getMinutes();
             }
 
             @Override
             protected void fillUI(RoutineExercise.TimeExerciseDetails details) {
-                updateTextView(R.id.edit_time, details.time);
+                Float existingTime =  details.time;
+                mTimePickPresenter.setMinutes(existingTime);
             }
         };
 

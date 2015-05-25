@@ -29,7 +29,7 @@ public class RoutineExercise {
 
         @Override
         public String detailsString() {
-            return !isDefined() ? "":distance+" m";
+            return !isDefined() ? "":distance+" meters";
         }
 
         @Override
@@ -44,7 +44,14 @@ public class RoutineExercise {
 
         @Override
         public String detailsString() {
-            return !isDefined() ? "":time+" min";
+            if (!isDefined())return "";
+            int minutes = (int)((float)time);
+            int seconds = Math.round((time - minutes) * 60f);
+            if (seconds < 10){
+                return minutes+" min 0"+seconds+" sec";
+            }else{
+                return minutes+" min "+seconds+" sec";
+            }
         }
 
         @Override

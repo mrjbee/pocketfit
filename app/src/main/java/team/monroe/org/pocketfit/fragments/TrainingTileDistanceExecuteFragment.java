@@ -19,7 +19,7 @@ public class TrainingTileDistanceExecuteFragment extends TrainingTileExecuteFrag
     @Override
     protected String createExerciseDescription(RoutineExercise exercise) {
         RoutineExercise.DistanceExerciseDetails details = (RoutineExercise.DistanceExerciseDetails) exercise.exerciseDetails;
-        return details.distance + " m";
+        return details.detailsString();
     }
 
     @Override

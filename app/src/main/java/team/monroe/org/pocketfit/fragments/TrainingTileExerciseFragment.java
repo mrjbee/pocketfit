@@ -41,11 +41,11 @@ public class TrainingTileExerciseFragment extends TrainingTileFragment {
                 break;
             case time:
                 RoutineExercise.TimeExerciseDetails timeDetails = (RoutineExercise.TimeExerciseDetails) mRoutineExercise.exerciseDetails;
-                addDetails("Time",timeDetails.time, "min");
+                addDetails("Time",timeDetails.detailsString(), "");
                 break;
             case distance:
                 RoutineExercise.DistanceExerciseDetails distanceDetails = (RoutineExercise.DistanceExerciseDetails) mRoutineExercise.exerciseDetails;
-                addDetails("Distance", distanceDetails.distance, "meters");
+                addDetails("Distance", distanceDetails.detailsString(), "");
                 break;
             default:
                 throw new IllegalStateException();
