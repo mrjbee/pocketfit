@@ -208,8 +208,8 @@
     </style>
 
     <style name="Text.Training.Prompt" parent="AppTheme">
-        <item name="android:textSize">25sp</item>
-        <item name="android:textColor">#ff6e6e6e</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ff848484</item>
     </style>
 
     <style name="Text.Training.Clock" parent="AppTheme">

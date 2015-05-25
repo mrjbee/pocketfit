@@ -5,29 +5,35 @@
     android:background="#ffededed"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/exercise_name"
-        style="@style/Text.Tile.Header"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"
-        android:text="Example"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_gravity="bottom"
+            android:id="@+id/exercise_set"
+            style="@style/Text.Tile.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set 1"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/exercise_set"
-        style="@style/Text.Tile.Header.Bigger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:text="Set 1"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/exercise_name"
+            style="@style/Text.Tile.Header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_gravity="bottom"
+            android:text="Example"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_weight="1"
