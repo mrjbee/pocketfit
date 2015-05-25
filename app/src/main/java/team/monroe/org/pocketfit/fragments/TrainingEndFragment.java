@@ -42,6 +42,8 @@ public class TrainingEndFragment extends BodyFragment<TrainingActivity>{
         addDetails("Duration", durationString, "");
         float weight = application().getTrainingPlan().getLiftedUpWeight();
         addDetails("Lifted Up",weight, "kg");
+        float distance = application().getTrainingPlan().getDistance();
+        addDetails("Total distance", distance, "meters");
 
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
             @Override

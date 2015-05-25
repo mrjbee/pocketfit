@@ -38,7 +38,7 @@ public class Exercise implements Serializable{
     }
 
     public static enum Type implements Serializable{
-        weight_times("Weight & Times"), times("Times"), distance("Distance"), time("Time");
+        weight_times("Weight & Times"), distance("Distance"), time("Time");
         public final String human;
         Type(String text) {
             this.human = text;

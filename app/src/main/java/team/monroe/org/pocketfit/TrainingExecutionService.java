@@ -300,6 +300,16 @@ public class TrainingExecutionService extends Service {
             return answer;
         }
 
+        public float getDistance() {
+            float answer = 0;
+            for (ResultRecord resultRecord : resultRecordList) {
+                if (resultRecord.exercise.exercise.type == Exercise.Type.distance){
+                    answer += ((Float)resultRecord.results.get("distance"));
+                }
+            }
+            return answer;
+        }
+
         public int getExerciseCount() {
             int answer = 0;
             java.util.Set<Exercise> exerciseSet = new HashSet<>();

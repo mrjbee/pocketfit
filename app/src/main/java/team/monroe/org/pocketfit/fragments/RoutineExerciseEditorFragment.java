@@ -156,9 +156,6 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
                                 case time:
                                     details = new RoutineExercise.TimeExerciseDetails();
                                     break;
-                                case times:
-                                    details = new RoutineExercise.TimesExerciseDetails();
-                                    break;
                                 case weight_times:
                                     details = new RoutineExercise.PowerExerciseDetails();
                                     break;
@@ -230,9 +227,6 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
                 break;
             case time:
                 mDetailsViewPresenter = timeExerciseDetailsViewPresenter;
-                break;
-            case times:
-                mDetailsViewPresenter = timesExerciseDetailsViewPresenter;
                 break;
             case weight_times:
                 mDetailsViewPresenter = powerExerciseDetailsViewPresenter;
