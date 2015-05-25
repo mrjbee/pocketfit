@@ -1,9 +1,11 @@
 package team.monroe.org.pocketfit.fragments;
+
 import android.widget.TextView;
+
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
-public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragment {
+public class TrainingTileDistanceExecuteFragment extends TrainingTileExecuteFragment {
 
     private ClockViewPresenter mSetClockPresenter;
 
@@ -16,7 +18,12 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
 
     @Override
     protected String createExerciseDescription(RoutineExercise exercise) {
-        RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) exercise.exerciseDetails;
-        return details.times + " x " + details.weight + " times/kg";
+        RoutineExercise.DistanceExerciseDetails details = (RoutineExercise.DistanceExerciseDetails) exercise.exerciseDetails;
+        return details.distance + " m";
+    }
+
+    @Override
+    protected String getSetDescription() {
+        return "";
     }
 }

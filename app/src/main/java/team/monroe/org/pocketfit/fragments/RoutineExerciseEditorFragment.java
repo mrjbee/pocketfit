@@ -58,12 +58,12 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
         distanceExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.DistanceExerciseDetails>(view(R.id.panel_disatnce)) {
             @Override
             public void fillDetails(RoutineExercise.DistanceExerciseDetails details) {
-
+                details.distance  = readPositiveFloat(R.id.edit_disatnce);
             }
 
             @Override
             protected void fillUI(RoutineExercise.DistanceExerciseDetails details) {
-
+                updateTextView(R.id.edit_disatnce, details.distance);
             }
         };
         timeExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimeExerciseDetails>(view(R.id.panel_time)) {
@@ -80,12 +80,12 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
         timesExerciseDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.TimesExerciseDetails>(view(R.id.panel_times)) {
             @Override
             public void fillDetails(RoutineExercise.TimesExerciseDetails details) {
-
+                details.times  = readPositiveInteger(R.id.edit_times);
             }
 
             @Override
             protected void fillUI(RoutineExercise.TimesExerciseDetails details) {
-
+                updateTextView(R.id.edit_times, details.times);
             }
         };
 

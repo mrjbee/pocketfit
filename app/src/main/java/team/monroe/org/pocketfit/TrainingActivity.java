@@ -14,6 +14,8 @@ import java.util.Date;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
+import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
@@ -201,8 +203,9 @@ public class TrainingActivity extends FragmentActivity{
                         }
                     case time:
                         return TrainingTileTimeResultFragment.class;
+                    case distance:
+                        return TrainingTileDistanceResultFragment.class;
                     default:
-                        //TOTODODO
                         throw new IllegalStateException();
                 }
             }else {
@@ -212,6 +215,8 @@ public class TrainingActivity extends FragmentActivity{
                         return TrainingTilePowerExecuteFragment.class;
                     case time:
                         return TrainingTileTimeExecuteFragment.class;
+                    case distance:
+                        return TrainingTileDistanceExecuteFragment.class;
                     default:
                         throw new IllegalStateException();
                 }
@@ -238,9 +243,12 @@ public class TrainingActivity extends FragmentActivity{
 
             if (currentFragment == TrainingTilePowerAllResultFragment.class){
                 animationRequest = animation_slide_from_left();
-            } else if (nextTileFragment == TrainingTilePowerExecuteFragment.class){
+            } else if (currentFragment == TrainingTilePowerResultFragment.class && nextTileFragment == TrainingTilePowerExecuteFragment.class ){
                 animationRequest = animation_flip_out();
-            } else if (nextTileFragment == TrainingTilePowerResultFragment.class){
+            } else if (nextTileFragment == TrainingTilePowerResultFragment.class
+                    || nextTileFragment == TrainingTileDistanceResultFragment.class
+                    || nextTileFragment == TrainingTileTimeResultFragment.class
+                    ){
                 animationRequest = animation_flip_in();
             }
         }

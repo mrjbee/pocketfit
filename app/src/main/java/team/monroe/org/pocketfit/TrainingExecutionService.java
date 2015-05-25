@@ -223,6 +223,11 @@ public class TrainingExecutionService extends Service {
             Lists.getLast(currentExecution.setList).results.put("duration", duration);
         }
 
+
+        public void commitDistanceSet(Float distance) {
+            Lists.getLast(currentExecution.setList).results.put("distance", distance);
+        }
+
         public boolean hasMoreSetsScheduled() {
             int requiredSets = 1;
             Exercise.Type type = currentExecution.routineExercise.exercise.type;
