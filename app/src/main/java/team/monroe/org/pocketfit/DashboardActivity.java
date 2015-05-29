@@ -16,6 +16,8 @@ import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileTrainingInProgressFragment;
 import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileScheduleRoutineFragment;
+import team.monroe.org.pocketfit.fragments.TileWorkoutFragment;
+import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
@@ -94,11 +96,14 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
     protected FragmentItem customize_startupFragment() {
         FragmentItem fragmentItem;
         if (application().isTrainingRunning()){
-            fragmentItem = new FragmentItem(TileTrainingInProgressFragment.class)
-                    .addArgument("auto_change",false);
-
+            fragmentItem = new FragmentItem(TileWorkoutFragment.class)
+                    .addArgument("state", TileWorkoutFragment.TransformationState.PROGRESS.ordinal());
         }else {
-            fragmentItem = new FragmentItem(application().hasActiveRoutine()? TileRoutineFragment.class : TileNoRoutineFragment.class);
+
+            fragmentItem = application().hasActiveRoutine() ?
+                    new FragmentItem(TileWorkoutFragment.class)
+                            .addArgument("state", TileWorkoutFragment.TransformationState.ABOUT.ordinal())
+                    : new FragmentItem(TileNoRoutineFragment.class);
         }
 
         return fragmentItem;
@@ -167,9 +172,9 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         },1000);
     }
 
-    public void switch_routineTile() {
+    public void switch_workoutTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), animation_down_up());
+        replaceBodyFragment(new FragmentItem(TileWorkoutFragment.class), animation_down_up());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -244,6 +249,12 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
        FragmentItem item = super.dropTopBackStack();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!getBodyFragment(BackButtonContract.class).onBackButton()){
+            super.onBackPressed();
+        }
+    }
 
     private static class MainButtonController {
 

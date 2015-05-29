@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 
 import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public abstract class AbstractDashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract {
+public abstract class AbstractDashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract, BackButtonContract {
 
     @Override
     final protected boolean isHeaderSecondary() {
@@ -26,4 +27,8 @@ public abstract class AbstractDashboardTileFragment extends BodyFragment<Dashboa
 
     protected abstract int getTileLayoutId();
 
+    @Override
+    public boolean onBackButton() {
+        return false;
+    }
 }

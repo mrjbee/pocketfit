@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/text.color.day.short.training"
+    >
+
+    <TextView
+        android:id="@+id/text_title_top"
+        android:gravity="center_vertical"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:text="Example"
+        style="@style/Text.Body.Caption"/>
+
+    <ImageView
+        android:id="@+id/image_cover"
+        android:layout_width="fill_parent"
+        android:layout_height="220dp"
+        android:src="@drawable/covert_loading"
+        android:scaleType="centerCrop"
+        />
+
+    <RelativeLayout
+        android:id="@+id/panel_actions"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        >
+
+        <ImageView
+            android:layout_alignParentBottom="true"
+            android:id="@+id/separator"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:src="@drawable/separator"
+            android:scaleType="centerCrop"/>
+
+
+        <Button
+            android:layout_centerVertical="true"
+            android:id="@+id/action"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:text="Example"
+            style="@style/Button.Panel"/>
+
+        <ImageButton
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/action_options"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:src="@drawable/options"
+            style="@style/Button.Action"
+            />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_title_bottom"
+        android:gravity="center_vertical"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:text="Example"
+        style="@style/Text.Body.Caption"/>
+
+
+    <ImageView
+        android:id="@+id/separator_secondary"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:src="@drawable/separator"
+        android:scaleType="centerCrop"/>
+
+
+    <RelativeLayout
+        android:id="@+id/panel_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/text_title"
+            android:id="@+id/text_description"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example"
+            android:singleLine="false"
+            android:maxLines="5"
+            style="@style/Text.Body.Optional"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

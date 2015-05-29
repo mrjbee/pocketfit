@@ -135,13 +135,13 @@ public class TileTrainingInProgressFragment extends DashboardNoBottomTileFragmen
     public void stopTraining(boolean completelyDone) {
         application().getTrainingPlan().setTrainingPlanListener(null);
         application().stopTraining(completelyDone);
-        owner().switch_routineTile();
+        owner().switch_workoutTile();
     }
 
     public void cancelTraining() {
         application().getTrainingPlan().setTrainingPlanListener(null);
         application().cancelTraining();
-        owner().switch_routineTile();
+        owner().switch_workoutTile();
     }
 
 }

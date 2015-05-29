@@ -67,7 +67,7 @@ public class TileNoRoutineFragment extends DashboardNoBottomTileFragment {
                     owner().hideMainButton(new Runnable() {
                         @Override
                         public void run() {
-                            owner().switch_routineTile();
+                            owner().switch_workoutTile();
                         }
                     });
                 } else {
