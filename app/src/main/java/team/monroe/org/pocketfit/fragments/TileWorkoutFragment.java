@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
@@ -15,7 +16,6 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
-import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.DateUtils;
@@ -46,6 +46,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private AppearanceController acDescription;
     private AppearanceController acSchedule;
     private GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>> mDayListViewAdapter;
+    private PopupWindow mOptionsPopupWindow;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -197,6 +198,43 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 }
             }
         });
+
+
+        view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOptionsPopupWindow ==null) {
+                    View view = activity().getLayoutInflater().inflate(R.layout.panel_popup_training, null);
+                    view.findViewById(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOptionsPopupWindow.dismiss();
+                            application().cancelTraining();
+                            fill_about_state();
+                            transform_about_state(true);
+                        }
+                    });
+                    view.findViewById(R.id.action_stop).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOptionsPopupWindow.dismiss();
+                            application().stopTraining(false);
+                            fill_about_state();
+                            transform_about_state(true);
+                        }
+                    });
+                    mOptionsPopupWindow = new PopupWindow(view,
+                            (int) DisplayUtils.dpToPx(200, getResources()),
+                            (int) DisplayUtils.dpToPx(120, getResources()),
+                            true);
+                }
+                mOptionsPopupWindow.setOutsideTouchable(true);
+                mOptionsPopupWindow.setFocusable(true);
+                mOptionsPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.tile_white));
+                mOptionsPopupWindow.showAsDropDown(view(R.id.action_options));
+            }
+        });
+
 
         int state = getArgument("state");
         mTransformationState = TransformationState.values()[state];
