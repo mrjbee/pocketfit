@@ -15,7 +15,7 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
-public class TileTrainingInProgressFragment extends DashboardTileFragment {
+public class TileTrainingInProgressFragment extends DashboardNoBottomTileFragment {
 
     private RoutineDay mDay;
     private Routine mRoutine;

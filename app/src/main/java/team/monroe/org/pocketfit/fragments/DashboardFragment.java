@@ -23,7 +23,7 @@ public class DashboardFragment extends BodyFragment<RoutinesActivity>{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_single_tile;
+        return R.layout.fragment_single_tile_no_bottom;
     }
     @Override
     protected boolean isHeaderSecondary() {

@@ -25,24 +25,31 @@ public class SlidingRelativeLayout extends RelativeLayout{
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    public float getYFraction() {
+        final int width = getHeight();
+        if (width != 0) return getY() / getHeight();
+        else return getY();
+    }
+
+
+    public void setYFraction(float xFraction) {
+        final int width = getHeight();
+        float newWidth = (width > 0) ? (xFraction * width) : -9999;
+        setY(newWidth);
+    }
+
+
     public float getXFraction() {
         final int width = getWidth();
         if (width != 0) return getX() / getWidth();
         else return getX();
     }
 
-    public SlidingListener mSlidingListener;
 
     public void setXFraction(float xFraction) {
         final int width = getWidth();
         float newWidth = (width > 0) ? (xFraction * width) : -9999;
         setX(newWidth);
-        if (mSlidingListener != null){
-            mSlidingListener.onXFraction(xFraction);
-        }
     }
 
-    public static interface SlidingListener {
-        public void onXFraction(float fraction);
-    }
 }

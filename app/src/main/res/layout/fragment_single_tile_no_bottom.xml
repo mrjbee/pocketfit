@@ -9,10 +9,9 @@
         android:layout_marginTop="@dimen/tile.margin.top"
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"
-        android:layout_marginBottom="@dimen/button.margin.bottom"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/tile_white"
+        android:background="@drawable/tile_white_spec"
         android:orientation="vertical">
 
     </LinearLayout>

@@ -158,7 +158,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switch_noRoutineTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), animation_flip_in());
+        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), animation_down_up());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -169,7 +169,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switch_routineTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), animation_flip_out());
+        replaceBodyFragment(new FragmentItem(TileRoutineFragment.class), animation_down_up());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -180,7 +180,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switch_activeRoutineSchedule() {
         mainButtonController.blockAppearance();
-        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_flip_out()), animation_flip_in());
+        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_slide_from_left()), animation_slide_from_right());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {

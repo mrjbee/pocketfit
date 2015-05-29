@@ -10,7 +10,7 @@ import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.Routine;
 
-public class TileNoRoutineFragment extends DashboardTileFragment {
+public class TileNoRoutineFragment extends DashboardNoBottomTileFragment {
 
 
     private Data.DataChangeObserver<Routine> observer_activeRoutineObserver;

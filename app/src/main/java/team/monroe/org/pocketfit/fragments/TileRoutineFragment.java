@@ -8,17 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.DateUtils;
 
-import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
-public class TileRoutineFragment extends DashboardTileFragment {
+public class TileRoutineFragment extends DashboardNoBottomTileFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineObserver;
     private RoutineSchedule mSchedule;

@@ -23,7 +23,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
-public class TileScheduleRoutineFragment extends DashboardTileFragment {
+public class TileScheduleRoutineFragment extends AbstractDashboardTileFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineObserver;
     private RoutineSchedule mSchedule;
@@ -184,6 +184,11 @@ public class TileScheduleRoutineFragment extends DashboardTileFragment {
     @Override
     public void onMainButton() {}
 
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_single_tile;
+    }
 
     @Override
     public void onStart() {

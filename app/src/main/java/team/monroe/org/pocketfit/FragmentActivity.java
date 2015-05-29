@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.monroe.team.android.box.app.ActivitySupport;
-import org.monroe.team.corebox.utils.Lists;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -99,6 +98,11 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
     final protected BodyFragmentAnimationRequest animation_flip_out() {
         return new BodyFragmentAnimationRequest(R.animator.card_flip_in, R.animator.card_flip_out, BodyFragment.HeaderUpdateRequest.ANIMATE);
     }
+
+    final protected BodyFragmentAnimationRequest animation_down_up() {
+        return new BodyFragmentAnimationRequest(R.animator.gone_up, R.animator.gone_down, BodyFragment.HeaderUpdateRequest.ANIMATE);
+    }
+
 
     final public void onChooseResult(Map<String, String> results) {
 

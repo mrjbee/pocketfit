@@ -9,16 +9,11 @@ import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public abstract class DashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract {
+public abstract class AbstractDashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract {
 
     @Override
     final protected boolean isHeaderSecondary() {
         return true;
-    }
-
-    @Override
-    final protected int getLayoutId() {
-        return R.layout.fragment_single_tile;
     }
 
     @Override
