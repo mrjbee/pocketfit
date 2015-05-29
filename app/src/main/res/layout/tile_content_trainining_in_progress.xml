@@ -68,5 +68,16 @@
             android:text="Example"
             style="@style/Button.Panel"/>
 
+        <ImageButton
+            android:layout_marginBottom="3dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/action_options"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:src="@drawable/options"
+            style="@style/Button.Action"
+            android:layout_alignParentLeft="true"
+            />
+
     </RelativeLayout>
 </LinearLayout>

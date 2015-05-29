@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import org.monroe.team.android.box.utils.DisplayUtils;
 
@@ -18,6 +19,7 @@ public class TileTrainingInProgressFragment extends DashboardTileFragment {
 
     private RoutineDay mDay;
     private Routine mRoutine;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected String getHeaderName() {
@@ -49,6 +51,36 @@ public class TileTrainingInProgressFragment extends DashboardTileFragment {
             }
         });
         view_button(R.id.text_days_left).setText("Continue Workout");
+        view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPopupWindow ==null) {
+                    View view = activity().getLayoutInflater().inflate(R.layout.panel_popup_training, null);
+                    view.findViewById(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mPopupWindow.dismiss();
+                            cancelTraining();
+                        }
+                    });
+                    view.findViewById(R.id.action_stop).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mPopupWindow.dismiss();
+                            stopTraining(false);
+                        }
+                    });
+                    mPopupWindow = new PopupWindow(view,
+                            (int) DisplayUtils.dpToPx(200, getResources()),
+                            (int) DisplayUtils.dpToPx(120, getResources()),
+                            true);
+                }
+                mPopupWindow.setOutsideTouchable(true);
+                mPopupWindow.setFocusable(true);
+                mPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.tile_white));
+                mPopupWindow.showAsDropDown(view(R.id.action_options));
+            }
+        });
     }
 
     @Override
@@ -97,6 +129,19 @@ public class TileTrainingInProgressFragment extends DashboardTileFragment {
         }else{
             view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
         }
+    }
+
+
+    public void stopTraining(boolean completelyDone) {
+        application().getTrainingPlan().setTrainingPlanListener(null);
+        application().stopTraining(completelyDone);
+        owner().switch_routineTile();
+    }
+
+    public void cancelTraining() {
+        application().getTrainingPlan().setTrainingPlanListener(null);
+        application().cancelTraining();
+        owner().switch_routineTile();
     }
 
 }
