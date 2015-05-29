@@ -32,11 +32,11 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
 
         startupTileAC = animateAppearance(view(R.id.fragment_container_body), ySlide(0, DisplayUtils.screenHeight(getResources())))
-                .showAnimation(duration_constant(600), interpreter_decelerate(0.8f))
+                .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
                 .build();
 
         backgroundStripeAC = animateAppearance(view(R.id.background_stripe), ySlide(0, DisplayUtils.screenHeight(getResources())/2))
-                .showAnimation(duration_constant(600), interpreter_decelerate(0.8f))
+                .showAnimation(duration_constant(400), interpreter_accelerate(0.5f))
                 .build();
 
 
@@ -51,7 +51,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
             mainButtonController.blockAppearance();
             backgroundStripeAC.hideWithoutAnimation();
             startupTileAC.hideWithoutAnimation();
-            startupTileAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
+            backgroundStripeAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                 @Override
                 public void customize(Animator animator) {
                     animator.setStartDelay(200);
@@ -59,18 +59,26 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
                         @Override
                         public void onAnimationStart(Animator animation) {
                             super.onAnimationStart(animation);
-                            backgroundStripeAC.show();
                         }
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            runLastOnUiThread(new Runnable() {
+                            startupTileAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                                 @Override
-                                public void run() {
-                                    mainButtonController.applyAppearance();
+                                public void customize(Animator animator) {
+                                    animator.addListener(new AnimatorListenerSupport(){
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            runLastOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mainButtonController.applyAppearance();
+                                                }
+                                            }, 500);
+                                        }
+                                    });
                                 }
-                            }, 500);
+                            });
                         }
                     });
                 }

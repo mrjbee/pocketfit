@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
-        <item name="android:windowBackground">@color/light.black</item>
+        <item name="android:windowBackground">@color/background.main</item>
     </style>
 
     <style name="Secondary.Activity" parent="AppTheme">

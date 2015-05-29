@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context=".Dashboard"
     style="@style/Panel.Base"
-    android:background="#4486f1">
+    android:background="@color/background.main">
 
     <LinearLayout
         android:layout_centerHorizontal="true"
