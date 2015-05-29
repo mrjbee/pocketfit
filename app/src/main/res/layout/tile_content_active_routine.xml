@@ -13,20 +13,23 @@
         />
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:paddingBottom="@dimen/tile.margin.bottom">
 
         <TextView
+            android:layout_below="@+id/separ"
             android:id="@+id/text_title"
-            android:paddingTop="10dp"
-            android:layout_margin="10dp"
+            android:layout_margin="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Example"
             style="@style/Text.Body.Caption"/>
 
         <ImageButton
+            android:layout_marginTop="-15dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/text_title"
             android:id="@+id/action_calendar"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -36,8 +39,8 @@
         <TextView
             android:layout_below="@id/text_title"
             android:id="@+id/text_description"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Example"
@@ -45,17 +48,7 @@
             android:maxLines="3"
             style="@style/Text.Body.Optional"/>
 
-        <ImageView
-            android:layout_above="@+id/text_days_left"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:src="@drawable/separator"
-            android:scaleType="centerCrop"
-            android:layout_margin="2dp"/>
-
-
         <Button
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/text_days_left"
             android:paddingTop="10dp"
@@ -65,6 +58,14 @@
             android:layout_height="wrap_content"
             android:text="Example"
             style="@style/Button.Panel"/>
+
+        <ImageView
+            android:layout_below="@+id/text_days_left"
+            android:id="@+id/separ"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:src="@drawable/separator"
+            android:scaleType="centerCrop"/>
 
     </RelativeLayout>
 </LinearLayout>

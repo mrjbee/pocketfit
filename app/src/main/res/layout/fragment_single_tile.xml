@@ -7,12 +7,11 @@
     <LinearLayout
         android:id="@+id/panel_tile"
         android:layout_marginTop="@dimen/tile.margin.top"
-        android:layout_marginBottom="@dimen/tile.margin.bottom"
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/tile_white"
+        android:background="@drawable/tile_white_spec"
         android:orientation="vertical">
 
     </LinearLayout>

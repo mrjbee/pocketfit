@@ -116,7 +116,6 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
         application().loadToBitmap(imageId, DisplayUtils.dpToPx(300, getResources()), DisplayUtils.dpToPx(300,getResources()), observe_data_action(State.STOP,new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
             @Override
             public void data(Pair<String, Bitmap> data) {
-                if (!data.first.equals(mRoutine.imageId)) return;
                 view(R.id.image_cover, ImageView.class).setImageBitmap(data.second);
             }
         }));
@@ -137,6 +136,9 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
         application().function_getRoutine(routineId, observe_function(State.STOP, new PocketFitApp.DataAction<Routine>() {
             @Override
             public void data(Routine routine) {
+                if (mRoutine != null){
+                    routine.imageId = mRoutine.imageId;
+                }
                 mRoutine = routine;
                 if (mRoutine == null){
                     mRoutine = new Routine(routineId);

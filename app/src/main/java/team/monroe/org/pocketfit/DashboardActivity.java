@@ -32,11 +32,11 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
 
         startupTileAC = animateAppearance(view(R.id.fragment_container_body), ySlide(0, DisplayUtils.screenHeight(getResources())))
-                .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
+                .showAnimation(duration_constant(600), interpreter_decelerate(0.8f))
                 .build();
 
-        backgroundStripeAC = animateAppearance(view(R.id.background_stripe), ySlide(0, DisplayUtils.screenHeight(getResources())/4))
-                .showAnimation(duration_constant(300))
+        backgroundStripeAC = animateAppearance(view(R.id.background_stripe), ySlide(0, DisplayUtils.screenHeight(getResources())/2))
+                .showAnimation(duration_constant(600), interpreter_decelerate(0.8f))
                 .build();
 
 

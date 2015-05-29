@@ -3,16 +3,32 @@
     android:layout_height="match_parent"
     tools:context=".Dashboard"
     style="@style/Panel.Base"
-    android:background="#252525">
+    android:background="#4486f1">
 
     <LinearLayout
+        android:layout_centerHorizontal="true"
         android:id="@+id/background_stripe"
-        android:layout_marginTop="130dp"
-        android:layout_marginBottom="@dimen/background.margin.bottom"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:background="#ff515151"
-        android:orientation="vertical" />
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
+            android:background="#ff386ec6"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            />
+
+        <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
+            android:background="#ff386ec6"
+            android:orientation="vertical" />
+
+    </LinearLayout>
 
     <fragment
         class="team.monroe.org.pocketfit.fragments.HeaderDashFragment"
