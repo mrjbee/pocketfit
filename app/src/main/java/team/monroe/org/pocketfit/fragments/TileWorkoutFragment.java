@@ -6,18 +6,28 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
+import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
+import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.DateUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
 public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
@@ -33,6 +43,9 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private AppearanceController acCover;
     private AppearanceController acOptions;
     private AppearanceController acActions;
+    private AppearanceController acDescription;
+    private AppearanceController acSchedule;
+    private GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>> mDayListViewAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -47,6 +60,16 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 .hideAnimation(duration_constant(200))
                 .hideAndGone().build();
 
+        acDescription = animateAppearance(view(R.id.text_description), alpha(1,0))
+                .showAnimation(duration_constant(200))
+                .hideAnimation(duration_constant(200))
+                .hideAndGone().build();
+
+
+        acSchedule = animateAppearance(view(R.id.panel_schedule), alpha(1,0))
+                .showAnimation(duration_constant(200))
+                .hideAnimation(duration_constant(200))
+                .hideAndGone().build();
 
         acCover = animateAppearance(view(R.id.image_cover), heightSlide(
                 (int) DisplayUtils.dpToPx(220, getResources()),
@@ -71,6 +94,110 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 .hideAnimation(duration_constant(200))
                 .hideAndGone().build();
 
+        mDayListViewAdapter = new GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>>(getActivity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<Day>>() {
+
+
+            @Override
+            public GetViewImplementation.ViewHolder<Day> create(final View convertView) {
+                return new GetViewImplementation.GenericViewHolder<Day>() {
+
+                    TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
+                    TextView text = (TextView) convertView.findViewById(R.id.item_text);
+                    TextView shortDay = (TextView) convertView.findViewById(R.id.item_day);
+                    ImageView dayBackground = (ImageView) convertView.findViewById(R.id.item_day_background);
+                    View play = convertView.findViewById(R.id.action_play);
+
+                    @Override
+                    public void update(final Day day, int position) {
+                        play.setFocusable(false);
+                        if (day.routineDay != null){
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
+                            text.setVisibility(View.VISIBLE);
+                            dayBackground.setImageResource(R.drawable.day_training);
+                            caption.setTextColor(getResources().getColor(R.color.text_color_date_training));
+                        } else {
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short));
+                            dayBackground.setImageResource(R.drawable.day_not_training);
+                            text.setVisibility(View.INVISIBLE);
+                            caption.setTextColor(getResources().getColor(R.color.text_color_date));
+                        }
+
+                        if (day.isPlayAvailable()){
+                            play.setVisibility(View.VISIBLE);
+                            play.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    application().startTraining(day.routine, day.routineDay, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            fill_progress_state();
+                                            transform_progress_state(true);
+                                            runLastOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    action_open_workout();
+                                                }
+                                            },500);
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            play.setVisibility(View.INVISIBLE);
+                            play.setOnClickListener(null);
+                        }
+
+                        if (day.dayDateString.equals("Today")){
+                            shortDay.setTextColor(getResources().getColor(R.color.text_color_day_short_training));
+                            dayBackground.setImageResource(R.drawable.day_today);
+                        }
+
+                        caption.setText(day.dayDateString);
+                        text.setText(day.dayDescription);
+                        shortDay.setText(day.shortDay);
+                        convertView.requestLayout();
+                    }
+                };
+            }
+        }, R.layout.item_schedule){
+            @Override
+            public int getCount() {
+                return isScheduleAvailable() ? 0: 200;
+            }
+
+            @Override
+            public Day getItem(int position) {
+                return buildDayFor(DateUtils.mathDays(getStartDate(), position));
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return !isScheduleAvailable();
+            }
+
+            @Override
+            public boolean areAllItemsEnabled() {
+                return false;
+            }
+
+            @Override
+            public boolean isEnabled(int position) {
+                Day day = getItem(position);
+                return day.routineDay != null;
+            }
+        };
+
+        view_list(R.id.list_items).setAdapter(mDayListViewAdapter);
+        view_list(R.id.list_items).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Day day = mDayListViewAdapter.getItem(position);
+                if (day.routineDay != null){
+                    onRoutineDaySelect(day.routineDay.id);
+                }
+            }
+        });
+
         int state = getArgument("state");
         mTransformationState = TransformationState.values()[state];
 
@@ -93,10 +220,12 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private void transform_about_state(boolean animate) {
         mTransformationState = TransformationState.ABOUT;
         if (!animate){
-            acTopTitle.hideWithoutAnimation();
             acCover.showWithoutAnimation();
             acActions.showWithoutAnimation();
             acBottomTitle.showWithoutAnimation();
+            acDescription.showWithoutAnimation();
+            acSchedule.hideWithoutAnimation();
+            acTopTitle.hideWithoutAnimation();
             acOptions.hideWithoutAnimation();
             acSeparatorSecondary.hideWithoutAnimation();
         } else {
@@ -104,6 +233,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             acCover.show();
             acActions.show();
             acBottomTitle.show();
+            acDescription.show();
+            acSchedule.hide();
             acOptions.hide();
             acSeparatorSecondary.hide();
         }
@@ -116,8 +247,19 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             acCover.hide();
             acActions.hide();
             acBottomTitle.show();
+            acDescription.hide();
+            acSchedule.show();
             acOptions.hide();
             acSeparatorSecondary.show();
+        }else {
+            acTopTitle.hideWithoutAnimation();
+            acCover.hideWithoutAnimation();
+            acActions.hideWithoutAnimation();
+            acBottomTitle.showWithoutAnimation();
+            acDescription.hideWithoutAnimation();
+            acSchedule.showWithoutAnimation();
+            acOptions.hideWithoutAnimation();
+            acSeparatorSecondary.showWithoutAnimation();
         }
     }
 
@@ -126,11 +268,15 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         if (animation){
             acTopTitle.show();
             acCover.hide();
+            acDescription.show();
+            acSchedule.hide();
             acActions.show();
             acOptions.show();
             acBottomTitle.show();
             acSeparatorSecondary.hide();
         }else{
+            acDescription.showWithoutAnimation();
+            acSchedule.hideWithoutAnimation();
             acTopTitle.showWithoutAnimation();
             acCover.hideWithoutAnimation();
             acActions.showWithoutAnimation();
@@ -189,7 +335,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                 public void run() {
                                    fill_progress_state();
                                    transform_progress_state(true);
-                                    runLastOnUiThread(new Runnable() {
+                                   runLastOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             action_open_workout();
@@ -328,6 +474,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     private void fill_schedule_state() {
         owner().hideMainButton(null);
+        view_text(R.id.text_title_bottom).setText(mSchedule.mRoutine.title);
+        mDayListViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -370,6 +518,61 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                     });
         }else{
             view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
+        }
+    }
+
+    private void onRoutineDaySelect(String id) {
+        owner().openDayEditor(mSchedule.mRoutine.id, id);
+    }
+
+    private DateFormat dateFormat= DateFormat.getDateInstance();
+    private DateFormat dayOfWeekFormat = new SimpleDateFormat("EE");
+
+    private Day buildDayFor(Date date) {
+        String dateString = dateFormat.format(date);
+        if (DateUtils.isToday(date)){
+            dateString = "Today";
+        }
+        String shortDay = dayOfWeekFormat.format(date);
+
+        RoutineDay routineDay = mSchedule.getTrainingDay(date);
+        String description = routineDay != null ? routineDay.description:"";
+
+        return new Day(dateString, description, shortDay, routineDay == null ? null : routineDay,
+                mSchedule.mRoutine,
+                mSchedule.wasLastTrainingOn(date));
+    }
+
+    private boolean isScheduleAvailable() {
+        return mSchedule == null || mSchedule.isNull() || !mSchedule.isDefined();
+    }
+
+    public Date getStartDate() {
+        return DateUtils.today();
+    }
+
+
+    private class Day{
+
+        private final String dayDateString;
+        private final String shortDay;
+        private final String dayDescription;
+        private final RoutineDay routineDay;
+        private final Routine routine;
+        private final boolean doneInThisDay;
+
+
+        private Day(String dateString, String trainingDescription, String shortDay, RoutineDay routineDay, Routine routine, boolean doneInThisDay) {
+            this.dayDateString = dateString;
+            this.shortDay = shortDay;
+            this.dayDescription = trainingDescription;
+            this.routineDay = routineDay;
+            this.routine = routine;
+            this.doneInThisDay = doneInThisDay;
+        }
+
+        public boolean isPlayAvailable() {
+            return routineDay != null && !doneInThisDay;
         }
     }
 

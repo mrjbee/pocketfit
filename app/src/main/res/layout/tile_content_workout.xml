@@ -85,8 +85,8 @@
         android:layout_height="fill_parent">
 
         <TextView
-            android:layout_marginTop="10dp"
             android:layout_below="@id/text_title"
+            android:layout_marginTop="10dp"
             android:id="@+id/text_description"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
@@ -97,6 +97,32 @@
             android:maxLines="5"
             style="@style/Text.Body.Optional"/>
 
+        <LinearLayout
+            android:id="@+id/panel_schedule"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:layout_weight="1"
+                android:id="@+id/list_items"
+                android:listSelector="@color/button.pressed"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+
+            <ImageView
+                android:layout_alignParentBottom="true"
+                android:layout_width="fill_parent"
+                android:layout_height="15dp"
+                android:src="@drawable/shadow_down"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>
