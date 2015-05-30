@@ -145,6 +145,7 @@ public class TrainingExecutionService extends Service {
                 }
 
                 private boolean isRunning(RoutineExercise routineExercise) {
+                    if (currentExecution ==null)return false;
                     return routineExercise.equals(currentExecution.routineExercise);
                 }
             };

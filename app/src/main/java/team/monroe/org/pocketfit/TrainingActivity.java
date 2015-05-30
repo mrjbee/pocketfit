@@ -48,6 +48,7 @@ public class TrainingActivity extends FragmentActivity{
     private AppearanceController contentAC;
     private GenericListViewAdapter<TrainingExecutionService.TrainingPlan.AgendaExercise, GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>> mAgendaAdapter;
     private Data.DataChangeObserver<TrainingExecutionService.TrainingPlan.Agenda> agendaDataChangeObserver;
+    private AppearanceController agendaAC;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -97,7 +98,16 @@ public class TrainingActivity extends FragmentActivity{
                     .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
                     .hideAnimation(duration_auto_fint(0.5f), interpreter_overshot()).build();
 
+
+        agendaAC = animateAppearance(view(R.id.list_workout_agenda), alpha(1f,0f))
+                .showAnimation(duration_constant(200))
+                .hideAnimation(duration_constant(200))
+                .hideAndGone()
+                .build();
+
         contentAC.showWithoutAnimation();
+        agendaAC.hideWithoutAnimation();
+
         view(R.id.panel_content, SlidingRelativeLayout.class).xTranslationObserver = new Closure<Float, Void>() {
             @Override
             public Void execute(Float x) {
@@ -135,9 +145,12 @@ public class TrainingActivity extends FragmentActivity{
                 }else if (mSlideToOpen && slideValue >0){
                     fraction = 0;
                 }
+                view(R.id.list_workout_agenda).setVisibility(View.VISIBLE);
                 if (mSlideToOpen){
+                    view(R.id.list_workout_agenda).setAlpha(1f * fraction);
                     view(R.id.panel_content).setTranslationX(maxSlideValue * fraction);
                 }else{
+                    view(R.id.list_workout_agenda).setAlpha(1f * (1-fraction));
                     view(R.id.panel_content).setTranslationX(maxSlideValue * (1 - fraction));
                 }
             }
@@ -219,7 +232,7 @@ public class TrainingActivity extends FragmentActivity{
                             @Override
                             public void update(TrainingExecutionService.TrainingPlan.AgendaExercise exercise, int position) {
                                 caption.setText(exercise.exercise.title);
-                                index.setText(position+"");
+                                index.setText((position+1)+"");
                                 circleImage.setImageResource(!exercise.executed? R.drawable.circle_gray:R.drawable.circle_pink);
                                 if (position == 0){
                                     line.setImageResource(R.drawable.gray_line_bottom);
@@ -239,17 +252,16 @@ public class TrainingActivity extends FragmentActivity{
                 }, R.layout.item_agenda_exercise);
 
         view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
-        view_list(R.id.list_workout_agenda).setVisibility(View.GONE);
     }
 
     private void openBackPanel() {
         contentAC.hide();
-        view(R.id.list_workout_agenda).setVisibility(View.VISIBLE);
+        agendaAC.show();
     }
 
     private void closeBackPanel() {
         contentAC.show();
-        view(R.id.list_workout_agenda).setVisibility(View.GONE);
+        agendaAC.hide();
     }
 
     private boolean isBackPanelClosed() {

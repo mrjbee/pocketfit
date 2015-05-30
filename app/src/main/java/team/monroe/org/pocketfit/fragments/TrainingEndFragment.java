@@ -64,7 +64,7 @@ public class TrainingEndFragment extends BodyFragment<TrainingActivity>{
 
     private void addDetails(String caption, Object value, String measure) {
         ViewGroup viewPanel = view(R.id.panel_results, ViewGroup.class);
-        View view = activity().getLayoutInflater().inflate(R.layout.panel_exercise_detail,viewPanel,false);
+        View view = activity().getLayoutInflater().inflate(R.layout.panel_result_detail,viewPanel,false);
         ((TextView)view.findViewById(R.id.item_caption)).setText(caption);
         ((TextView)view.findViewById(R.id.item_value)).setText(value.toString());
         ((TextView)view.findViewById(R.id.item_measure)).setText(measure);

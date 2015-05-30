@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
@@ -24,6 +24,7 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowRadius">1</item>
         <item name="android:shadowColor">#ffffffff</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
     <style name="Text.Header.Secondary.Caption" parent="Text.Header.Caption">
@@ -33,11 +34,13 @@
     <style name="Text.Header.Caption.Light" parent="AppTheme">
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">#fffcfcfc</item>
-      </style>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
+    </style>
 
     <style name="Text.Header.Secondary.Caption.Light" parent="AppTheme">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#fffcfcfc</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
 
@@ -213,11 +216,12 @@
     <style name="Text.Training.Title" parent="AppTheme">
         <item name="android:textSize">25sp</item>
         <item name="android:textColor">#fff8f8f8</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
     <style name="Text.Training.Prompt" parent="AppTheme">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#fff3f3f3</item>
+        <item name="android:textColor">#ff515151</item>
     </style>
 
     <style name="Text.Training.Clock" parent="AppTheme">
