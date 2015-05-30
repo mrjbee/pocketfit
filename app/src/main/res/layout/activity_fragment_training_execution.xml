@@ -1,88 +1,109 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dashboard"
-    android:background="#ff515151"
-    >
-
-    <LinearLayout
-        android:layout_centerVertical="true"
-        android:id="@+id/background_stripe"
+    android:background="#ff171717"
+    tools:context=".Dashboard">
+    <RelativeLayout
+        android:id="@+id/panel_below"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="fill_parent">
 
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:background="#ff909090"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp"
-            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/panel_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:background="#ff909090"
+            android:id="@+id/shadow"
+            android:layout_width="10dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/shadow_hor"
             android:orientation="vertical" />
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/shadow"
+            android:background="#ff515151">
 
-    <TextView
-        android:gravity="center"
-        android:id="@+id/text_routine_name"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        style="@style/Text.Training.Title"
-        android:text="Example"/>
-
-    <TextView
-        android:gravity="center"
-        android:id="@+id/text_clock"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        style="@style/Text.Training.Pause.Clock"
-        android:text="00:00:00"/>
-
-    <TextView
-        android:gravity="top"
-        android:id="@+id/text_pause_clock"
-        android:layout_toRightOf="@+id/text_clock"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        style="@style/Text.Training.Clock"
-        android:text="00:00:00"/>
+            <LinearLayout
+                android:id="@+id/background_stripe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
 
 
-    <FrameLayout
-        android:id="@+id/fragment_container_body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#ff909090"
+                    android:orientation="vertical" />
 
-    <ImageButton
-        android:id="@+id/action_options"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_height="60dp"
-        android:layout_width="60dp"
-        android:src="@drawable/options_light"
-        style="@style/Button.Action"
-        android:layout_alignParentRight="true"
-        />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#ff909090"
+                    android:orientation="vertical" />
 
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_routine_name"
+                style="@style/Text.Training.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Example" />
+
+            <TextView
+                android:id="@+id/text_clock"
+                style="@style/Text.Training.Pause.Clock"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="00:00:00" />
+
+            <TextView
+                android:id="@+id/text_pause_clock"
+                style="@style/Text.Training.Clock"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/text_clock"
+                android:gravity="top"
+                android:text="00:00:00" />
+
+
+            <FrameLayout
+                android:id="@+id/fragment_container_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/action_options"
+                style="@style/Button.Action"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/options_light" />
+        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>

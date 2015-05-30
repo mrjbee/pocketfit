@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
+import org.monroe.team.android.box.app.ui.SlideTouchGesture;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
@@ -17,7 +18,6 @@ import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
-import team.monroe.org.pocketfit.fragments.TrainingTileLoadingRoutineExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerResultFragment;
@@ -35,6 +35,7 @@ public class TrainingActivity extends FragmentActivity{
     private ClockViewPresenter mTrainingPauseClockPresenter;
     private AppearanceController mPauseClockAnimator;
     private AppearanceController mTrainingClockAnimator;
+    private AppearanceController contentAC;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -79,6 +80,78 @@ public class TrainingActivity extends FragmentActivity{
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
 
+        float bottomLayerWidth = DisplayUtils.dpToPx(250, getResources());
+        contentAC = animateAppearance(view(R.id.panel_content), xSlide(0f, bottomLayerWidth))
+                .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
+                .hideAnimation(duration_auto_fint(0.5f), interpreter_decelerate(0.8f))
+                .build();
+
+        contentAC.showWithoutAnimation();
+        final float maxSlideValue = bottomLayerWidth;
+        view(R.id.panel_below).setOnTouchListener(new SlideTouchGesture(maxSlideValue, SlideTouchGesture.Axis.X) {
+
+            public boolean mSlideToOpen = false;
+            public float mEndValue;
+
+            @Override
+            protected float applyFraction() {
+                return 0.4f;
+            }
+
+            @Override
+            protected void onStart(float x, float y) {
+                super.onStart(x, y);
+                mSlideToOpen = isBackPanelClosed();
+                mEndValue = mSlideToOpen ? maxSlideValue: 0;
+            }
+
+            @Override
+            protected void onProgress(float x, float y, float slideValue, float fraction) {
+                if (!mSlideToOpen && slideValue < 0){
+                    fraction = 0;
+                }else if (mSlideToOpen && slideValue >0){
+                    fraction = 0;
+                }
+                if (mSlideToOpen){
+                    view(R.id.panel_content).setTranslationX(maxSlideValue * fraction);
+                }else{
+                    view(R.id.panel_content).setTranslationX(maxSlideValue * (1 - fraction));
+                }
+            }
+            @Override
+            protected void onCancel(float x, float y, float slideValue, float fraction) {
+                boolean revertResult = true;
+                if (!mSlideToOpen && slideValue < 0){
+                    revertResult = false;
+                }else if (mSlideToOpen && slideValue >0){
+                    revertResult = false;
+                }
+
+                if (mSlideToOpen && revertResult){
+                    closeBackPanel();
+                }else{
+                    openBackPanel();
+                }
+            }
+            @Override
+            protected void onApply(float x, float y, float slideValue, float fraction) {
+
+                boolean revertResult = true;
+                if (!mSlideToOpen && slideValue < 0){
+                    revertResult = false;
+                }else if (mSlideToOpen && slideValue >0){
+                    revertResult = false;
+                }
+
+                if (!mSlideToOpen && revertResult){
+                    closeBackPanel();
+                }else{
+                    openBackPanel();
+                }
+            }
+        });
+
+
         view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +178,22 @@ public class TrainingActivity extends FragmentActivity{
                 popupWindow.showAsDropDown(view(R.id.action_options));
             }
         });
+    }
+
+    private void openBackPanel() {
+        contentAC.hide();
+    }
+
+    private void closeBackPanel() {
+        contentAC.show();
+    }
+
+    private boolean isBackPanelClosed() {
+        return view(R.id.panel_content).getTranslationX() < 100;
+    }
+
+    private void onBottomOpen() {
+
     }
 
     @Override
@@ -269,4 +358,12 @@ public class TrainingActivity extends FragmentActivity{
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!isBackPanelClosed()){
+            closeBackPanel();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
