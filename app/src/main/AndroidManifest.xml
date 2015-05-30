@@ -10,7 +10,6 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:screenOrientation="portrait"
             android:name=".DashboardActivity"
             android:label="Pocket Fit"
             android:theme="@style/AnimationActivity" >

@@ -77,12 +77,21 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 .hideAnimation(duration_constant(200))
                 .hideAndGone().build();
 
-        acCover = animateAppearance(view(R.id.image_cover), heightSlide(
-                (int) DisplayUtils.dpToPx(220, getResources()),
-                (int) DisplayUtils.dpToPx(100, getResources())))
-                .showAnimation(duration_constant(500), interpreter_accelerate_decelerate())
-                .hideAnimation(duration_constant(500), interpreter_overshot())
-                .build();
+        if (activity().isLandscape(R.bool.class)){
+            acCover = animateAppearance(view(R.id.image_cover), widthSlide(
+                    (int) DisplayUtils.dpToPx(250, getResources()),
+                    (int) DisplayUtils.dpToPx(100, getResources())))
+                    .showAnimation(duration_constant(500), interpreter_accelerate_decelerate())
+                    .hideAnimation(duration_constant(500), interpreter_overshot())
+                    .build();
+        }else {
+            acCover = animateAppearance(view(R.id.image_cover), heightSlide(
+                    (int) DisplayUtils.dpToPx(220, getResources()),
+                    (int) DisplayUtils.dpToPx(100, getResources())))
+                    .showAnimation(duration_constant(500), interpreter_accelerate_decelerate())
+                    .hideAnimation(duration_constant(500), interpreter_overshot())
+                    .build();
+        }
 
         acOptions = animateAppearance(view(R.id.action_options), widthSlide((int) DisplayUtils.dpToPx(50, getResources()),0))
                 .showAnimation(duration_constant(200))
