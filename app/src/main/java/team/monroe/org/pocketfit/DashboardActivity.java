@@ -13,9 +13,6 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
-import team.monroe.org.pocketfit.fragments.TileTrainingInProgressFragment;
-import team.monroe.org.pocketfit.fragments.TileRoutineFragment;
-import team.monroe.org.pocketfit.fragments.TileScheduleRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
@@ -173,53 +170,9 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
 
     public void switch_workoutTile() {
         mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileWorkoutFragment.class), animation_down_up());
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainButtonController.applyAppearance();
-            }
-        }, 500);
-    }
-
-    public void switch_activeRoutineSchedule() {
-        mainButtonController.blockAppearance();
-        updateBodyFragment(new FragmentItem(TileScheduleRoutineFragment.class).setBackAnimation(animation_slide_from_left()), animation_slide_from_right());
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainButtonController.applyAppearance();
-            }
-        }, 500);
-    }
-
-
-    public void switch_trainingExecution(boolean autoStart) {
-        mainButtonController.blockAppearance();
         replaceBodyFragment(
-                new FragmentItem(TileTrainingInProgressFragment.class)
-                        .addArgument("auto_change",autoStart)
-                        .setBackAnimation(animation_flip_out()), animation_flip_in());
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainButtonController.applyAppearance();
-            }
-        }, 500);
-        if (autoStart){
-            runLastOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    openTrainingRunner();
-                }
-            }, 1000);
-        }
-    }
-
-    public void switch_toRoutines() {
-        FragmentItem item = customize_startupFragment();
-        mainButtonController.blockAppearance();
-        replaceBodyFragment(item.setBackAnimation(animation_flip_in()), animation_flip_out());
+                new FragmentItem(TileWorkoutFragment.class).addArgument("state", TileWorkoutFragment.TransformationState.ABOUT.ordinal()),
+                animation_down_up());
         runLastOnUiThread(new Runnable() {
             @Override
             public void run() {
