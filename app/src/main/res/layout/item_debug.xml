@@ -6,10 +6,12 @@
         android:id="@+id/item_caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Caption"
         style="@style/Text.Body.Caption"/>
     <TextView
         android:id="@+id/item_sub_caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Description"
         style="@style/Text.Body"/>
 </LinearLayout>

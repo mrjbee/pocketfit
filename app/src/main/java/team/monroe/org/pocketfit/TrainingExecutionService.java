@@ -5,21 +5,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 
+import org.monroe.team.android.box.data.Data;
 import org.monroe.team.corebox.utils.Closure;
 import org.monroe.team.corebox.utils.DateUtils;
 import org.monroe.team.corebox.utils.Lists;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
@@ -52,7 +50,8 @@ public class TrainingExecutionService extends Service {
         @Override
         public void startExecution(Routine routine, RoutineDay routineDay) {
             if (trainingPlan != null) throw new IllegalStateException("Routine is running");
-            trainingPlan = new TrainingPlan(routine, routineDay);
+            PocketFitApp pocketFitApp = (PocketFitApp) getApplication();
+            trainingPlan = new TrainingPlan(routine, routineDay, pocketFitApp.model());
 
             Notification.Builder builder = new Notification.Builder(service());
             builder.setSmallIcon(R.drawable.runner);
@@ -109,18 +108,47 @@ public class TrainingExecutionService extends Service {
 
         private final Routine routine;
         private final RoutineDay routineDay;
+        private final Data<Agenda> data_Agenda;
         private Date startDate;
         private Date pauseStartDate;
         private ExerciseExecution currentExecution;
         private TrainingPlanListener trainingPlanListener = new NoOpTrainingPlanListener();
         private List<ResultRecord> resultRecordList = new ArrayList<>();
 
-        public TrainingPlan(Routine routine, RoutineDay routineDay) {
+        public TrainingPlan(final Routine routine, final RoutineDay routineDay, PocketFitModel model) {
             this.routine = routine;
             this.routineDay = routineDay;
             if (!routineDay.exerciseList.isEmpty()) {
                 currentExecution = new ExerciseExecution(routineDay.exerciseList.get(0));
             }
+
+            data_Agenda = new Data<Agenda>(Agenda.class, model) {
+                @Override
+                protected Agenda provideData() {
+                    Agenda agenda = new Agenda();
+                    for (RoutineExercise routineExercise : routineDay.exerciseList) {
+                        agenda.exerciseList.add(new AgendaExercise(
+                                routineExercise.exercise,
+                                isExecuted(routineExercise),
+                                isRunning(routineExercise)));
+                    }
+                    return agenda;
+                }
+
+                private boolean isExecuted(RoutineExercise routineExercise) {
+                    for (ResultRecord resultRecord : resultRecordList) {
+                        if (routineExercise.equals(resultRecord.exercise)){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                private boolean isRunning(RoutineExercise routineExercise) {
+                    return routineExercise.equals(currentExecution.routineExercise);
+                }
+            };
+
         }
 
         public TrainingPlanListener getTrainingPlanListener() {
@@ -171,6 +199,7 @@ public class TrainingExecutionService extends Service {
             }
             pauseStartDate = null;
             trainingPlanListener.onStartPauseDateChanged(pauseStartDate);
+            data_Agenda.invalidate();
         }
 
         private boolean isMultiSetExercise() {
@@ -203,6 +232,7 @@ public class TrainingExecutionService extends Service {
                 pauseStartDate = date;
                 trainingPlanListener.onStartPauseDateChanged(pauseStartDate);
             }
+            data_Agenda.invalidate();
         }
 
         public boolean isPaused() {
@@ -268,6 +298,7 @@ public class TrainingExecutionService extends Service {
             }else {
                 currentExecution = null;
             }
+            data_Agenda.invalidate();
         }
 
         public boolean isAllSetsCommitted() {
@@ -334,7 +365,26 @@ public class TrainingExecutionService extends Service {
             return routineDay;
         }
 
+        public Data<Agenda> getAgenda() {
+            return data_Agenda;
+        }
 
+        public class Agenda{
+            public final List<AgendaExercise> exerciseList = new ArrayList<>();
+        }
+
+        public class AgendaExercise {
+
+            public final Exercise exercise;
+            public final boolean executed;
+            public final boolean running;
+
+            public AgendaExercise(Exercise exercise, boolean executed, boolean running) {
+                this.exercise = exercise;
+                this.executed = executed;
+                this.running = running;
+            }
+        }
 
         public interface TrainingPlanListener{
             void onStartDateChanged(Date startDate);

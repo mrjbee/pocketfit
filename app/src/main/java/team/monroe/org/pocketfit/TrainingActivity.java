@@ -7,9 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
+import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.Closure;
 
@@ -18,6 +22,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import java.util.Date;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
+import team.monroe.org.pocketfit.fragments.GenericListFragment;
 import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
@@ -41,6 +46,8 @@ public class TrainingActivity extends FragmentActivity{
     private AppearanceController mPauseClockAnimator;
     private AppearanceController mTrainingClockAnimator;
     private AppearanceController contentAC;
+    private GenericListViewAdapter<TrainingExecutionService.TrainingPlan.AgendaExercise, GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>> mAgendaAdapter;
+    private Data.DataChangeObserver<TrainingExecutionService.TrainingPlan.Agenda> agendaDataChangeObserver;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -87,9 +94,8 @@ public class TrainingActivity extends FragmentActivity{
 
         float bottomLayerWidth = DisplayUtils.dpToPx(250, getResources());
         contentAC = animateAppearance(view(R.id.panel_content), xSlide(0f, bottomLayerWidth))
-                .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
-                .hideAnimation(duration_auto_fint(0.5f), interpreter_overshot())
-                .build();
+                    .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
+                    .hideAnimation(duration_auto_fint(0.5f), interpreter_overshot()).build();
 
         contentAC.showWithoutAnimation();
         view(R.id.panel_content, SlidingRelativeLayout.class).xTranslationObserver = new Closure<Float, Void>() {
@@ -195,14 +201,55 @@ public class TrainingActivity extends FragmentActivity{
                 popupWindow.showAsDropDown(view(R.id.action_options));
             }
         });
+
+
+        mAgendaAdapter =
+                new GenericListViewAdapter<TrainingExecutionService.TrainingPlan.AgendaExercise, GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>>(this, new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>>() {
+                    @Override
+                    public GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise> create(final View convertView) {
+                        return new GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>() {
+
+                            TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
+                            TextView index = (TextView) convertView.findViewById(R.id.item_index);
+                            ImageView circleImage = (ImageView) convertView.findViewById(R.id.image_circle);
+
+                            ImageView line = (ImageView) convertView.findViewById(R.id.image_line);
+                            ImageView lineOver = (ImageView) convertView.findViewById(R.id.image_line_over);
+
+                            @Override
+                            public void update(TrainingExecutionService.TrainingPlan.AgendaExercise exercise, int position) {
+                                caption.setText(exercise.exercise.title);
+                                index.setText(position+"");
+                                circleImage.setImageResource(!exercise.executed? R.drawable.circle_gray:R.drawable.circle_pink);
+                                if (position == 0){
+                                    line.setImageResource(R.drawable.gray_line_bottom);
+                                    lineOver.setVisibility(View.VISIBLE);
+                                }else if (position == mAgendaAdapter.getCount()-1){
+                                    line.setImageResource(R.drawable.gray_line_top);
+                                    lineOver.setVisibility(View.INVISIBLE);
+                                }else {
+                                    line.setImageResource(R.drawable.gray_line_both);
+                                    lineOver.setVisibility(View.VISIBLE);
+                                }
+                            }
+                            @Override
+                            public void cleanup() {}
+                        };
+                    }
+                }, R.layout.item_agenda_exercise);
+
+        view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
+        view_list(R.id.list_workout_agenda).setVisibility(View.GONE);
     }
 
     private void openBackPanel() {
         contentAC.hide();
+        view(R.id.list_workout_agenda).setVisibility(View.VISIBLE);
     }
 
     private void closeBackPanel() {
         contentAC.show();
+        view(R.id.list_workout_agenda).setVisibility(View.GONE);
     }
 
     private boolean isBackPanelClosed() {
@@ -216,6 +263,21 @@ public class TrainingActivity extends FragmentActivity{
     @Override
     protected void onStart() {
         super.onStart();
+
+        agendaDataChangeObserver = new Data.DataChangeObserver<TrainingExecutionService.TrainingPlan.Agenda>() {
+            @Override
+            public void onDataInvalid() {
+                updateAgenda();
+            }
+
+            @Override
+            public void onData(TrainingExecutionService.TrainingPlan.Agenda agenda) {
+
+            }
+        };
+
+        application().getTrainingPlan().getAgenda().addDataChangeObserver(agendaDataChangeObserver);
+
         updateClock(false);
         application().getTrainingPlan().setTrainingPlanListener(new NoOpTrainingPlanListener(){
             @Override
@@ -230,6 +292,23 @@ public class TrainingActivity extends FragmentActivity{
         });
         updateRoutineCover();
         updateDetails();
+        updateAgenda();
+    }
+
+
+
+    private void updateAgenda() {
+        application().getTrainingPlan().getAgenda().fetch(true,
+                new PocketFitApp.FetchObserver<TrainingExecutionService.TrainingPlan.Agenda>(application()) {
+            @Override
+            public void onFetch(TrainingExecutionService.TrainingPlan.Agenda agenda) {
+                mAgendaAdapter.clear();
+                for (TrainingExecutionService.TrainingPlan.AgendaExercise agendaExercise : agenda.exerciseList) {
+                    mAgendaAdapter.add(agendaExercise);
+                }
+                mAgendaAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void updateDetails() {
@@ -309,6 +388,7 @@ public class TrainingActivity extends FragmentActivity{
         mTrainingDurationClockPresenter.resetClock();
         if (application().getTrainingPlan() != null) {
             application().getTrainingPlan().setTrainingPlanListener(null);
+            application().getTrainingPlan().getAgenda().removeDataChangeObserver(agendaDataChangeObserver);
         }
     }
 

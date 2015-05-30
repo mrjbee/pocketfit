@@ -31,6 +31,7 @@
             style="@style/Text.Body.Optional"/>
 
         <ImageView
+            android:id="@+id/separator"
             android:layout_below="@id/text_description"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
@@ -38,9 +39,20 @@
             android:scaleType="fitXY"
             android:layout_marginTop="10dp"/>
 
+        <ListView
+            android:id="@+id/list_workout_agenda"
+            android:layout_below="@id/separator"
+            android:layout_width="300dp"
+            android:scrollbars="none"
+            android:listSelector="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:layout_height="fill_parent"/>
+
+
     </RelativeLayout>
     <team.monroe.org.pocketfit.view.SlidingRelativeLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/panel_content"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -58,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/shadow"
-            android:background="#ff171717">
+            android:background="@color/background.main">
 
             <LinearLayout
                 android:id="@+id/background_stripe"
@@ -72,14 +84,14 @@
                     android:layout_width="fill_parent"
                     android:layout_height="30dp"
                     android:layout_marginBottom="10dp"
-                    android:background="#fff7f7f7"
+                    android:background="@color/background.secondary"
                     android:orientation="vertical" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
-                    android:background="#fff7f7f7"
+                    android:background="@color/background.secondary"
                     android:orientation="vertical" />
 
             </LinearLayout>

@@ -4,8 +4,8 @@
     <integer name="card_flip_time_half">200</integer>
 
     <color name="light.black">#252525</color>
-    <color name="background.main">#4486f1</color>
-    <color name="background.secondary">#ff386ec6</color>
+    <color name="background.main">#ff386ec6</color>
+    <color name="background.secondary">#4486f1</color>
 
     <color name="text.color.date">#ff9a9a9a</color>
     <color name="text.color.date.training">#ff575757</color>
