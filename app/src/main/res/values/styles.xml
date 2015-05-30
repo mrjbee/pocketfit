@@ -199,24 +199,23 @@
 
 
     <style name="Text.Training.Title" parent="AppTheme">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#ff6e6e6e</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">#fff8f8f8</item>
     </style>
 
     <style name="Text.Training.Prompt" parent="AppTheme">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#ff848484</item>
+        <item name="android:textColor">#fff3f3f3</item>
     </style>
 
     <style name="Text.Training.Clock" parent="AppTheme">
         <item name="android:textSize">25sp</item>
-        <item name="android:textColor">#ffa8a8a8</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ff519fff</item>
     </style>
 
     <style name="Text.Training.Pause.Clock" parent="AppTheme">
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#ffa8a8a8</item>
+        <item name="android:textColor">#fff7f7f7</item>
         <item name="android:textStyle">bold</item>
     </style>
 

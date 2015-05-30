@@ -2,8 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard"
-    style="@style/Panel.Base"
-    android:paddingTop="15dp">
+    android:paddingTop="15dp"
+    android:background="#ff515151"
+    >
+
+
+    <LinearLayout
+        android:paddingTop="@dimen/tile_training_margin_top"
+        android:layout_centerVertical="true"
+        android:id="@+id/background_stripe"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#ff909090"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#ff909090"
+            android:orientation="vertical" />
+
+    </LinearLayout>
 
     <TextView
         android:gravity="center"

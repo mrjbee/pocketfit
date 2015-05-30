@@ -2,7 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard"
-    style="@style/Panel.Base">
+    android:background="#ff515151"
+    >
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:id="@+id/background_stripe"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#ff909090"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#ff909090"
+            android:orientation="vertical" />
+
+    </LinearLayout>
 
     <TextView
         android:gravity="center"
@@ -46,8 +72,7 @@
         android:id="@+id/fragment_container_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-    </FrameLayout>
+        />
 
     <ImageButton
         android:id="@+id/action_options"
@@ -55,7 +80,7 @@
         android:layout_marginRight="10dp"
         android:layout_height="60dp"
         android:layout_width="60dp"
-        android:src="@drawable/options"
+        android:src="@drawable/options_light"
         style="@style/Button.Action"
         android:layout_alignParentRight="true"
         />
