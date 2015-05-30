@@ -25,9 +25,7 @@ import org.monroe.team.corebox.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
@@ -41,7 +39,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private RoutineSchedule mSchedule;
 
 
-    private TransformationState mTransformationState;
+    private TransformationState mState;
     private AppearanceController acSeparatorSecondary;
     private AppearanceController acTopTitle;
     private AppearanceController acBottomTitle;
@@ -250,9 +248,9 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
 
         int state = getArgument("state");
-        mTransformationState = TransformationState.values()[state];
+        mState = TransformationState.values()[state];
 
-        switch (mTransformationState){
+        switch (mState){
             case ABOUT:
                 transform_about_state(false);
                 break;
@@ -268,8 +266,13 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     }
 
+    private void updateState(TransformationState transformationState){
+        mState = transformationState;
+        owner().updateWorkoutTileState(mState);
+    }
+
     private void transform_about_state(boolean animate) {
-        mTransformationState = TransformationState.ABOUT;
+        updateState(TransformationState.ABOUT);
         if (!animate){
             acCover.showWithoutAnimation();
             acActions.showWithoutAnimation();
@@ -293,7 +296,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     }
 
     private void transform_schedule_state(boolean animation) {
-        mTransformationState = TransformationState.SCHEDULE;
+        updateState(TransformationState.SCHEDULE);
         if (animation){
             SceneDirector.scenario()
                         .hide(acActions)
@@ -320,7 +323,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     }
 
     private void transform_progress_state(boolean animation, final Runnable postAnimationAction) {
-        mTransformationState = TransformationState.PROGRESS;
+        updateState(TransformationState.PROGRESS);
         if (animation){
             SceneDirector.scenario()
                     .hide(acSchedule, acCover)
@@ -386,7 +389,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     @Override
     public void onMainButton() {
-        if (mTransformationState == TransformationState.ABOUT){
+        if (mState == TransformationState.ABOUT){
             if (!mSchedule.isDefined()){
                 owner().hideMainButton(new Runnable() {
                     @Override
@@ -478,13 +481,13 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                     });
                 } else {
                     updateRoutineCover();
-                    switch (mTransformationState){
+                    switch (mState){
                         case ABOUT:
                             fill_about_state();
                             break;
                         case PROGRESS:
                             //After training activity closed
-                            if (mTransformationState == TransformationState.PROGRESS && application().getTrainingPlan() == null){
+                            if (mState == TransformationState.PROGRESS && application().getTrainingPlan() == null){
                                 runLastOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -528,6 +531,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 view_button(R.id.action).setText("Today training");
                 owner().showMainButton(R.drawable.round_btn_play, null);
             }else{
+                owner().hideMainButton(null);
                 view_button(R.id.action).setText(daysBeforeTraining+" days before training");
             }
             view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
@@ -562,7 +566,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     @Override
     public boolean onBackButton() {
-        if (mTransformationState == TransformationState.SCHEDULE){
+        if (mState == TransformationState.SCHEDULE){
             fill_about_state();
             transform_about_state(true);
             return true;
@@ -585,6 +589,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                         }
                     });
         }else{
+            view(R.id.image_cover, ImageView.class).setTag(null);
             view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
         }
     }

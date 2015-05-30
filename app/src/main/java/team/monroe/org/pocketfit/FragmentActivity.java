@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.monroe.team.android.box.app.ActivitySupport;
+import org.monroe.team.corebox.utils.Lists;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,6 +57,10 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
            }
            updateBodyFragmentNoHistory(backStackItem, changeAnimation);
         }
+    }
+
+    final protected FragmentItem fragmentBackStackTop() {
+        return Lists.getLast(backStack);
     }
 
     final protected void replaceBodyFragment(FragmentItem backStackItem, BodyFragmentAnimationRequest changeRequest) {
@@ -191,10 +196,14 @@ public abstract class FragmentActivity extends ActivitySupport<PocketFitApp> imp
         return backStack.remove(backStack.size() - 1);
     }
 
+    public Bundle getBodyArguments() {
+        return fragmentBackStackTop().getArgumentBundle();
+    }
+
 
     public static class FragmentItem implements Serializable{
 
-        private final Class<? extends BodyFragment> fragmentClass;
+        public final Class<? extends BodyFragment> fragmentClass;
         private final Map<String,Serializable> argumentMap = new HashMap<>();
         public BodyFragmentAnimationRequest backAnimation = null;
 

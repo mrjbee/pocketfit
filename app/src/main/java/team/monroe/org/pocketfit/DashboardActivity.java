@@ -30,7 +30,6 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
 
         startupTileAC = animateAppearance(view(R.id.fragment_container_body), ySlide(0, DisplayUtils.screenHeight(getResources())))
@@ -254,6 +253,11 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         if (!getBodyFragment(BackButtonContract.class).onBackButton()){
             super.onBackPressed();
         }
+    }
+
+    public void updateWorkoutTileState(TileWorkoutFragment.TransformationState state) {
+        if (fragmentBackStackTop().fragmentClass != TileWorkoutFragment.class) throw new IllegalStateException("Not a workout tile");
+        fragmentBackStackTop().addArgument("state", state.ordinal());
     }
 
     private static class MainButtonController {
