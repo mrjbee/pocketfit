@@ -1,5 +1,6 @@
 package team.monroe.org.pocketfit.fragments;
 
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
@@ -16,13 +17,17 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.Closure;
 import org.monroe.team.corebox.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
@@ -52,7 +57,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         acTopTitle = animateAppearance(view(R.id.text_title_top), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
-                .showAnimation(duration_constant(200))
+                .showAnimation(duration_constant(300), interpreter_accelerate(0.5f))
                 .hideAnimation(duration_constant(200))
                 .hideAndGone().build();
 
@@ -75,8 +80,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         acCover = animateAppearance(view(R.id.image_cover), heightSlide(
                 (int) DisplayUtils.dpToPx(220, getResources()),
                 (int) DisplayUtils.dpToPx(100, getResources())))
-                .showAnimation(duration_constant(200))
-                .hideAnimation(duration_constant(200))
+                .showAnimation(duration_constant(500), interpreter_accelerate_decelerate())
+                .hideAnimation(duration_constant(500), interpreter_overshot())
                 .build();
 
         acOptions = animateAppearance(view(R.id.action_options), widthSlide((int) DisplayUtils.dpToPx(50, getResources()),0))
@@ -132,13 +137,12 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                         @Override
                                         public void run() {
                                             fill_progress_state();
-                                            transform_progress_state(true);
-                                            runLastOnUiThread(new Runnable() {
+                                            transform_progress_state(true, new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     action_open_workout();
                                                 }
-                                            },500);
+                                            });
                                         }
                                     });
                                 }
@@ -244,7 +248,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                 transform_about_state(false);
                 break;
             case PROGRESS:
-                transform_progress_state(false);
+                transform_progress_state(false, null);
                 break;
             case SCHEDULE:
                 transform_schedule_state(false);
@@ -267,28 +271,33 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             acOptions.hideWithoutAnimation();
             acSeparatorSecondary.hideWithoutAnimation();
         } else {
-            acTopTitle.hide();
-            acCover.show();
-            acActions.show();
-            acBottomTitle.show();
-            acDescription.show();
-            acSchedule.hide();
-            acOptions.hide();
-            acSeparatorSecondary.hide();
-        }
+            SceneDirector.scenario()
+                        .hide(acTopTitle)
+                        .hide(acSchedule)
+                        .then()
+                            .show(acActions, acBottomTitle, acDescription)
+                            .hide(acOptions, acSeparatorSecondary)
+                            .then()
+                                .show(acCover)
+                        .play();
+            }
     }
 
     private void transform_schedule_state(boolean animation) {
         mTransformationState = TransformationState.SCHEDULE;
         if (animation){
-            acTopTitle.hide();
-            acCover.hide();
-            acActions.hide();
-            acBottomTitle.show();
-            acDescription.hide();
-            acSchedule.show();
-            acOptions.hide();
-            acSeparatorSecondary.show();
+            SceneDirector.scenario()
+                        .hide(acActions)
+                        .hide(acTopTitle)
+                        .hide(acOptions)
+                        .then()
+                            .show(acBottomTitle,acSeparatorSecondary)
+                            .hide(acDescription)
+                            .then()
+                                .hide(acCover)
+                                    .then()
+                                        .show(acSchedule)
+                        .play();
         }else {
             acTopTitle.hideWithoutAnimation();
             acCover.hideWithoutAnimation();
@@ -301,17 +310,30 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         }
     }
 
-    private void transform_progress_state(boolean animation) {
+    private void transform_progress_state(boolean animation, final Runnable postAnimationAction) {
         mTransformationState = TransformationState.PROGRESS;
         if (animation){
-            acTopTitle.show();
-            acCover.hide();
-            acDescription.show();
-            acSchedule.hide();
-            acActions.show();
-            acOptions.show();
-            acBottomTitle.show();
-            acSeparatorSecondary.hide();
+            SceneDirector.scenario()
+                    .hide(acSchedule, acCover)
+                    .then()
+                        .show(acBottomTitle, acActions)
+                        .hide(acSeparatorSecondary)
+                        .then()
+                            .show(acOptions)
+                            .then()
+                                .show(acDescription)
+                                .then()
+                                    .show(acTopTitle)
+                                    .then()
+                                        .action(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if(postAnimationAction != null){
+                                                    postAnimationAction.run();
+                                                }
+                                            }
+                                        })
+                    .play();
         }else{
             acDescription.showWithoutAnimation();
             acSchedule.hideWithoutAnimation();
@@ -372,13 +394,12 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                 @Override
                                 public void run() {
                                    fill_progress_state();
-                                   transform_progress_state(true);
-                                   runLastOnUiThread(new Runnable() {
+                                   transform_progress_state(true,new Runnable() {
                                         @Override
                                         public void run() {
                                             action_open_workout();
                                         }
-                                    },500);
+                                    });
                                 }
                             });
                         }

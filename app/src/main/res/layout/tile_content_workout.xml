@@ -112,15 +112,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>
 
-            <ImageView
+          <ImageView
                 android:layout_alignParentBottom="true"
                 android:layout_width="fill_parent"
-                android:layout_height="15dp"
-                android:src="@drawable/shadow_down"
+                android:layout_height="1dp"
+                android:src="@drawable/separator"
                 android:scaleType="fitXY"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="20dp"/>
 
         </LinearLayout>
     </RelativeLayout>
