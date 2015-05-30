@@ -1,13 +1,17 @@
 package team.monroe.org.pocketfit;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.Closure;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
@@ -25,6 +29,7 @@ import team.monroe.org.pocketfit.fragments.TrainingTileTimeExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileTimeResultFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
+import team.monroe.org.pocketfit.view.SlidingRelativeLayout;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
 import static team.monroe.org.pocketfit.TrainingExecutionService.TrainingPlan.NoOpTrainingPlanListener;
@@ -83,10 +88,22 @@ public class TrainingActivity extends FragmentActivity{
         float bottomLayerWidth = DisplayUtils.dpToPx(250, getResources());
         contentAC = animateAppearance(view(R.id.panel_content), xSlide(0f, bottomLayerWidth))
                 .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
-                .hideAnimation(duration_auto_fint(0.5f), interpreter_decelerate(0.8f))
+                .hideAnimation(duration_auto_fint(0.5f), interpreter_overshot())
                 .build();
 
         contentAC.showWithoutAnimation();
+        view(R.id.panel_content, SlidingRelativeLayout.class).xTranslationObserver = new Closure<Float, Void>() {
+            @Override
+            public Void execute(Float x) {
+                if (x < DisplayUtils.dpToPx(4, getResources())){
+                    view(R.id.shadow).setVisibility(View.GONE);
+                }else {
+                    view(R.id.shadow).setVisibility(View.VISIBLE);
+                }
+                return null;
+            }
+        };
+
         final float maxSlideValue = bottomLayerWidth;
         view(R.id.panel_below).setOnTouchListener(new SlideTouchGesture(maxSlideValue, SlideTouchGesture.Axis.X) {
 
@@ -211,8 +228,35 @@ public class TrainingActivity extends FragmentActivity{
                 updateClock(true);
             }
         });
+        updateRoutineCover();
+        updateDetails();
     }
 
+    private void updateDetails() {
+        view_text(R.id.text_description).setText(application().getTrainingPlan().getRoutineDay().description);
+    }
+
+
+    private void updateRoutineCover() {
+        Routine mRoutine = application().getTrainingRoutine();
+        if (mRoutine.imageId != null) {
+            String wasId = (String) view(R.id.image_cover, ImageView.class).getTag();
+            if (mRoutine.imageId.equals(wasId)) return;
+            view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.covert_loading);
+            application().loadToBitmap(mRoutine.imageId,
+                    DisplayUtils.screenHeight(getResources()),
+                    DisplayUtils.screenHeight(getResources()), new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
+                        @Override
+                        public void data(Pair<String, Bitmap> data) {
+                            view(R.id.image_cover, ImageView.class).setImageBitmap(data.second);
+                            view(R.id.image_cover, ImageView.class).setTag(data.first);
+                        }
+                    });
+        }else{
+            view(R.id.image_cover, ImageView.class).setTag(null);
+            view(R.id.image_cover, ImageView.class).setImageResource(R.drawable.no_covert);
+        }
+    }
 
     private void updateClock(boolean animate) {
 

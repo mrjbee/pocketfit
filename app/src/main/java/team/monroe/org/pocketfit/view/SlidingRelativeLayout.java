@@ -7,6 +7,8 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import org.monroe.team.corebox.utils.Closure;
+
 public class SlidingRelativeLayout extends RelativeLayout{
     public SlidingRelativeLayout(Context context) {
         super(context);
@@ -51,5 +53,19 @@ public class SlidingRelativeLayout extends RelativeLayout{
         float newWidth = (width > 0) ? (xFraction * width) : -9999;
         setX(newWidth);
     }
+
+    public Closure<Float, Void> xTranslationObserver = new Closure<Float, Void>() {
+        @Override
+        public Void execute(Float arg) {
+            return null;
+        }
+    };
+
+    @Override
+    public void setTranslationX(float translationX) {
+        super.setTranslationX(translationX);
+        xTranslationObserver.execute(translationX);
+    }
+
 
 }
