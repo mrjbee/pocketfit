@@ -32,6 +32,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
     private MainButtonController mainButtonController;
     private VerticalViewPager mViewPager;
     private team.monroe.org.pocketfit.view.FragmentPagerAdapter mPageAdapter;
+    private float mHeaderHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,10 +135,29 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
                 return 2;
             }
         };
+        mHeaderHeight = DisplayUtils.dpToPx(100,getResources());
+
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            private float mViewPagerHeight = -1;
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                if (mViewPagerHeight == -1){
+                    mViewPagerHeight = mViewPager.getHeight();
+                }
+                int currentPosition = mViewPager.getCurrentItem();
+                float pixels = 0;
+                if (position < currentPosition){
+                    pixels = mViewPagerHeight - positionOffsetPixels;
+                }else {
+                    pixels = positionOffsetPixels;
+                }
+                float alpha = 1 - (Math.min(mHeaderHeight, pixels * 2) / mHeaderHeight);
+                getHeaderFragment().updateAlpha(alpha);
+                if (position == 0 && currentPosition == position){
+                    //down from first
+                    getHeaderFragment().scaleCaption(alpha);
+                }
             }
 
             @Override

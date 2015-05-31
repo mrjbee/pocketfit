@@ -28,6 +28,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
 
     private boolean mShown = true;
+    private float mCaptionHeight;
 
     @Override
     protected int getLayoutId() {
@@ -37,6 +38,7 @@ public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mCaptionHeight = DisplayUtils.dpToPx(100, getResources());
     }
 
     public void changeHeader(String title, View actions, boolean topHeaderRequired, boolean light){
@@ -60,8 +62,16 @@ public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
         if (DisplayUtils.isLandscape(getResources(), R.bool.class)){
             view_text(R.id.caption).setVisibility(View.GONE);
         }else {
+            scaleCaption(1f);
             view_text(R.id.caption).setVisibility(topHeaderRequired?View.VISIBLE:View.GONE);
         }
     }
 
+    public void updateAlpha(float alpha) {
+        getFragmentView().setAlpha(alpha);
+    }
+
+    public void scaleCaption(float fraction) {
+        getFragmentView().setTranslationY((1- fraction) * - mCaptionHeight);
+    }
 }
