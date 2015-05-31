@@ -11,6 +11,7 @@ import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
+import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
@@ -24,7 +25,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.rotate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
-public class HeaderDashFragment extends FragmentSupport<PocketFitApp> implements HeaderContract{
+public class HeaderDashFragment extends AppFragment<DashboardActivity> implements HeaderContract{
 
     private AppearanceController secondaryHeaderContainerAC;
     private String headerCaption = "";
@@ -61,18 +62,10 @@ public class HeaderDashFragment extends FragmentSupport<PocketFitApp> implements
         getHeaderCaptionView().setText(headerCaption);
         ViewGroup group = view(R.id.panel_actions, ViewGroup.class);
         group.removeAllViews();
-        View answer = getHeaderOwner().buildHeaderActionsView(group);
+        View answer = owner().buildHeaderActionsView(group);
         if (answer != null) {
             group.addView(answer);
         }
-    }
-
-    private HeaderOwnerContract getHeaderOwner() {
-        return ((HeaderOwnerContract)activity());
-    }
-
-    private void onBackHeaderArrow() {
-        getHeaderOwner().onHeaderBackPressed();
     }
 
     private TextView getHeaderCaptionView() {

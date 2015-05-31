@@ -48,7 +48,7 @@ public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
                 application().function_createId("routine",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                     @Override
                     public void data(String routine) {
-                        owner(RoutinesActivity.class).open_Routine(routine);
+                        ownerContract(RoutinesActivity.class).open_Routine(routine);
                     }
                 }));
             }
@@ -109,7 +109,7 @@ public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
 
                             @Override
                             protected void onApply(float x, float y, float slideValue, float fraction) {
-                                owner(RoutinesActivity.class).open_Routine(routine.id);
+                                ownerContract(RoutinesActivity.class).open_Routine(routine.id);
                             }
 
                             @Override
@@ -161,7 +161,7 @@ public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Routine routine = mRoutinesAdapter.getItem(position);
-                owner(RoutinesActivity.class).open_Routine(routine.id);
+                ownerContract(RoutinesActivity.class).open_Routine(routine.id);
             }
         });
     }

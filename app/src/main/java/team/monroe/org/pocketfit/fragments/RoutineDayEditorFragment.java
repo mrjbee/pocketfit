@@ -84,7 +84,7 @@ public class RoutineDayEditorFragment extends BodyFragment<RoutinesActivity>{
                     public void data(String id) {
                         String title = view_text(R.id.edit_description).getText().toString();
                         if (!title.trim().isEmpty()){
-                            owner(RoutinesActivity.class).open_exercisesAsChooser(mRoutineDay.id, id, true);
+                            ownerContract(RoutinesActivity.class).open_exercisesAsChooser(mRoutineDay.id, id, true);
                         }else{
                             Toast.makeText(getActivity(), "Please add description first", Toast.LENGTH_SHORT).show();
                         }
@@ -112,7 +112,7 @@ public class RoutineDayEditorFragment extends BodyFragment<RoutinesActivity>{
                 view.findViewById(R.id.item_action).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner(RoutinesActivity.class).open_RoutineExercise(mRoutineDay.id, routineExercise.id);
+                        ownerContract(RoutinesActivity.class).open_RoutineExercise(mRoutineDay.id, routineExercise.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {

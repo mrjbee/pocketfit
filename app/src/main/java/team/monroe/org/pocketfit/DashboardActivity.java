@@ -4,11 +4,11 @@ import android.animation.Animator;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
@@ -20,18 +20,22 @@ import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 import team.monroe.org.pocketfit.view.VerticalViewPager;
 
-public class DashboardActivity extends FragmentActivity implements MainButtonOwnerContract {
+public class DashboardActivity extends ActivitySupport<PocketFitApp> implements MainButtonOwnerContract {
 
     private AppearanceController startupTileAC;
     private AppearanceController backgroundStripeAC;
     private MainButtonController mainButtonController;
+    private VerticalViewPager mViewPager;
+    private team.monroe.org.pocketfit.view.FragmentPagerAdapter mPageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView( R.layout.activity_dashboard);
+
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
 
-        startupTileAC = animateAppearance(view(R.id.fragment_container_body), ySlide(0, DisplayUtils.screenHeight(getResources())))
+        startupTileAC = animateAppearance(view(R.id.view_pager), ySlide(0, DisplayUtils.screenHeight(getResources())))
                 .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
                 .build();
 
@@ -43,7 +47,7 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getBodyFragment(MainButtonUserContract.class).onMainButton();
+                getPage(MainButtonUserContract.class).onMainButton();
             }
         });
 
@@ -89,43 +93,45 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
             mainButtonController.restoreState(savedInstanceState);
         }
 
-        VerticalViewPager viewPager = view(R.id.view_pager, VerticalViewPager.class);
-        viewPager.setAdapter(new team.monroe.org.pocketfit.view.FragmentPagerAdapter(getFragmentManager()) {
-
+        mViewPager = view(R.id.view_pager, VerticalViewPager.class);
+        mPageAdapter = new team.monroe.org.pocketfit.view.FragmentPagerAdapter(getFragmentManager()) {
 
             @Override
             public Fragment getItem(int position) {
-                return null;
+                if (position == 0) {
+                    return createWorkoutPage();
+                }
+                throw new IllegalStateException();
+            }
+
+            private TileWorkoutFragment createWorkoutPage() {
+                TileWorkoutFragment.TransformationState state;
+                if (application().isTrainingRunning()) {
+                    state = TileWorkoutFragment.TransformationState.PROGRESS;
+                } else if (application().hasActiveRoutine()) {
+                    state = TileWorkoutFragment.TransformationState.ABOUT;
+                } else {
+                    state = TileWorkoutFragment.TransformationState.NOT_SET;
+                }
+                TileWorkoutFragment workoutFragment = new TileWorkoutFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", state.ordinal());
+                workoutFragment.setArguments(bundle);
+                return workoutFragment;
             }
 
             @Override
             public int getCount() {
-                return 0;
+                return 1;
             }
-        });
+        };
+        mViewPager.setAdapter(mPageAdapter);
     }
 
-    @Override
-    protected FragmentItem customize_startupFragment() {
-        FragmentItem fragmentItem;
-        if (application().isTrainingRunning()){
-            fragmentItem = new FragmentItem(TileWorkoutFragment.class)
-                    .addArgument("state", TileWorkoutFragment.TransformationState.PROGRESS.ordinal());
-        }else {
-
-            fragmentItem =
-                    new FragmentItem(TileWorkoutFragment.class)
-                            .addArgument("state",
-                                    application().hasActiveRoutine() ?
-                                            TileWorkoutFragment.TransformationState.ABOUT.ordinal():
-                                            TileWorkoutFragment.TransformationState.NOT_SET.ordinal());
-        }
-        return fragmentItem;
-    }
-
-    @Override
-    protected int customize_rootLayout() {
-        return R.layout.activity_dashboard;
+    private <ContractType>  ContractType getPage(Class<ContractType> contract) {
+        int pageIndex = mViewPager.getCurrentItem();
+        String pageTag = "android:switcher:" + mViewPager.getId() + ":" + pageIndex;
+        return (ContractType)getFragmentManager().findFragmentByTag(pageTag);
     }
 
     public void openExerciseEditor() {
@@ -191,20 +197,15 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
         mainButtonController.saveState(outState);
     }
 
-    public void removeTopFromHistory() {
-       FragmentItem item = super.dropTopBackStack();
-    }
-
     @Override
     public void onBackPressed() {
-        if (!getBodyFragment(BackButtonContract.class).onBackButton()){
+        if (!getPage(BackButtonContract.class).onBackButton()){
             super.onBackPressed();
         }
     }
 
-    public void updateWorkoutTileState(TileWorkoutFragment.TransformationState state) {
-        if (fragmentBackStackTop().fragmentClass != TileWorkoutFragment.class) throw new IllegalStateException("Not a workout tile");
-        fragmentBackStackTop().addArgument("state", state.ordinal());
+    public View buildHeaderActionsView(ViewGroup group) {
+        return null;
     }
 
     private static class MainButtonController {

@@ -2,7 +2,6 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -172,7 +171,7 @@ public class RoutineExerciseEditorFragment extends BodyFragment<RoutinesActivity
         view(R.id.action_change_exercise).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner(RoutinesActivity.class).open_exercisesAsChooser(mDayId, mRoutineExerciseId, false);
+                ownerContract(RoutinesActivity.class).open_exercisesAsChooser(mDayId, mRoutineExerciseId, false);
             }
         });
 

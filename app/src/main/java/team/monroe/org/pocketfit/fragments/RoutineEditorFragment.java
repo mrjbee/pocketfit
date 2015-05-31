@@ -49,7 +49,7 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
         view(R.id.image_select_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner(RoutinesActivity.class).performImageSelection();
+                ownerContract(RoutinesActivity.class).performImageSelection();
             }
         });
         listViewPresenter = new ListViewPresenter<RoutineDay>(view(R.id.panel_days, ViewGroup.class)) {
@@ -71,7 +71,7 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
                 view.findViewById(R.id.item_action).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        owner(RoutinesActivity.class).open_RoutineDay(mRoutine.id, routineDay.id);
+                        ownerContract(RoutinesActivity.class).open_RoutineDay(mRoutine.id, routineDay.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
@@ -153,7 +153,7 @@ public class RoutineEditorFragment extends BodyFragment<RoutinesActivity> {
                             public void data(String id) {
                                 String title = view_text(R.id.edit_title).getText().toString();
                                 if (!title.trim().isEmpty()){
-                                    owner(RoutinesActivity.class).open_RoutineDay(mRoutine.id, id);
+                                    ownerContract(RoutinesActivity.class).open_RoutineDay(mRoutine.id, id);
                                 }else{
                                     Toast.makeText(getActivity(), "Please add title first", Toast.LENGTH_SHORT).show();
                                 }

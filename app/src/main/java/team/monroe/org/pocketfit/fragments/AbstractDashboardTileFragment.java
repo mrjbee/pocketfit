@@ -10,12 +10,7 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public abstract class AbstractDashboardTileFragment extends BodyFragment<DashboardActivity> implements MainButtonUserContract, BackButtonContract {
-
-    @Override
-    final protected boolean isHeaderSecondary() {
-        return true;
-    }
+public abstract class AbstractDashboardTileFragment extends AppFragment<DashboardActivity> implements MainButtonUserContract, BackButtonContract {
 
     @Override
     final public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,4 +26,5 @@ public abstract class AbstractDashboardTileFragment extends BodyFragment<Dashboa
     public boolean onBackButton() {
         return false;
     }
+
 }

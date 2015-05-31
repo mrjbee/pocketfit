@@ -256,7 +256,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         });
 
 
-        int state = getArgument("state");
+        int state = getArguments().getInt("state");
         mState = TransformationState.values()[state];
 
         switch (mState){
@@ -303,7 +303,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     private void updateState(TransformationState transformationState){
         mState = transformationState;
-        owner().updateWorkoutTileState(mState);
+        getArguments().putInt("state",mState.ordinal());
+        //ownerContract().updateWorkoutTileState(mState);
     }
 
     private void transform_about_state(boolean animate) {
@@ -383,7 +384,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                         .action(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(postAnimationAction != null){
+                                                if (postAnimationAction != null) {
                                                     postAnimationAction.run();
                                                 }
                                             }
@@ -402,7 +403,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         }
     }
 
-    @Override
+    @Deprecated
     protected String getHeaderName() {
         return "Workout";
     }
@@ -412,7 +413,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         return R.layout.tile_content_workout;
     }
 
-    @Override
+    @Deprecated
     public View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
         View view = layoutInflater.inflate(R.layout.actions_routine,actionPanel, false);
         view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
