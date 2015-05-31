@@ -14,7 +14,8 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
-import team.monroe.org.pocketfit.fragments.TileWorkoutFragment;
+
+import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
@@ -98,22 +99,26 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
             @Override
             public Fragment getItem(int position) {
-                if (position == 0) {
-                    return createWorkoutPage();
+                switch (position){
+                    case 0:
+                        return createWorkoutPage();
+                    case 1:
+                        return new PageHistoryFragment();
+                    default:
+                        throw new IllegalStateException();
                 }
-                throw new IllegalStateException();
             }
 
-            private TileWorkoutFragment createWorkoutPage() {
-                TileWorkoutFragment.TransformationState state;
+            private PageWorkoutFragment createWorkoutPage() {
+                PageWorkoutFragment.TransformationState state;
                 if (application().isTrainingRunning()) {
-                    state = TileWorkoutFragment.TransformationState.PROGRESS;
+                    state = PageWorkoutFragment.TransformationState.PROGRESS;
                 } else if (application().hasActiveRoutine()) {
-                    state = TileWorkoutFragment.TransformationState.ABOUT;
+                    state = PageWorkoutFragment.TransformationState.ABOUT;
                 } else {
-                    state = TileWorkoutFragment.TransformationState.NOT_SET;
+                    state = PageWorkoutFragment.TransformationState.NOT_SET;
                 }
-                TileWorkoutFragment workoutFragment = new TileWorkoutFragment();
+                PageWorkoutFragment workoutFragment = new PageWorkoutFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("state", state.ordinal());
                 workoutFragment.setArguments(bundle);
@@ -122,7 +127,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
             @Override
             public int getCount() {
-                return 1;
+                return 2;
             }
         };
         mViewPager.setAdapter(mPageAdapter);

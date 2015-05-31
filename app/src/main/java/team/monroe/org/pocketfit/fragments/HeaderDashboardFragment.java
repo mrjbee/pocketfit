@@ -25,7 +25,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.rotate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
-public class HeaderDashFragment extends AppFragment<DashboardActivity> implements HeaderContract{
+public class HeaderDashboardFragment extends AppFragment<DashboardActivity> implements HeaderContract{
 
     private AppearanceController secondaryHeaderContainerAC;
     private String headerCaption = "";
@@ -108,4 +108,6 @@ public class HeaderDashFragment extends AppFragment<DashboardActivity> implement
     public boolean isSecondary() {
         return true;
     }
+
+
 }

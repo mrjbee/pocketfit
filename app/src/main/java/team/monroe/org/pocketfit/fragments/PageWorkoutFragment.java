@@ -1,6 +1,5 @@
 package team.monroe.org.pocketfit.fragments;
 
-import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
@@ -20,7 +19,6 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
-import org.monroe.team.corebox.utils.Closure;
 import org.monroe.team.corebox.utils.DateUtils;
 
 import java.text.DateFormat;
@@ -33,7 +31,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
-public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
+public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineSchedule;
     private RoutineSchedule mSchedule;
@@ -410,7 +408,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     @Override
     protected int getTileLayoutId() {
-        return R.layout.tile_content_workout;
+        return R.layout.page_content_workout;
     }
 
     @Deprecated
