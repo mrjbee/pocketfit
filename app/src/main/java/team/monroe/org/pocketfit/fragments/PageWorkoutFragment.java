@@ -29,7 +29,7 @@ import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 
-public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
+public class PageWorkoutFragment extends DashboardStartPageFragment {
 
     private Data.DataChangeObserver<RoutineSchedule> observer_activeRoutineSchedule;
     private RoutineSchedule mSchedule;
@@ -52,7 +52,7 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        configureHeader("Workout", build_HeaderActionsView(), true, true);
+        configureHeader("Workout", build_HeaderActionsView());
 
         acNoWorkout= animateAppearance(view(R.id.panel_no_routine),
                 ySlide(0, DisplayUtils.screenHeight(getResources())))

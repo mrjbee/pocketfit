@@ -12,7 +12,7 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 
-public abstract class AbstractDashboardTileFragment extends AppFragment<DashboardActivity> implements MainButtonUserContract, BackButtonContract {
+public abstract class DashboardPageFragment extends AppFragment<DashboardActivity> implements MainButtonUserContract, BackButtonContract {
 
     private boolean mShown = true;
     private float mCaptionHeight;
@@ -44,9 +44,9 @@ public abstract class AbstractDashboardTileFragment extends AppFragment<Dashboar
         return R.layout.fragment_dash_header;
     }
 
-    public void configureHeader(String title, View actions, boolean topHeaderRequired, boolean light){
+    final protected void configureHeader(String title, View actions){
 
-        int textColor = getResources().getColor(light? R.color.text_header_dash:R.color.text_header_dash_dark);
+        int textColor = getResources().getColor(headerLightVersion() ? R.color.text_header_dash:R.color.text_header_dash_dark);
 
         view_text(R.id.secondary_caption).setTextColor(textColor);
         view_text(R.id.secondary_caption).setText(title);
@@ -66,15 +66,23 @@ public abstract class AbstractDashboardTileFragment extends AppFragment<Dashboar
             view_text(R.id.caption).setVisibility(View.GONE);
         }else {
             scaleCaption(1f);
-            view_text(R.id.caption).setVisibility(topHeaderRequired?View.VISIBLE:View.GONE);
+            view_text(R.id.caption).setVisibility(headerFullVersion() ?View.VISIBLE:View.GONE);
         }
     }
 
+    protected boolean headerFullVersion() {
+        return true;
+    }
+
+    protected boolean headerLightVersion() {
+        return true;
+    }
+
     public void updateAlpha(float alpha) {
-        getFragmentView().setAlpha(alpha);
+       // getFragmentView().setAlpha(alpha);
     }
 
     public void scaleCaption(float fraction) {
-        getFragmentView().setTranslationY((1- fraction) * - mCaptionHeight);
+       // getFragmentView().setTranslationY((1- fraction) * - mCaptionHeight);
     }
 }

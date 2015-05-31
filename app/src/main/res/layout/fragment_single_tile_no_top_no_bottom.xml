@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"

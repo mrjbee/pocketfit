@@ -4,12 +4,12 @@ import android.os.Bundle;
 
 import team.monroe.org.pocketfit.fragments.DefaultPageFragment;
 
-public class PageHistoryFragment extends DefaultPageFragment {
+public class PageMockFragment extends DefaultPageFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        configureHeader("History", null);
+        configureHeader("Something Else", null);
     }
 
     @Override

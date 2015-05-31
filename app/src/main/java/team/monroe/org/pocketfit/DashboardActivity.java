@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import org.monroe.team.android.box.app.ActivitySupport;
@@ -16,11 +15,8 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
-import team.monroe.org.pocketfit.fragments.AbstractDashboardTileFragment;
-import team.monroe.org.pocketfit.fragments.HeaderDashboardFragment;
 import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
-import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 import team.monroe.org.pocketfit.view.VerticalViewPager;
@@ -109,6 +105,8 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
                         return createWorkoutPage();
                     case 1:
                         return new PageHistoryFragment();
+                    case 2:
+                        return new PageMockFragment();
                     default:
                         throw new IllegalStateException();
                 }
@@ -132,7 +130,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
         mHeaderHeight = DisplayUtils.dpToPx(100,getResources());
