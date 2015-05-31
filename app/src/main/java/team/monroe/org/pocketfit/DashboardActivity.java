@@ -153,16 +153,16 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
                     pixels = positionOffsetPixels;
                 }
                 float alpha = 1 - (Math.min(mHeaderHeight, pixels * 2) / mHeaderHeight);
-                getHeaderFragment().updateAlpha(alpha);
+                //getHeaderFragment().updateAlpha(alpha);
                 if (position == 0 && currentPosition == position){
                     //down from first
-                    getHeaderFragment().scaleCaption(alpha);
+                  //  getHeaderFragment().scaleCaption(alpha);
                 }
             }
 
             @Override
             public void onPageSelected(int position) {
-                getPage(AbstractDashboardTileFragment.class).installHeader();
+             //   getPage(AbstractDashboardTileFragment.class).installHeader();
             }
 
             @Override
@@ -248,18 +248,6 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
         if (!getPage(BackButtonContract.class).onBackButton()){
             super.onBackPressed();
         }
-    }
-
-    public void setHeader(String title, View actions, boolean topHeaderRequired, boolean light) {
-        getHeaderFragment().changeHeader(title, actions, topHeaderRequired, light);
-    }
-
-    protected final HeaderDashboardFragment getHeaderFragment() {
-        return (HeaderDashboardFragment) getFragmentManager().findFragmentById(R.id.fragment_header);
-    }
-
-    public boolean isHeaderInstallationRequired() {
-        return mViewPager.getCurrentItem() == 0;
     }
 
     private static class MainButtonController {

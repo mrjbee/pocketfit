@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<team.monroe.org.pocketfit.view.SlidingRelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/fragment_single_tile_header"/>
+
     <LinearLayout
-        android:id="@+id/panel_tile"
-        android:layout_marginTop="@dimen/tile.margin.top"
         android:layout_marginLeft="@dimen/tile.margin.side"
         android:layout_marginRight="@dimen/tile.margin.side"
         android:layout_width="fill_parent"
@@ -15,6 +18,12 @@
         android:background="@drawable/tile_white_spec"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/panel_tile"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+        </LinearLayout>
     </LinearLayout>
 
-</team.monroe.org.pocketfit.view.SlidingRelativeLayout>
+</LinearLayout>

@@ -52,9 +52,7 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        if (owner().isHeaderInstallationRequired()){
-            installHeader();
-        }
+        configureHeader("Workout", build_HeaderActionsView(), true, true);
 
         acNoWorkout= animateAppearance(view(R.id.panel_no_routine),
                 ySlide(0, DisplayUtils.screenHeight(getResources())))
@@ -626,11 +624,6 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
             return true;
         }
         return super.onBackButton();
-    }
-
-    @Override
-    public void installHeader() {
-        owner().setHeader("Workout", build_HeaderActionsView(),true, true);
     }
 
     private void updateRoutineCover() {

@@ -39,14 +39,6 @@
 
     </team.monroe.org.pocketfit.view.VerticalViewPager>
 
-    <fragment
-        class="team.monroe.org.pocketfit.fragments.HeaderDashboardFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        tools:layout="@layout/fragment_dash_header"
-        android:id="@+id/fragment_header" />
-
-
     <RelativeLayout
         android:id="@+id/panel_main_button"
         android:layout_alignParentRight="true"
