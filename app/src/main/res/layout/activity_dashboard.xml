@@ -42,7 +42,7 @@
     <fragment
         class="team.monroe.org.pocketfit.fragments.HeaderDashboardFragment"
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         tools:layout="@layout/fragment_dash_header"
         android:id="@+id/fragment_header" />
 

@@ -16,8 +16,11 @@ import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
+import team.monroe.org.pocketfit.fragments.AbstractDashboardTileFragment;
+import team.monroe.org.pocketfit.fragments.HeaderDashboardFragment;
 import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
+import team.monroe.org.pocketfit.fragments.contract.HeaderContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 import team.monroe.org.pocketfit.view.VerticalViewPager;
@@ -139,7 +142,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
             @Override
             public void onPageSelected(int position) {
-
+                getPage(AbstractDashboardTileFragment.class).installHeader();
             }
 
             @Override
@@ -198,6 +201,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -226,8 +230,16 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
         }
     }
 
-    public View buildHeaderActionsView(ViewGroup group) {
-        return null;
+    public void setHeader(String title, View actions, boolean topHeaderRequired, boolean light) {
+        getHeaderFragment().changeHeader(title, actions, topHeaderRequired, light);
+    }
+
+    protected final HeaderDashboardFragment getHeaderFragment() {
+        return (HeaderDashboardFragment) getFragmentManager().findFragmentById(R.id.fragment_header);
+    }
+
+    public boolean isHeaderInstallationRequired() {
+        return mViewPager.getCurrentItem() == 0;
     }
 
     private static class MainButtonController {

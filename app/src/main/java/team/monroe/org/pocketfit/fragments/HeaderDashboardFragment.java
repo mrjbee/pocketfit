@@ -27,6 +27,8 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 
 public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
 
+    private boolean mShown = true;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_dash_header;
@@ -37,5 +39,29 @@ public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
         super.onActivityCreated(savedInstanceState);
     }
 
+    public void changeHeader(String title, View actions, boolean topHeaderRequired, boolean light){
+
+        int textColor = getResources().getColor(light? R.color.text_header_dash:R.color.text_header_dash_dark);
+
+        view_text(R.id.secondary_caption).setTextColor(textColor);
+        view_text(R.id.secondary_caption).setText(title);
+
+        ViewGroup container = view(R.id.panel_actions, ViewGroup.class);
+        container.removeAllViews();
+        if (actions != null) {
+            container.addView(actions);
+        }
+
+        if (!mShown){
+            //appear animation required
+            mShown = true;
+        }
+
+        if (DisplayUtils.isLandscape(getResources(), R.bool.class)){
+            view_text(R.id.caption).setVisibility(View.GONE);
+        }else {
+            view_text(R.id.caption).setVisibility(topHeaderRequired?View.VISIBLE:View.GONE);
+        }
+    }
 
 }

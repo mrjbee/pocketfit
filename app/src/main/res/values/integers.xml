@@ -15,6 +15,9 @@
 
     <color name="transperent">#00ffffff</color>
     <color name="button.pressed">#329F9F9F</color>
-    <color name="button.pressed.dark">#ff386ec6</color>
+    <color name="button.pressed.dark">#ff23457b</color>
+
+    <color name="text.header.dash">#fffcfcfc</color>
+    <color name="text.header.dash.dark">#ff575757</color>
 
 </resources>

@@ -3,9 +3,7 @@ package team.monroe.org.pocketfit.fragments;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -54,6 +52,9 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
+        if (owner().isHeaderInstallationRequired()){
+            installHeader();
+        }
 
         acNoWorkout= animateAppearance(view(R.id.panel_no_routine),
                 ySlide(0, DisplayUtils.screenHeight(getResources())))
@@ -411,9 +412,8 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
         return R.layout.page_content_workout;
     }
 
-    @Deprecated
-    public View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
-        View view = layoutInflater.inflate(R.layout.actions_routine,actionPanel, false);
+    public View build_HeaderActionsView() {
+        View view = activity().getLayoutInflater().inflate(R.layout.actions_routine, null);
         view.findViewById(R.id.action_edit_exercises).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -626,6 +626,11 @@ public class PageWorkoutFragment extends DashboardNoBottomTileFragment {
             return true;
         }
         return super.onBackButton();
+    }
+
+    @Override
+    public void installHeader() {
+        owner().setHeader("Workout", build_HeaderActionsView(),true, true);
     }
 
     private void updateRoutineCover() {

@@ -15,7 +15,7 @@
 
     <dimen name="tile_training_margin_top">50dp</dimen>
     <dimen name="tile_training_margin_bottom">10dp</dimen>
-    <dimen name="dash.header.margin.side">40dp</dimen>
+    <dimen name="dash.header.margin.side">50dp</dimen>
 
 
     <bool name="is_landscape">true</bool>

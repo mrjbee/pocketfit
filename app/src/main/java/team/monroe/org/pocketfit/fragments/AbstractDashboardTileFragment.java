@@ -27,4 +27,5 @@ public abstract class AbstractDashboardTileFragment extends AppFragment<Dashboar
         return false;
     }
 
+    public abstract void installHeader();
 }

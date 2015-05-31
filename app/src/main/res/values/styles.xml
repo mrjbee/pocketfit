@@ -39,7 +39,7 @@
 
     <style name="Text.Header.Secondary.Caption.Light" parent="AppTheme">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#fffcfcfc</item>
+        <item name="android:textColor">@color/text.color.day.short.training</item>
         <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
@@ -182,6 +182,11 @@
     </style>
 
     <style name="Button.Action.Dark" parent="Button.Action">
+        <item name="android:background">@drawable/button_action_dark</item>
+    </style>
+
+    <style name="Button.Action.Dark.Header" parent="Button.Action">
+        <item name="android:padding">5dp</item>
         <item name="android:background">@drawable/button_action_dark</item>
     </style>
 
