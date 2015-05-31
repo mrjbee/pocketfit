@@ -37,11 +37,21 @@
         tools:layout="@layout/fragment_dash_header"
         android:id="@+id/fragment_header" />
 
+
     <FrameLayout
         android:id="@+id/fragment_container_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
+
+    <team.monroe.org.pocketfit.view.VerticalViewPager
+        android:visibility="gone"
+        android:id="@+id/view_pager"
+        android:overScrollMode="always"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </team.monroe.org.pocketfit.view.VerticalViewPager>
 
     <RelativeLayout
         android:id="@+id/panel_main_button"

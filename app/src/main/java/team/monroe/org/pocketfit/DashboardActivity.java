@@ -1,8 +1,11 @@
 package team.monroe.org.pocketfit;
 
 import android.animation.Animator;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,12 +14,11 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 import org.monroe.team.android.box.utils.DisplayUtils;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
-
-import team.monroe.org.pocketfit.fragments.TileNoRoutineFragment;
 import team.monroe.org.pocketfit.fragments.TileWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
+import team.monroe.org.pocketfit.view.VerticalViewPager;
 
 public class DashboardActivity extends FragmentActivity implements MainButtonOwnerContract {
 
@@ -86,6 +88,21 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
             backgroundStripeAC.showWithoutAnimation();
             mainButtonController.restoreState(savedInstanceState);
         }
+
+        VerticalViewPager viewPager = view(R.id.view_pager, VerticalViewPager.class);
+        viewPager.setAdapter(new team.monroe.org.pocketfit.view.FragmentPagerAdapter(getFragmentManager()) {
+
+
+            @Override
+            public Fragment getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public int getCount() {
+                return 0;
+            }
+        });
     }
 
     @Override
@@ -96,12 +113,13 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
                     .addArgument("state", TileWorkoutFragment.TransformationState.PROGRESS.ordinal());
         }else {
 
-            fragmentItem = application().hasActiveRoutine() ?
+            fragmentItem =
                     new FragmentItem(TileWorkoutFragment.class)
-                            .addArgument("state", TileWorkoutFragment.TransformationState.ABOUT.ordinal())
-                    : new FragmentItem(TileNoRoutineFragment.class);
+                            .addArgument("state",
+                                    application().hasActiveRoutine() ?
+                                            TileWorkoutFragment.TransformationState.ABOUT.ordinal():
+                                            TileWorkoutFragment.TransformationState.NOT_SET.ordinal());
         }
-
         return fragmentItem;
     }
 
@@ -155,30 +173,6 @@ public class DashboardActivity extends FragmentActivity implements MainButtonOwn
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    public void switch_noRoutineTile() {
-        mainButtonController.blockAppearance();
-        replaceBodyFragment(new FragmentItem(TileNoRoutineFragment.class), animation_down_up());
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainButtonController.applyAppearance();
-            }
-        },1000);
-    }
-
-    public void switch_workoutTile() {
-        mainButtonController.blockAppearance();
-        replaceBodyFragment(
-                new FragmentItem(TileWorkoutFragment.class).addArgument("state", TileWorkoutFragment.TransformationState.ABOUT.ordinal()),
-                animation_down_up());
-        runLastOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainButtonController.applyAppearance();
-            }
-        }, 500);
     }
 
     @Override

@@ -50,10 +50,19 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private AppearanceController acSchedule;
     private GenericListViewAdapter<Day, GetViewImplementation.ViewHolder<Day>> mDayListViewAdapter;
     private PopupWindow mOptionsPopupWindow;
+    private AppearanceController acNoWorkout;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
+
+        acNoWorkout= animateAppearance(view(R.id.panel_no_routine),
+                ySlide(0, DisplayUtils.screenHeight(getResources())))
+                .showAnimation(duration_constant(400), interpreter_accelerate(0.5f))
+                .hideAnimation(duration_constant(400))
+                .hideAndGone().build();
+
         acTopTitle = animateAppearance(view(R.id.text_title_top), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
                 .showAnimation(duration_constant(300), interpreter_accelerate(0.5f))
                 .hideAnimation(duration_constant(200))
@@ -260,10 +269,36 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             case SCHEDULE:
                 transform_schedule_state(false);
                 break;
+            case NOT_SET:
+                transform_not_set_state(false);
+                break;
             default:
                 throw new IllegalStateException();
         }
 
+    }
+
+    private void transform_not_set_state(boolean animate) {
+        updateState(TransformationState.NOT_SET);
+        if (!animate){
+            acNoWorkout.showWithoutAnimation();
+            acCover.showWithoutAnimation();
+            acActions.hideWithoutAnimation();
+            acBottomTitle.hideWithoutAnimation();
+            acDescription.hideWithoutAnimation();
+            acSchedule.hideWithoutAnimation();
+            acTopTitle.hideWithoutAnimation();
+            acOptions.hideWithoutAnimation();
+            acSeparatorSecondary.hideWithoutAnimation();
+        } else {
+            SceneDirector.scenario()
+                        .hide(acOptions, acActions, acBottomTitle, acDescription, acSchedule, acTopTitle, acOptions, acSeparatorSecondary)
+                        .then()
+                            .show(acCover)
+                            .then()
+                                .show(acNoWorkout)
+                    .play();
+        }
     }
 
     private void updateState(TransformationState transformationState){
@@ -274,6 +309,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
     private void transform_about_state(boolean animate) {
         updateState(TransformationState.ABOUT);
         if (!animate){
+            acNoWorkout.hideWithoutAnimation();
             acCover.showWithoutAnimation();
             acActions.showWithoutAnimation();
             acBottomTitle.showWithoutAnimation();
@@ -284,6 +320,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             acSeparatorSecondary.hideWithoutAnimation();
         } else {
             SceneDirector.scenario()
+                        .hide(acNoWorkout)
+                        .then()
                         .hide(acTopTitle)
                         .hide(acSchedule)
                         .then()
@@ -299,6 +337,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         updateState(TransformationState.SCHEDULE);
         if (animation){
             SceneDirector.scenario()
+                        .hide(acNoWorkout)
+                        .then()
                         .hide(acActions)
                         .hide(acTopTitle)
                         .hide(acOptions)
@@ -311,6 +351,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                         .show(acSchedule)
                         .play();
         }else {
+            acNoWorkout.hideWithoutAnimation();
             acTopTitle.hideWithoutAnimation();
             acCover.hideWithoutAnimation();
             acActions.hideWithoutAnimation();
@@ -326,6 +367,8 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
         updateState(TransformationState.PROGRESS);
         if (animation){
             SceneDirector.scenario()
+                    .hide(acNoWorkout)
+                    .then()
                     .hide(acSchedule, acCover)
                     .then()
                         .show(acBottomTitle, acActions)
@@ -347,6 +390,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
                                         })
                     .play();
         }else{
+            acNoWorkout.hideWithoutAnimation();
             acDescription.showWithoutAnimation();
             acSchedule.hideWithoutAnimation();
             acTopTitle.showWithoutAnimation();
@@ -389,7 +433,14 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
     @Override
     public void onMainButton() {
-        if (mState == TransformationState.ABOUT){
+        if (mState == TransformationState.NOT_SET) {
+            owner().hideMainButton(new Runnable() {
+                @Override
+                public void run() {
+                    owner().openRoutinesEditor();
+                }
+            });
+        }else if (mState == TransformationState.ABOUT){
             if (!mSchedule.isDefined()){
                 owner().hideMainButton(new Runnable() {
                     @Override
@@ -473,17 +524,15 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             public void data(RoutineSchedule schedule) {
                 mSchedule = schedule;
                 if (mSchedule.isNull()){
-                    owner().hideMainButton(new Runnable() {
-                        @Override
-                        public void run() {
-                            owner().switch_noRoutineTile();
-                        }
-                    });
+                    fill_not_set_state();
+                    transform_not_set_state(true);
                 } else {
                     updateRoutineCover();
                     switch (mState){
                         case ABOUT:
+                        case NOT_SET:
                             fill_about_state();
+                            transform_about_state(true);
                             break;
                         case PROGRESS:
                             //After training activity closed
@@ -511,6 +560,12 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
             }
         }));
 
+    }
+
+    private void fill_not_set_state() {
+        owner().showMainButton(R.drawable.round_btn_gear, null);
+        mDayListViewAdapter.clear();
+        mDayListViewAdapter.notifyDataSetChanged();
     }
 
     private void fill_about_state() {
@@ -651,7 +706,7 @@ public class TileWorkoutFragment extends DashboardNoBottomTileFragment {
 
 
     public static enum TransformationState{
-        ABOUT, SCHEDULE, PROGRESS
+        ABOUT, SCHEDULE, PROGRESS, NOT_SET
     }
 
 
