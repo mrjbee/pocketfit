@@ -25,10 +25,7 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.rotate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
-public class HeaderDashboardFragment extends AppFragment<DashboardActivity> implements HeaderContract{
-
-    private AppearanceController secondaryHeaderContainerAC;
-    private String headerCaption = "";
+public class HeaderDashboardFragment extends AppFragment<DashboardActivity>{
 
     @Override
     protected int getLayoutId() {
@@ -38,75 +35,6 @@ public class HeaderDashboardFragment extends AppFragment<DashboardActivity> impl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (savedInstanceState != null){
-            headerCaption = savedInstanceState.getString("header_caption","Uppss Not Set");
-        }
-
-        secondaryHeaderContainerAC = combine(
-                animateAppearance(view(R.id.header_secondary_container), xSlide(0, -DisplayUtils.screenWidth(getResources()) / 2))
-                .showAnimation(duration_constant(200), interpreter_overshot())
-                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-                .hideAndGone(),
-
-                animateAppearance(view(R.id.panel_actions),xSlide(0, DisplayUtils.screenWidth(getResources())/2))
-                .showAnimation(duration_constant(200),interpreter_overshot())
-                .hideAnimation(duration_constant(200), interpreter_accelerate(0.5f))
-                );
-
-            secondaryHeaderContainerAC.showWithoutAnimation();
-            build_header();
-    }
-
-    private void build_header() {
-        getHeaderCaptionView().setText(headerCaption);
-        ViewGroup group = view(R.id.panel_actions, ViewGroup.class);
-        group.removeAllViews();
-        View answer = owner().buildHeaderActionsView(group);
-        if (answer != null) {
-            group.addView(answer);
-        }
-    }
-
-    private TextView getHeaderCaptionView() {
-        return view_text(R.id.secondary_caption);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("header_caption",headerCaption);
-    }
-
-    public void changeCaption(String newCaption, boolean secondaryHeaderRequested, boolean animate) {
-        AppearanceController hideController = secondaryHeaderContainerAC;
-        final AppearanceController showController = secondaryHeaderContainerAC;
-        headerCaption = newCaption;
-        if (animate) {
-            hideController.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
-                @Override
-                public void customize(Animator animator) {
-                    animator.addListener(new AnimatorListenerSupport() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            build_header();
-                            showController.hideWithoutAnimation();
-                            showController.show();
-                        }
-                    });
-                }
-            });
-        } else {
-            hideController.hideWithoutAnimation();
-            showController.showWithoutAnimation();
-            build_header();
-        }
-    }
-    public String getCaption() {
-        return headerCaption;
-    }
-    public boolean isSecondary() {
-        return true;
     }
 
 
