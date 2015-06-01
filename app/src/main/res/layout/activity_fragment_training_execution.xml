@@ -1,153 +1,153 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff9f9f9"
-    tools:context=".Dashboard">
-    <RelativeLayout
-        android:id="@+id/panel_below"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/image_cover"
+        <!-- The main content view -->
+        <team.monroe.org.pocketfit.view.SlidingRelativeLayout
+            android:visibility="visible"
+            android:id="@+id/panel_content"
             android:layout_width="fill_parent"
-            android:layout_height="220dp"
-            android:src="@drawable/covert_loading"
-            android:scaleType="centerCrop"
-            />
+            android:layout_height="fill_parent">
 
-        <TextView
-            android:layout_below="@id/image_cover"
-            android:layout_marginTop="15dp"
-            android:id="@+id/text_description"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Example"
-            android:singleLine="false"
-            android:maxLines="3"
-            style="@style/Text.Body.Optional"/>
-
-        <ImageView
-            android:id="@+id/separator"
-            android:layout_below="@id/text_description"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:src="@drawable/separator"
-            android:scaleType="fitXY"
-            android:layout_marginTop="10dp"/>
-
-        <ListView
-            android:id="@+id/list_workout_agenda"
-            android:layout_below="@id/separator"
-            android:layout_width="300dp"
-            android:scrollbars="none"
-            android:listSelector="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:divider="@null"
-            android:layout_height="fill_parent"/>
-
-
-    </RelativeLayout>
-    <team.monroe.org.pocketfit.view.SlidingRelativeLayout
-        android:visibility="visible"
-        android:id="@+id/panel_content"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/shadow"
-            android:layout_width="4dp"
-            android:layout_height="fill_parent"
-            android:background="@drawable/shadow_hor"
-            android:orientation="vertical" />
-
-        <RelativeLayout
-            android:layout_marginLeft="-1dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/shadow"
-            android:background="@color/background.main">
-
-            <LinearLayout
-                android:id="@+id/background_stripe"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-
+            <RelativeLayout
+                android:layout_marginLeft="-1dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/shadow"
+                android:background="@color/background.main">
 
                 <LinearLayout
+                    android:id="@+id/background_stripe"
                     android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/background.secondary"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/background.secondary"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_routine_name"
+                    style="@style/Text.Training.Title"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/background.secondary"
-                    android:orientation="vertical" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Example" />
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                <TextView
+                    android:id="@+id/text_clock"
+                    style="@style/Text.Training.Pause.Clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="00:00:00" />
+
+                <TextView
+                    android:id="@+id/text_pause_clock"
+                    style="@style/Text.Training.Clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/background.secondary"
-                    android:orientation="vertical" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_routine_name"
-                style="@style/Text.Training.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="Example" />
-
-            <TextView
-                android:id="@+id/text_clock"
-                style="@style/Text.Training.Pause.Clock"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="00:00:00" />
-
-            <TextView
-                android:id="@+id/text_pause_clock"
-                style="@style/Text.Training.Clock"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/text_clock"
-                android:gravity="top"
-                android:text="00:00:00" />
+                    android:layout_toRightOf="@+id/text_clock"
+                    android:gravity="top"
+                    android:text="00:00:00" />
 
 
-            <FrameLayout
-                android:id="@+id/fragment_container_body"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <FrameLayout
+                    android:id="@+id/fragment_container_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <ImageButton
-                android:id="@+id/action_options"
-                style="@style/Button.Action"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/options_light" />
-        </RelativeLayout>
-    </team.monroe.org.pocketfit.view.SlidingRelativeLayout>
-</RelativeLayout>
+                <ImageButton
+                    android:id="@+id/action_options"
+                    style="@style/Button.Action"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/options_light" />
+            </RelativeLayout>
+        </team.monroe.org.pocketfit.view.SlidingRelativeLayout>
+
+        <!-- The navigation drawer -->
+        <RelativeLayout
+                android:visibility="visible"
+                android:id="@+id/panel_below"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="#fff7f7f7"
+                >
+
+                <ImageView
+                    android:id="@+id/image_cover"
+                    android:layout_width="fill_parent"
+                    android:layout_height="180dp"
+                    android:src="@drawable/covert_loading"
+                    android:scaleType="centerCrop"
+                    />
+
+                <TextView
+                    android:layout_below="@id/image_cover"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/text_description"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Example"
+                    android:singleLine="false"
+                    android:maxLines="3"
+                    style="@style/Text.Body.Optional"/>
+
+                <ImageView
+                    android:id="@+id/separator"
+                    android:layout_below="@id/text_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:src="@drawable/separator"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="10dp"/>
+
+                <ListView
+                    android:id="@+id/list_workout_agenda"
+                    android:layout_below="@id/separator"
+                    android:layout_width="fill_parent"
+                    android:scrollbars="none"
+                    android:listSelector="@android:color/transparent"
+                    android:dividerHeight="0dp"
+                    android:divider="@null"
+                    android:layout_height="fill_parent"/>
+
+
+            </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>

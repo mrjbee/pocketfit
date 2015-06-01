@@ -45,10 +45,8 @@ public class TrainingActivity extends FragmentActivity{
     private ClockViewPresenter mTrainingPauseClockPresenter;
     private AppearanceController mPauseClockAnimator;
     private AppearanceController mTrainingClockAnimator;
-    private AppearanceController contentAC;
     private GenericListViewAdapter<TrainingExecutionService.TrainingPlan.AgendaExercise, GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>> mAgendaAdapter;
     private Data.DataChangeObserver<TrainingExecutionService.TrainingPlan.Agenda> agendaDataChangeObserver;
-    private AppearanceController agendaAC;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -94,99 +92,6 @@ public class TrainingActivity extends FragmentActivity{
                 .build();
 
         float bottomLayerWidth = DisplayUtils.dpToPx(250, getResources());
-        contentAC = animateAppearance(view(R.id.panel_content), xSlide(0f, bottomLayerWidth))
-                    .showAnimation(duration_auto_fint(0.5f), interpreter_accelerate_decelerate())
-                    .hideAnimation(duration_auto_fint(0.5f), interpreter_overshot()).build();
-
-
-        agendaAC = animateAppearance(view(R.id.list_workout_agenda), alpha(1f,0f))
-                .showAnimation(duration_constant(200))
-                .hideAnimation(duration_constant(200))
-                .hideAndGone()
-                .build();
-
-        contentAC.showWithoutAnimation();
-        agendaAC.hideWithoutAnimation();
-
-        view(R.id.panel_content, SlidingRelativeLayout.class).xTranslationObserver = new Closure<Float, Void>() {
-            @Override
-            public Void execute(Float x) {
-                if (x < DisplayUtils.dpToPx(4, getResources())){
-                    view(R.id.shadow).setVisibility(View.GONE);
-                }else {
-                    view(R.id.shadow).setVisibility(View.VISIBLE);
-                }
-                return null;
-            }
-        };
-
-        final float maxSlideValue = bottomLayerWidth;
-        view(R.id.panel_below).setOnTouchListener(new SlideTouchGesture(maxSlideValue, SlideTouchGesture.Axis.X) {
-
-            public boolean mSlideToOpen = false;
-            public float mEndValue;
-
-            @Override
-            protected float applyFraction() {
-                return 0.4f;
-            }
-
-            @Override
-            protected void onStart(float x, float y) {
-                super.onStart(x, y);
-                mSlideToOpen = isBackPanelClosed();
-                mEndValue = mSlideToOpen ? maxSlideValue: 0;
-            }
-
-            @Override
-            protected void onProgress(float x, float y, float slideValue, float fraction) {
-                if (!mSlideToOpen && slideValue < 0){
-                    fraction = 0;
-                }else if (mSlideToOpen && slideValue >0){
-                    fraction = 0;
-                }
-                view(R.id.list_workout_agenda).setVisibility(View.VISIBLE);
-                if (mSlideToOpen){
-                    view(R.id.list_workout_agenda).setAlpha(1f * fraction);
-                    view(R.id.panel_content).setTranslationX(maxSlideValue * fraction);
-                }else{
-                    view(R.id.list_workout_agenda).setAlpha(1f * (1-fraction));
-                    view(R.id.panel_content).setTranslationX(maxSlideValue * (1 - fraction));
-                }
-            }
-            @Override
-            protected void onCancel(float x, float y, float slideValue, float fraction) {
-                boolean revertResult = true;
-                if (!mSlideToOpen && slideValue < 0){
-                    revertResult = false;
-                }else if (mSlideToOpen && slideValue >0){
-                    revertResult = false;
-                }
-
-                if (mSlideToOpen && revertResult){
-                    closeBackPanel();
-                }else{
-                    openBackPanel();
-                }
-            }
-            @Override
-            protected void onApply(float x, float y, float slideValue, float fraction) {
-
-                boolean revertResult = true;
-                if (!mSlideToOpen && slideValue < 0){
-                    revertResult = false;
-                }else if (mSlideToOpen && slideValue >0){
-                    revertResult = false;
-                }
-
-                if (!mSlideToOpen && revertResult){
-                    closeBackPanel();
-                }else{
-                    openBackPanel();
-                }
-            }
-        });
-
 
         view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,16 +157,6 @@ public class TrainingActivity extends FragmentActivity{
                 }, R.layout.item_agenda_exercise);
 
         view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
-    }
-
-    private void openBackPanel() {
-        contentAC.hide();
-        agendaAC.show();
-    }
-
-    private void closeBackPanel() {
-        contentAC.show();
-        agendaAC.hide();
     }
 
     private boolean isBackPanelClosed() {
@@ -496,10 +391,6 @@ public class TrainingActivity extends FragmentActivity{
 
     @Override
     public void onBackPressed() {
-        if (!isBackPanelClosed()){
-            closeBackPanel();
-        }else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 }
