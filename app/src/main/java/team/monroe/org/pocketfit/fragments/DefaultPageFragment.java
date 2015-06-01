@@ -25,7 +25,6 @@ public abstract class DefaultPageFragment extends DashboardPageFragment {
         if (pageMotionDirectionUp){
             if(top != 0) {
                 float shownFraction = 1 - top / (float) getFragmentView().getHeight();
-                L.DEBUG.d("TEST fraction = " + shownFraction + " top:" + top);
                 float scaleFactor = 0.8f + 0.3f * shownFraction;
                 getSecondaryHeaderView().setScaleX(scaleFactor);
                 getSecondaryHeaderView().setScaleY(scaleFactor);

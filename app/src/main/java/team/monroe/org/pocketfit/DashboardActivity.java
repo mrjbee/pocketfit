@@ -19,18 +19,17 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import team.monroe.org.pocketfit.fragments.DashboardPageFragment;
 import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
-import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 import team.monroe.org.pocketfit.view.VerticalViewPager;
 
-public class DashboardActivity extends ActivitySupport<PocketFitApp> implements MainButtonOwnerContract {
+public class DashboardActivity extends ActivitySupport<PocketFitApp>{
 
     private AppearanceController startupTileAC;
     private AppearanceController backgroundStripeAC;
     private MainButtonController mainButtonController;
     private VerticalViewPager mViewPager;
     private team.monroe.org.pocketfit.view.FragmentPagerAdapter mPageAdapter;
-    private float mHeaderHeight;
+    private Class<? extends  DashboardPageFragment> mCurrentPageClass = PageWorkoutFragment.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
             startupTileAC.showWithoutAnimation();
             backgroundStripeAC.showWithoutAnimation();
             mainButtonController.restoreState(savedInstanceState);
+            mCurrentPageClass = (Class<? extends DashboardPageFragment>) savedInstanceState.getSerializable("current_page");
         }
 
         mViewPager = view(R.id.view_pager, VerticalViewPager.class);
@@ -132,11 +132,9 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
             @Override
             public int getCount() {
-                return 3;
+                return 2;
             }
         };
-        mHeaderHeight = DisplayUtils.dpToPx(100,getResources());
-
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             private boolean mScrollHandlingEnabled = false;
@@ -193,6 +191,9 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
             @Override
             public void onPageSelected(int position) {
                 L.DEBUG.d("Dashboard Page SELECTED");
+                DashboardPageFragment pageFragment = getPage(DashboardPageFragment.class);
+                mCurrentPageClass = pageFragment.getClass();
+                pageFragment.updateMainButton();
             }
 
             @Override
@@ -276,13 +277,13 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
         super.onResume();
     }
 
-    @Override
-    public void showMainButton(int resource, Runnable action) {
+    public void showMainButton(Class<? extends DashboardPageFragment> pageClass, int resource, Runnable action) {
+        if (pageClass != mCurrentPageClass)return;
         mainButtonController.show(resource, action);
     }
 
-    @Override
-    public void hideMainButton(Runnable actionOnHide) {
+    public void hideMainButton(Class<? extends DashboardPageFragment> pageClass, Runnable actionOnHide) {
+        if (pageClass != mCurrentPageClass)return;
         mainButtonController.hide(actionOnHide);
     }
 
@@ -290,6 +291,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mainButtonController.saveState(outState);
+        outState.putSerializable("current_page",mCurrentPageClass);
     }
 
     @Override

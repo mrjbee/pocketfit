@@ -10,6 +10,7 @@ public class PageHistoryFragment extends DefaultPageFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         configureHeader("My Fit Diary", null);
+        showMainButton(R.drawable.round_btn_pen, null);
     }
 
     @Override
@@ -22,5 +23,8 @@ public class PageHistoryFragment extends DefaultPageFragment {
 
     }
 
-
+    @Override
+    public void updateMainButton() {
+        showMainButton(R.drawable.round_btn_pen, null);
+    }
 }

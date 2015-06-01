@@ -32,7 +32,7 @@
                 android:textStyle="bold" />
 
             <RelativeLayout
-                android:id="@+id/panel_actions"
+                android:id="@+id/panel_action_button"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp">
 

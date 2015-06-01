@@ -104,7 +104,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
                 .hideAndGone().build();
 
 
-        acActions = animateAppearance(view(R.id.panel_actions), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
+        acActions = animateAppearance(view(R.id.panel_action_button), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
                 .showAnimation(duration_constant(200))
                 .hideAnimation(duration_constant(200))
                 .hideAndGone().build();
@@ -336,11 +336,10 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
         updateState(TransformationState.SCHEDULE);
         if (animation){
             SceneDirector.scenario()
-                        .hide(acNoWorkout)
-                        .then()
-                        .hide(acActions)
-                        .hide(acTopTitle)
-                        .hide(acOptions)
+                            //.hide(acNoWorkout)
+                            .hide(acActions)
+                            .hide(acTopTitle)
+                            .hide(acOptions)
                         .then()
                             .show(acBottomTitle,acSeparatorSecondary)
                             .hide(acDescription)
@@ -430,9 +429,26 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
     }
 
     @Override
+    public void updateMainButton() {
+        if (mState == TransformationState.NOT_SET){
+            showMainButton(R.drawable.round_btn_gear, null);
+            return;
+        }else if (mState == TransformationState.ABOUT){
+            if(!mSchedule.isDefined()){
+                showMainButton(R.drawable.round_btn_pen, null);
+                return;
+            }else if (mSchedule.getDaysBeforeNextTrainingDay() == 0){
+                showMainButton(R.drawable.round_btn_play, null);
+                return;
+            }
+        }
+        super.updateMainButton();
+    }
+
+    @Override
     public void onMainButton() {
         if (mState == TransformationState.NOT_SET) {
-            owner().hideMainButton(new Runnable() {
+            hideMainButton(new Runnable() {
                 @Override
                 public void run() {
                     owner().openRoutinesEditor();
@@ -440,7 +456,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
             });
         }else if (mState == TransformationState.ABOUT){
             if (!mSchedule.isDefined()){
-                owner().hideMainButton(new Runnable() {
+                hideMainButton(new Runnable() {
                     @Override
                     public void run() {
                         owner().openRoutineEditor(mSchedule.mRoutine.id);
@@ -448,14 +464,14 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
                 });
             } else {
                 if (mSchedule.getDaysBeforeNextTrainingDay() == 0){
-                    owner().hideMainButton(new Runnable() {
+                    hideMainButton(new Runnable() {
                         @Override
                         public void run() {
                             application().startTraining(mSchedule.mRoutine, mSchedule.getTrainingDay(DateUtils.now()), new Runnable() {
                                 @Override
                                 public void run() {
-                                   fill_progress_state();
-                                   transform_progress_state(true,new Runnable() {
+                                    fill_progress_state();
+                                    transform_progress_state(true, new Runnable() {
                                         @Override
                                         public void run() {
                                             action_open_workout();
@@ -561,7 +577,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
     }
 
     private void fill_not_set_state() {
-        owner().showMainButton(R.drawable.round_btn_gear, null);
+        showMainButton(R.drawable.round_btn_gear, null);
         mDayListViewAdapter.clear();
         mDayListViewAdapter.notifyDataSetChanged();
     }
@@ -577,14 +593,14 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
                     action_edit_routine();
                 }
             });
-            owner().showMainButton(R.drawable.round_btn_pen, null);
+            showMainButton(R.drawable.round_btn_pen, null);
         }else{
             int daysBeforeTraining = mSchedule.getDaysBeforeNextTrainingDay();
             if (daysBeforeTraining == 0){
                 view_button(R.id.action).setText("Today training");
-                owner().showMainButton(R.drawable.round_btn_play, null);
+                showMainButton(R.drawable.round_btn_play, null);
             }else{
-                owner().hideMainButton(null);
+                hideMainButton(null);
                 view_button(R.id.action).setText(daysBeforeTraining+" days before training");
             }
             view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
@@ -598,19 +614,19 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
     }
 
     private void fill_schedule_state() {
-        owner().hideMainButton(null);
+        hideMainButton(null);
         view_text(R.id.text_title_bottom).setText(mSchedule.mRoutine.title);
         mDayListViewAdapter.notifyDataSetChanged();
     }
 
 
     private void action_edit_routine() {
-        owner().hideMainButton(new Runnable() {
-            @Override
-            public void run() {
-                owner().openRoutineEditor(mSchedule.mRoutine.id);
-            }
-        });
+      hideMainButton(new Runnable() {
+          @Override
+          public void run() {
+              owner().openRoutineEditor(mSchedule.mRoutine.id);
+          }
+      });
     }
 
     private void action_open_workout() {

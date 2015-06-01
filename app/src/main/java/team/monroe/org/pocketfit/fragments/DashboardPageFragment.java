@@ -33,6 +33,14 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
         return view;
     }
 
+    protected void showMainButton(int drawableId, Runnable action){
+        owner().showMainButton(this.getClass(), drawableId, action);
+    }
+
+    protected void hideMainButton(Runnable action){
+        owner().hideMainButton(this.getClass(), action);
+    }
+
     protected abstract int getTileLayoutId();
 
     @Override
@@ -134,5 +142,7 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
         return true;
     }
 
-
+    public void updateMainButton() {
+        hideMainButton(null);
+    }
 }
