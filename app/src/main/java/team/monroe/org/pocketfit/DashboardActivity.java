@@ -143,52 +143,48 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
             public boolean mDragging = false;
             public boolean mPageMotionDirectionUp = false;
             public int mCurrentPage;
+            public int mTopPage;
+            public int mBottomPage;
 
             @Override
             public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
 
                 if (!mScrollHandlingEnabled) return;
 
-                int topPage = pos;
-                int bottomPage = pos + 1;
-
                 if (mDragging) {
+                    mTopPage = pos;
+                    mBottomPage = pos + 1;
                     mCurrentPage = mViewPager.getCurrentItem();
-                    mPageMotionDirectionUp = mCurrentPage == topPage;
+                    mPageMotionDirectionUp = mCurrentPage == mTopPage;
                 }
 
                 int bottomPagePosition = (mViewPager.getHeight() - positionOffsetPixels);
                 int topPagePosition = - positionOffsetPixels;
-
-                if (mPageMotionDirectionUp && mCurrentPage != mViewPager.getCurrentItem()){
-                    //last step as current page changed and become top
-                    if (mPageMotionDirectionUp){
-                        bottomPage = pos;
-                        topPage = pos - 1;
-                        bottomPagePosition = 0;
-                        topPage = -getPage(DashboardPageFragment.class).getFragmentView().getHeight();
-                    }
+                if (!mDragging & mPageMotionDirectionUp & pos != mTopPage){
+                    int cup = topPagePosition;
+                    topPagePosition = -bottomPagePosition;
+                    bottomPagePosition = -cup;
                 }
 
-                L.DEBUG.d("DASH SCROLL [up = "+mPageMotionDirectionUp+"]"+" top :" + topPage + "; bottom :" + bottomPage + "; current :" + mCurrentPage);
+                L.DEBUG.d("DASH SCROLL [up = "+mPageMotionDirectionUp+"]"+" top :" + mTopPage + "; bottom :" + mBottomPage + "; current :" + mCurrentPage);
                 L.DEBUG.d("DASH SCROLL position [top = "+topPagePosition+" x bottom = "+bottomPagePosition+"]");
 
                 if (mPageMotionDirectionUp){
-                    if (topPage > -1) {
-                        getPage(DashboardPageFragment.class, topPage).onPageMoveToHide(topPagePosition, mPageMotionDirectionUp);
+                    if (mTopPage > -1) {
+                        getPage(DashboardPageFragment.class, mTopPage).onPageMoveToHide(topPagePosition, mPageMotionDirectionUp);
                     }
-                    if (bottomPage != mPageAdapter.getCount()){
-                        if (getPage(DashboardPageFragment.class, bottomPage) != null) {
-                            getPage(DashboardPageFragment.class, bottomPage).onPageMoveToShow(bottomPagePosition, mPageMotionDirectionUp);
+                    if (mBottomPage != mPageAdapter.getCount()){
+                        if (getPage(DashboardPageFragment.class, mBottomPage) != null) {
+                            getPage(DashboardPageFragment.class, mBottomPage).onPageMoveToShow(bottomPagePosition, mPageMotionDirectionUp);
                         }
                     }
                 } else {
-                    if (topPage > -1) {
-                        getPage(DashboardPageFragment.class, topPage).onPageMoveToShow(topPagePosition, mPageMotionDirectionUp);
+                    if (mTopPage > -1) {
+                        getPage(DashboardPageFragment.class, mTopPage).onPageMoveToShow(topPagePosition, mPageMotionDirectionUp);
                     }
-                   if (bottomPage != mPageAdapter.getCount()) {
-                        if ( getPage(DashboardPageFragment.class, bottomPage) != null) {
-                            getPage(DashboardPageFragment.class, bottomPage).onPageMoveToHide(bottomPagePosition, mPageMotionDirectionUp);
+                   if (mBottomPage != mPageAdapter.getCount()) {
+                        if ( getPage(DashboardPageFragment.class, mBottomPage) != null) {
+                            getPage(DashboardPageFragment.class, mBottomPage).onPageMoveToHide(bottomPagePosition, mPageMotionDirectionUp);
                         }
                     }
                 }

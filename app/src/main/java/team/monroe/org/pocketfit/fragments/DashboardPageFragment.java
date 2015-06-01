@@ -58,11 +58,12 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
             //appear animation required
             mShown = true;
         }
-
-        if (DisplayUtils.isLandscape(getResources(), R.bool.class)){
-            view_text(R.id.caption).setVisibility(View.GONE);
-        }else {
-            view_text(R.id.caption).setVisibility(headerFullVersion() ?View.VISIBLE:View.GONE);
+        if(view_text(R.id.caption)!= null) {
+            if (DisplayUtils.isLandscape(getResources(), R.bool.class)) {
+                view_text(R.id.caption).setVisibility(View.GONE);
+            } else {
+                view_text(R.id.caption).setVisibility(headerFullVersion() ? View.VISIBLE : View.GONE);
+            }
         }
     }
 

@@ -2,6 +2,9 @@ package team.monroe.org.pocketfit.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
+
+import org.monroe.team.corebox.log.L;
 
 import team.monroe.org.pocketfit.R;
 
@@ -20,14 +23,16 @@ public abstract class DefaultPageFragment extends DashboardPageFragment {
     @Override
     public void onPageMoveToShow(float top, boolean pageMotionDirectionUp) {
         if (pageMotionDirectionUp){
-            if (top != 0){
-                getHeaderContainer().setAlpha(0);
-            }else{
-                //animation here
-                getHeaderContainer().setAlpha(1);
+            if(top != 0) {
+                float shownFraction = 1 - top / (float) getFragmentView().getHeight();
+                L.DEBUG.d("TEST fraction = " + shownFraction + " top:" + top);
+                float scaleFactor = 0.8f + 0.3f * shownFraction;
+                getSecondaryHeaderView().setScaleX(scaleFactor);
+                getSecondaryHeaderView().setScaleY(scaleFactor);
+            }else {
+                getSecondaryHeaderView().animate().setDuration(200).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1).start();
             }
         }else{
-            getHeaderContainer().setAlpha(1);
         }
     }
 

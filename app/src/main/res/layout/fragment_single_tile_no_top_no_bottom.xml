@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/header"
-            layout="@layout/fragment_single_tile_header"/>
+            layout="@layout/fragment_dash_header2"/>
 
         <LinearLayout
             android:id="@+id/panel_tile"

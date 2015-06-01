@@ -9,7 +9,7 @@ public class PageHistoryFragment extends DefaultPageFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        configureHeader("History", null);
+        configureHeader("My Fit Diary", null);
     }
 
     @Override
