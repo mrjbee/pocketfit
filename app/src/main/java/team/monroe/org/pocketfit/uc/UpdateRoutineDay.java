@@ -49,7 +49,9 @@ public class UpdateRoutineDay extends UserCaseSupport<UpdateRoutineDay.RoutineDa
         routinePersists.routineDaysIdList.add(indexInsert, dayPersists.id);
 
         if (indexExists != -1){
-            //totally new item
+            if (indexExists > indexInsert){
+                indexExists ++;
+            }
             routinePersists.routineDaysIdList.remove(indexExists);
         }
 

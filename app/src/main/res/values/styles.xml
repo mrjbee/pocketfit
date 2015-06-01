@@ -40,9 +40,8 @@
     <style name="Text.Header.Secondary.Caption.Light" parent="AppTheme">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/text.color.day.short.training</item>
-        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
     </style>
-
 
     <style name="Text.Tile.Header.Light" parent="AppTheme">
         <item name="android:textSize">20sp</item>

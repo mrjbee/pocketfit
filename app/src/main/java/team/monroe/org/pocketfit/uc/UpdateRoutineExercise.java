@@ -44,7 +44,10 @@ public class UpdateRoutineExercise extends UserCaseSupport<UpdateRoutineExercise
         routineDayPersists.routineExerciseIdList.add(indexInsert, updateExercisePersists.id);
 
         if (indexExists != -1){
-            //totally new item
+
+            if (indexExists > indexInsert){
+                indexExists ++;
+            }
             routineDayPersists.routineExerciseIdList.remove(indexExists);
         }
 
