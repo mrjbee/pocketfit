@@ -10,7 +10,9 @@ import android.util.Pair;
 import org.monroe.team.android.box.BitmapUtils;
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.data.Data;
+import org.monroe.team.android.box.utils.AndroidLogImplementation;
 import org.monroe.team.android.box.utils.FileUtils;
+import org.monroe.team.corebox.log.L;
 import org.monroe.team.corebox.services.BackgroundTaskManager;
 import org.monroe.team.corebox.utils.DateUtils;
 
@@ -42,6 +44,10 @@ import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
 
 public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
+
+    static {
+        L.setup(new AndroidLogImplementation());
+    }
 
     private Data<Routine> data_activeRoutine;
     private Data<Pair> data_runningTraining;

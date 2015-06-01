@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -674,6 +675,30 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
 
     public Date getStartDate() {
         return DateUtils.today();
+    }
+
+    public void backonPageMoveToHide(float top, boolean pageMotionDirectionUp) {
+        TextView secondaryHeader = getSecondaryHeaderView();
+        float viewPosition = DisplayUtils.dpToPx(110, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        if (top < viewPosition){
+            translateHeaderPosition(top);
+        }
+    }
+
+    private void translateHeaderPosition(float offset) {
+        ViewGroup headerPanel = getHeaderContainer();
+        headerPanel.setTranslationY(offset);
+    }
+
+    public void backonPageMoveToShow(float top, boolean pageMotionDirectionUp) {
+        TextView secondaryHeader = getSecondaryHeaderView();
+        float viewPosition = DisplayUtils.dpToPx(110, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        float fragmentHeight = getFragmentView().getHeight();
+        if (fragmentHeight - top < viewPosition){
+            translateHeaderPosition(fragmentHeight - top);
+        }else{
+            translateHeaderPosition(viewPosition);
+        }
     }
 
 

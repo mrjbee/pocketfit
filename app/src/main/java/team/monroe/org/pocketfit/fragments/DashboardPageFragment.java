@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.log.L;
 
 import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.R;
@@ -39,11 +41,6 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
     }
 
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_dash_header;
-    }
-
     final protected void configureHeader(String title, View actions){
 
         int textColor = getResources().getColor(headerLightVersion() ? R.color.text_header_dash:R.color.text_header_dash_dark);
@@ -65,10 +62,74 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
         if (DisplayUtils.isLandscape(getResources(), R.bool.class)){
             view_text(R.id.caption).setVisibility(View.GONE);
         }else {
-            scaleCaption(1f);
             view_text(R.id.caption).setVisibility(headerFullVersion() ?View.VISIBLE:View.GONE);
         }
     }
+
+
+    protected final ViewGroup getHeaderContainer() {
+        return (ViewGroup) view(R.id.header);
+    }
+
+    protected final TextView getSecondaryHeaderView(){
+        return view_text(R.id.secondary_caption);
+    }
+
+    public void onPageMoveToShow(float top, boolean pageMotionDirectionUp) {
+
+        if (top == 0){
+            getHeaderContainer().setRotation(0);
+        }else{
+            getHeaderContainer().setRotation(pageMotionDirectionUp? 5:-5);
+        }
+
+        int headerHeight = getHeaderContainer().getHeight();
+        float alpha = 0;
+        if (pageMotionDirectionUp){
+            if ((getFragmentView().getHeight()-top) > headerHeight){
+                alpha = 1;
+            }else {
+                alpha = (float)(getFragmentView().getHeight()-top)/(float)headerHeight;
+            }
+        }else{
+            if (Math.abs(top) > headerHeight){
+                alpha = 0;
+            }else {
+                alpha = 1f - (float)Math.abs(top)/(float)headerHeight;
+            }
+        }
+       // L.DEBUG.d("HEADER [show] alpha:"+alpha+" top:"+top);
+        getHeaderContainer().setAlpha(alpha);
+    }
+
+    public void onPageMoveToHide(float top, boolean pageMotionDirectionUp) {
+        if (top == 0){
+            getHeaderContainer().setRotation(0);
+        }else{
+            getHeaderContainer().setRotation(pageMotionDirectionUp? 5:-5);
+        }
+        int headerHeight = getHeaderContainer().getHeight();
+        float alpha = 0;
+        if (!pageMotionDirectionUp){
+            if ((getFragmentView().getHeight()-top) > headerHeight){
+                alpha = 1;
+            }else {
+                alpha = (float)(getFragmentView().getHeight()-top)/(float)headerHeight;
+            }
+        }else{
+            if (Math.abs(top) > headerHeight){
+                alpha = 0;
+            }else {
+                alpha = 1f - (float)Math.abs(top)/(float)headerHeight;
+            }
+        }
+        // L.DEBUG.d("HEADER [show] alpha:"+alpha+" top:"+top);
+        getHeaderContainer().setAlpha(alpha);
+    }
+
+    public void onPageHide(boolean pageMotionDirectionUp) {}
+
+    public void onPageShow(boolean pageMotionDirectionUp) {}
 
     protected boolean headerFullVersion() {
         return true;
@@ -78,11 +139,5 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
         return true;
     }
 
-    public void updateAlpha(float alpha) {
-       // getFragmentView().setAlpha(alpha);
-    }
 
-    public void scaleCaption(float fraction) {
-       // getFragmentView().setTranslationY((1- fraction) * - mCaptionHeight);
-    }
 }

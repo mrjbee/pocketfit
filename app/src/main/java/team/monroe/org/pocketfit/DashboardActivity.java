@@ -12,9 +12,11 @@ import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.log.L;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
+import team.monroe.org.pocketfit.fragments.DashboardPageFragment;
 import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonOwnerContract;
@@ -137,42 +139,117 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-            private float mViewPagerHeight = -1;
+            private boolean mScrollHandlingEnabled = false;
+            public boolean mMovementDirectionDiscoverEnabled = false;
+            public boolean mPageMotionDirectionUp = false;
+
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
+
+                if (!mScrollHandlingEnabled) return;
+
+                int topPage = pos;
+                int bottomPage = pos + 1;
+
+                int currentPage = mViewPager.getCurrentItem();
+                if (mMovementDirectionDiscoverEnabled) {
+                    boolean directionUp = currentPage == topPage;
+                    mPageMotionDirectionUp = directionUp;
+                }
+
+                int bottomPagePosition = (mViewPager.getHeight() - positionOffsetPixels);
+                int topPagePosition = - positionOffsetPixels;
+
+                L.DEBUG.d("DASH SCROLL [up = "+mPageMotionDirectionUp+"]"+" top :" + topPage + "; bottom :" + bottomPage + "; current :" + currentPage);
+                L.DEBUG.d("DASH SCROLL position [top = "+topPagePosition+" x bottom = "+bottomPagePosition+"]");
+
+                if (mPageMotionDirectionUp){
+                    getPage(DashboardPageFragment.class, topPage).onPageMoveToHide(topPagePosition, mPageMotionDirectionUp);
+                    if (bottomPage != mPageAdapter.getCount()){
+                        if (getPage(DashboardPageFragment.class, bottomPage) != null) {
+                            getPage(DashboardPageFragment.class, bottomPage).onPageMoveToShow(bottomPagePosition, mPageMotionDirectionUp);
+                        }
+                    }
+                }else{
+                    getPage(DashboardPageFragment.class, topPage).onPageMoveToShow(topPagePosition, mPageMotionDirectionUp);
+                    if (bottomPage != mPageAdapter.getCount()){
+                        if ( getPage(DashboardPageFragment.class, bottomPage) != null) {
+                            getPage(DashboardPageFragment.class, bottomPage).onPageMoveToHide(bottomPagePosition, mPageMotionDirectionUp);
+                        }
+                    }
+                }
+
+                /*if (positionToUse == -1){
+                    return;
+                }
+
                 if (mViewPagerHeight == -1){
                     mViewPagerHeight = mViewPager.getHeight();
                 }
+
+                if (mWasFragment == null){
+                    mWasFragment = getPage(DashboardPageFragment.class);
+                }
+
                 int currentPosition = mViewPager.getCurrentItem();
                 float pixels = 0;
-                if (position < currentPosition){
-                    pixels = mViewPagerHeight - positionOffsetPixels;
+                if (positionToUse < currentPosition){
+                    moveUp = false;
+                    pixels = (mViewPagerHeight - positionOffsetPixels);
                 }else {
+                    moveUp = true;
                     pixels = positionOffsetPixels;
                 }
-                float alpha = 1 - (Math.min(mHeaderHeight, pixels * 2) / mHeaderHeight);
-                //getHeaderFragment().updateAlpha(alpha);
-                if (position == 0 && currentPosition == position){
-                    //down from first
-                  //  getHeaderFragment().scaleCaption(alpha);
-                }
+
+                if (moveUp){
+                    getPage(DashboardPageFragment.class, positionToUse).onPageMoveToHide(pixels, moveUp);
+                    if (positionToUse != mPageAdapter.getCount() - 1){
+                        pos = positionToUse +1;
+                       // getPage(DashboardPageFragment.class, position + 1).onPageMoveToShow(pixels, moveUp);
+                    }
+                } else {
+                    getPage(DashboardPageFragment.class, positionToUse).onPageMoveToHide(pixels, moveUp);
+                    if (positionToUse != 0) {
+                        pos = positionToUse -1;
+                      //  getPage(DashboardPageFragment.class, position - 1).onPageMoveToShow(pixels, moveUp);
+                    }
+                }*/
             }
 
             @Override
             public void onPageSelected(int position) {
-             //   getPage(AbstractDashboardTileFragment.class).installHeader();
+                L.DEBUG.d("Dashboard Page SELECTED");
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                switch (state){
+                    case VerticalViewPager.SCROLL_STATE_DRAGGING:
+                        L.DEBUG.d("Dashboard Page DRAGGING");
+                        mScrollHandlingEnabled = true;
+                        mMovementDirectionDiscoverEnabled = true;
+                        return;
+                    case VerticalViewPager.SCROLL_STATE_SETTLING:
+                        mMovementDirectionDiscoverEnabled = false;
+                        L.DEBUG.d("Dashboard Page SETTLING");
+                        return;
+                    case VerticalViewPager.SCROLL_STATE_IDLE:
+                        L.DEBUG.d("Dashboard Page IDLE");
+                        return;
+                }
             }
         });
         mViewPager.setAdapter(mPageAdapter);
     }
 
+
     private <ContractType>  ContractType getPage(Class<ContractType> contract) {
         int pageIndex = mViewPager.getCurrentItem();
+        return getPage(contract, pageIndex);
+    }
+
+
+    private <ContractType>  ContractType getPage(Class<ContractType> contract, int pageIndex) {
         String pageTag = "android:switcher:" + mViewPager.getId() + ":" + pageIndex;
         return (ContractType)getFragmentManager().findFragmentByTag(pageTag);
     }
