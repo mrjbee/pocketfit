@@ -98,7 +98,6 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
                 alpha = 1f - (float)Math.abs(top)/(float)headerHeight;
             }
         }
-       // L.DEBUG.d("HEADER [show] alpha:"+alpha+" top:"+top);
         getHeaderContainer().setAlpha(alpha);
     }
 
@@ -123,13 +122,8 @@ public abstract class DashboardPageFragment extends AppFragment<DashboardActivit
                 alpha = 1f - (float)Math.abs(top)/(float)headerHeight;
             }
         }
-        // L.DEBUG.d("HEADER [show] alpha:"+alpha+" top:"+top);
         getHeaderContainer().setAlpha(alpha);
     }
-
-    public void onPageHide(boolean pageMotionDirectionUp) {}
-
-    public void onPageShow(boolean pageMotionDirectionUp) {}
 
     protected boolean headerFullVersion() {
         return true;

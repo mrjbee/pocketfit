@@ -690,6 +690,26 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
         headerPanel.setTranslationY(offset);
     }
 
+    @Override
+    public void onPageMoveToShow(float top, boolean pageMotionDirectionUp) {
+        TextView secondaryHeader = getSecondaryHeaderView();
+        float viewPosition = DisplayUtils.dpToPx(108, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        if (Math.abs(top) < viewPosition){
+            translateHeaderPosition(Math.abs(top));
+        }else{
+            translateHeaderPosition(viewPosition);
+        }
+    }
+
+    @Override
+    public void onPageMoveToHide(float top, boolean pageMotionDirectionUp) {
+        TextView secondaryHeader = getSecondaryHeaderView();
+        float viewPosition = DisplayUtils.dpToPx(108, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        if (Math.abs(top) < viewPosition){
+            translateHeaderPosition(Math.abs(top));
+        }
+    }
+
     public void backonPageMoveToShow(float top, boolean pageMotionDirectionUp) {
         TextView secondaryHeader = getSecondaryHeaderView();
         float viewPosition = DisplayUtils.dpToPx(110, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());

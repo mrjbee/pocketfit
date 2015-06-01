@@ -140,8 +140,9 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             private boolean mScrollHandlingEnabled = false;
-            public boolean mMovementDirectionDiscoverEnabled = false;
+            public boolean mDragging = false;
             public boolean mPageMotionDirectionUp = false;
+            public int mCurrentPage;
 
             @Override
             public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
@@ -151,69 +152,46 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
                 int topPage = pos;
                 int bottomPage = pos + 1;
 
-                int currentPage = mViewPager.getCurrentItem();
-                if (mMovementDirectionDiscoverEnabled) {
-                    boolean directionUp = currentPage == topPage;
-                    mPageMotionDirectionUp = directionUp;
+                if (mDragging) {
+                    mCurrentPage = mViewPager.getCurrentItem();
+                    mPageMotionDirectionUp = mCurrentPage == topPage;
                 }
 
                 int bottomPagePosition = (mViewPager.getHeight() - positionOffsetPixels);
                 int topPagePosition = - positionOffsetPixels;
 
-                L.DEBUG.d("DASH SCROLL [up = "+mPageMotionDirectionUp+"]"+" top :" + topPage + "; bottom :" + bottomPage + "; current :" + currentPage);
+                if (mPageMotionDirectionUp && mCurrentPage != mViewPager.getCurrentItem()){
+                    //last step as current page changed and become top
+                    if (mPageMotionDirectionUp){
+                        bottomPage = pos;
+                        topPage = pos - 1;
+                        bottomPagePosition = 0;
+                        topPage = -getPage(DashboardPageFragment.class).getFragmentView().getHeight();
+                    }
+                }
+
+                L.DEBUG.d("DASH SCROLL [up = "+mPageMotionDirectionUp+"]"+" top :" + topPage + "; bottom :" + bottomPage + "; current :" + mCurrentPage);
                 L.DEBUG.d("DASH SCROLL position [top = "+topPagePosition+" x bottom = "+bottomPagePosition+"]");
 
                 if (mPageMotionDirectionUp){
-                    getPage(DashboardPageFragment.class, topPage).onPageMoveToHide(topPagePosition, mPageMotionDirectionUp);
+                    if (topPage > -1) {
+                        getPage(DashboardPageFragment.class, topPage).onPageMoveToHide(topPagePosition, mPageMotionDirectionUp);
+                    }
                     if (bottomPage != mPageAdapter.getCount()){
                         if (getPage(DashboardPageFragment.class, bottomPage) != null) {
                             getPage(DashboardPageFragment.class, bottomPage).onPageMoveToShow(bottomPagePosition, mPageMotionDirectionUp);
                         }
                     }
-                }else{
-                    getPage(DashboardPageFragment.class, topPage).onPageMoveToShow(topPagePosition, mPageMotionDirectionUp);
-                    if (bottomPage != mPageAdapter.getCount()){
+                } else {
+                    if (topPage > -1) {
+                        getPage(DashboardPageFragment.class, topPage).onPageMoveToShow(topPagePosition, mPageMotionDirectionUp);
+                    }
+                   if (bottomPage != mPageAdapter.getCount()) {
                         if ( getPage(DashboardPageFragment.class, bottomPage) != null) {
                             getPage(DashboardPageFragment.class, bottomPage).onPageMoveToHide(bottomPagePosition, mPageMotionDirectionUp);
                         }
                     }
                 }
-
-                /*if (positionToUse == -1){
-                    return;
-                }
-
-                if (mViewPagerHeight == -1){
-                    mViewPagerHeight = mViewPager.getHeight();
-                }
-
-                if (mWasFragment == null){
-                    mWasFragment = getPage(DashboardPageFragment.class);
-                }
-
-                int currentPosition = mViewPager.getCurrentItem();
-                float pixels = 0;
-                if (positionToUse < currentPosition){
-                    moveUp = false;
-                    pixels = (mViewPagerHeight - positionOffsetPixels);
-                }else {
-                    moveUp = true;
-                    pixels = positionOffsetPixels;
-                }
-
-                if (moveUp){
-                    getPage(DashboardPageFragment.class, positionToUse).onPageMoveToHide(pixels, moveUp);
-                    if (positionToUse != mPageAdapter.getCount() - 1){
-                        pos = positionToUse +1;
-                       // getPage(DashboardPageFragment.class, position + 1).onPageMoveToShow(pixels, moveUp);
-                    }
-                } else {
-                    getPage(DashboardPageFragment.class, positionToUse).onPageMoveToHide(pixels, moveUp);
-                    if (positionToUse != 0) {
-                        pos = positionToUse -1;
-                      //  getPage(DashboardPageFragment.class, position - 1).onPageMoveToShow(pixels, moveUp);
-                    }
-                }*/
             }
 
             @Override
@@ -227,10 +205,10 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp> implements 
                     case VerticalViewPager.SCROLL_STATE_DRAGGING:
                         L.DEBUG.d("Dashboard Page DRAGGING");
                         mScrollHandlingEnabled = true;
-                        mMovementDirectionDiscoverEnabled = true;
+                        mDragging = true;
                         return;
                     case VerticalViewPager.SCROLL_STATE_SETTLING:
-                        mMovementDirectionDiscoverEnabled = false;
+                        mDragging = false;
                         L.DEBUG.d("Dashboard Page SETTLING");
                         return;
                     case VerticalViewPager.SCROLL_STATE_IDLE:
