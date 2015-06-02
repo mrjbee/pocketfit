@@ -376,9 +376,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public void stopTraining(boolean completelyDone) {
 
-        List<TrainingExecutionService.TrainingPlan.ResultRecord> resultRecords = getTrainingPlan().getResultRecords();
+        List<TrainingExecutionService.TrainingPlan.ExerciseResult> exerciseResults = getTrainingPlan().getResultRecords();
 
-        if (completelyDone || !resultRecords.isEmpty()) {
+        if (completelyDone || !exerciseResults.isEmpty()) {
             String routineId = getTrainingPlan().getRoutine().id;
             String routineDayId = getTrainingPlan().getRoutineDay().id;
             if (hasActiveRoutine()) {

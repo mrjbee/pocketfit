@@ -113,7 +113,7 @@ public class TrainingExecutionService extends Service {
         private Date pauseStartDate;
         private ExerciseExecution currentExecution;
         private TrainingPlanListener trainingPlanListener = new NoOpTrainingPlanListener();
-        private List<ResultRecord> resultRecordList = new ArrayList<>();
+        private List<ExerciseResult> exerciseResultList = new ArrayList<>();
 
         public TrainingPlan(final Routine routine, final RoutineDay routineDay, PocketFitModel model) {
             this.routine = routine;
@@ -126,22 +126,28 @@ public class TrainingExecutionService extends Service {
                 @Override
                 protected Agenda provideData() {
                     Agenda agenda = new Agenda();
-                    for (RoutineExercise routineExercise : routineDay.exerciseList) {
-                        agenda.exerciseList.add(new AgendaExercise(
-                                routineExercise.exercise,
-                                isExecuted(routineExercise),
-                                isRunning(routineExercise)));
-                    }
-                    return agenda;
-                }
-
-                private boolean isExecuted(RoutineExercise routineExercise) {
-                    for (ResultRecord resultRecord : resultRecordList) {
-                        if (routineExercise.equals(resultRecord.exercise)){
-                            return true;
+                    RoutineExercise itRoutineExercise = null;
+                    AgendaExercise itAgendaExercise = null;
+                    for (ExerciseResult exerciseResult : exerciseResultList) {
+                        if (itRoutineExercise == null || itRoutineExercise != exerciseResult.exercise){
+                            itRoutineExercise = exerciseResult.exercise;
+                            itAgendaExercise = new AgendaExercise(exerciseResult.exercise.exercise);
+                            agenda.exerciseList.add(itAgendaExercise);
                         }
+                        itAgendaExercise.results.add(exerciseResult);
                     }
-                    return false;
+                    int leavedRoutineExerciseIndex = -1;
+                    if (itRoutineExercise != null){
+                        leavedRoutineExerciseIndex = routineDay.exerciseList.indexOf(itRoutineExercise);
+                    }
+                    leavedRoutineExerciseIndex++;
+
+                    for (;leavedRoutineExerciseIndex<routineDay.exerciseList.size();leavedRoutineExerciseIndex++){
+                        itRoutineExercise = routineDay.exerciseList.get(leavedRoutineExerciseIndex);
+                        agenda.exerciseList.add(new AgendaExercise(itRoutineExercise.exercise));
+                    }
+
+                    return agenda;
                 }
 
                 private boolean isRunning(RoutineExercise routineExercise) {
@@ -284,13 +290,13 @@ public class TrainingExecutionService extends Service {
             int index = routineDay.exerciseList.indexOf(currentExecution.routineExercise);
             for (int i = 0; i < currentExecution.setList.size(); i++) {
                 Set set = currentExecution.setList.get(i);
-                ResultRecord resultRecord = new ResultRecord(
+                ExerciseResult exerciseResult = new ExerciseResult(
                         set.startDate,
                         set.endDate,
                         currentExecution.routineExercise,
                         i,
                         set.results);
-                resultRecordList.add(resultRecord);
+                exerciseResultList.add(exerciseResult);
             }
 
             index++;
@@ -314,19 +320,19 @@ public class TrainingExecutionService extends Service {
             if (startDate == null){
                 return 0;
             }
-            if (resultRecordList.isEmpty()){
+            if (exerciseResultList.isEmpty()){
                 return 0;
             }
-            Date endDate = Lists.getLast(resultRecordList).endDate;
+            Date endDate = Lists.getLast(exerciseResultList).endDate;
             return endDate.getTime() - startDate.getTime();
         }
 
         public float getLiftedUpWeight() {
             float answer = 0;
-            for (ResultRecord resultRecord : resultRecordList) {
-                if (resultRecord.exercise.exercise.type == Exercise.Type.weight_times){
-                    answer += ((Integer)resultRecord.results.get("times")) *
-                            ((Float)resultRecord.results.get("weight"));
+            for (ExerciseResult exerciseResult : exerciseResultList) {
+                if (exerciseResult.exercise.exercise.type == Exercise.Type.weight_times){
+                    answer += ((Integer) exerciseResult.results.get("times")) *
+                            ((Float) exerciseResult.results.get("weight"));
                 }
             }
             return answer;
@@ -334,9 +340,9 @@ public class TrainingExecutionService extends Service {
 
         public float getDistance() {
             float answer = 0;
-            for (ResultRecord resultRecord : resultRecordList) {
-                if (resultRecord.exercise.exercise.type == Exercise.Type.distance){
-                    answer += ((Float)resultRecord.results.get("distance"));
+            for (ExerciseResult exerciseResult : exerciseResultList) {
+                if (exerciseResult.exercise.exercise.type == Exercise.Type.distance){
+                    answer += ((Float) exerciseResult.results.get("distance"));
                 }
             }
             return answer;
@@ -345,17 +351,17 @@ public class TrainingExecutionService extends Service {
         public int getExerciseCount() {
             int answer = 0;
             java.util.Set<Exercise> exerciseSet = new HashSet<>();
-            for (ResultRecord resultRecord : resultRecordList) {
-                if (!exerciseSet.contains(resultRecord.exercise.exercise)){
+            for (ExerciseResult exerciseResult : exerciseResultList) {
+                if (!exerciseSet.contains(exerciseResult.exercise.exercise)){
                     answer++;
                 }
-                exerciseSet.add(resultRecord.exercise.exercise);
+                exerciseSet.add(exerciseResult.exercise.exercise);
             }
             return answer;
         }
 
-        public List<ResultRecord> getResultRecords() {
-            return resultRecordList;
+        public List<ExerciseResult> getResultRecords() {
+            return exerciseResultList;
         }
 
         public Routine getRoutine() {
@@ -377,13 +383,14 @@ public class TrainingExecutionService extends Service {
         public class AgendaExercise {
 
             public final Exercise exercise;
-            public final boolean executed;
-            public final boolean running;
+            public final List<ExerciseResult> results = new ArrayList<>();
 
-            public AgendaExercise(Exercise exercise, boolean executed, boolean running) {
+            public AgendaExercise(Exercise exercise) {
                 this.exercise = exercise;
-                this.executed = executed;
-                this.running = running;
+            }
+
+            public boolean isExecuted() {
+                return !results.isEmpty();
             }
         }
 
@@ -423,7 +430,7 @@ public class TrainingExecutionService extends Service {
             private Date endDate;
         }
 
-        public static class ResultRecord {
+        public static class ExerciseResult {
 
             public final Date startDate;
             public final Date endDate;
@@ -431,12 +438,16 @@ public class TrainingExecutionService extends Service {
             public final int setNumber;
             public final Map<String, Object> results;
 
-            public ResultRecord(Date startDate, Date endDate, RoutineExercise exercise, int setNumber, Map<String, Object> results) {
+            public ExerciseResult(Date startDate, Date endDate, RoutineExercise exercise, int setNumber, Map<String, Object> results) {
                 this.startDate = startDate;
                 this.endDate = endDate;
                 this.exercise = exercise;
                 this.setNumber = setNumber;
                 this.results = results;
+            }
+
+            public boolean isFinished() {
+                return false;
             }
         }
 

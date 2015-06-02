@@ -138,7 +138,7 @@ public class TrainingActivity extends FragmentActivity{
                             public void update(TrainingExecutionService.TrainingPlan.AgendaExercise exercise, int position) {
                                 caption.setText(exercise.exercise.title);
                                 index.setText((position+1)+"");
-                                circleImage.setImageResource(!exercise.executed? R.drawable.circle_gray:R.drawable.circle_pink);
+                                circleImage.setImageResource(!exercise.isExecuted()? R.drawable.circle_gray:R.drawable.circle_pink);
                                 if (position == 0){
                                     line.setImageResource(R.drawable.gray_line_bottom);
                                     lineOver.setVisibility(View.VISIBLE);
