@@ -82,7 +82,6 @@ public class TrainingActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Routine mRoutine = application().getTrainingRoutine();
-        unblockDrawer();
         view_text(R.id.text_routine_name).setText(mRoutine.title);
         mTrainingDurationClockPresenter = new ClockViewPresenter(view_text(R.id.text_clock));
         mTrainingPauseClockPresenter = new ClockViewPresenter(view_text(R.id.text_pause_clock));
@@ -121,10 +120,7 @@ public class TrainingActivity extends FragmentActivity{
         view(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                unblockDrawer();
-                mAwaitingEditDoneClosure.execute(null);
-                mShadowLayerAnimator.hide();
-                mEditPanelAnimator.hide();
+                cancelDetailsEdit();
             }
         });
 
@@ -230,6 +226,13 @@ public class TrainingActivity extends FragmentActivity{
                 }, R.layout.item_agenda_exercise);
 
         view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
+    }
+
+    private void cancelDetailsEdit() {
+        unblockDrawer();
+        mAwaitingEditDoneClosure.execute(null);
+        mShadowLayerAnimator.hide();
+        mEditPanelAnimator.hide();
     }
 
     private void editDetails(RoutineExercise.ExerciseDetails details, Closure<RoutineExercise.ExerciseDetails, Void> onDone) {
@@ -366,6 +369,7 @@ public class TrainingActivity extends FragmentActivity{
     @Override
     protected void onStop() {
         super.onStop();
+        unblockDrawer();
         mTrainingDurationClockPresenter.resetClock();
         if (application().getTrainingPlan() != null) {
             application().getTrainingPlan().setTrainingPlanListener(null);
@@ -465,6 +469,11 @@ public class TrainingActivity extends FragmentActivity{
 
     @Override
     public void onBackPressed() {
+        if (view(R.id.layer_edit).getVisibility() == View.VISIBLE){
+            cancelDetailsEdit();
+            return;
+        }
+
         if (!closeDrawerIfRequired()) {
             super.onBackPressed();
         }
@@ -489,5 +498,11 @@ public class TrainingActivity extends FragmentActivity{
     private void blockDrawer() {
         DrawerLayout drawer = view(R.id.drawer_layout, DrawerLayout.class);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, view(R.id.left_drawer));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        unblockDrawer();
+        super.onSaveInstanceState(outState);
     }
 }
