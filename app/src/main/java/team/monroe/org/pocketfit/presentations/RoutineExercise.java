@@ -1,6 +1,8 @@
 package team.monroe.org.pocketfit.presentations;
 
 
+import android.content.res.Resources;
+
 import java.io.Serializable;
 
 public class RoutineExercise {
@@ -60,21 +62,6 @@ public class RoutineExercise {
         }
     }
 
-    public static class TimesExerciseDetails implements ExerciseDetails{
-
-        public Integer times;
-
-        @Override
-        public String detailsString() {
-            return !isDefined() ? "":times+" times";
-        }
-
-        @Override
-        public boolean isDefined() {
-            return times != null;
-        }
-    }
-
     public static class PowerExerciseDetails implements ExerciseDetails{
 
         public Float weight;
@@ -91,5 +78,61 @@ public class RoutineExercise {
             return times != null && weight!=null && sets!=null;
         }
     }
+
+
+    public static String detailsCharacteristic(ExerciseDetails details, Resources resources){
+            if (details instanceof  DistanceExerciseDetails){
+                return "Distance";
+            }else if (details instanceof TimeExerciseDetails){
+                return "Time";
+            }else if (details instanceof  PowerExerciseDetails){
+                if (((PowerExerciseDetails) details).sets > 0) {
+                    return "Sets";
+                }else {
+                    return "Set";
+                }
+            }else {
+              throw new IllegalStateException();
+            }
+    }
+
+    public static String detailsMeasure(ExerciseDetails details, Resources resources){
+        if (details instanceof  DistanceExerciseDetails){
+            return "meters";
+        }else if (details instanceof TimeExerciseDetails){
+            return "min";
+        }else if (details instanceof  PowerExerciseDetails){
+            if (((PowerExerciseDetails) details).sets > 0) {
+                return "reps/kg";
+            }else {
+                return "reps/kg";
+            }
+        }else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static String detailsValue(ExerciseDetails details, Resources resources){
+        if (details instanceof  DistanceExerciseDetails){
+            return ""+((DistanceExerciseDetails) details).distance;
+        }else if (details instanceof TimeExerciseDetails){
+            int minutes = (int)((float)((TimeExerciseDetails) details).time);
+            int seconds = Math.round((((TimeExerciseDetails) details).time - minutes) * 60f);
+            if (seconds < 10){
+                return minutes+".0"+seconds;
+            }else{
+                return minutes+"."+seconds;
+            }
+        }else if (details instanceof  PowerExerciseDetails){
+            if (((PowerExerciseDetails) details).sets > 0){
+                return ((PowerExerciseDetails) details).sets + " x ("+((PowerExerciseDetails) details).times + "x" + ((PowerExerciseDetails) details).weight+")";
+            }else {
+                return ((PowerExerciseDetails) details).times + "x" + ((PowerExerciseDetails) details).weight;
+            }
+        }else {
+            throw new IllegalStateException();
+        }
+    }
+
 }
 

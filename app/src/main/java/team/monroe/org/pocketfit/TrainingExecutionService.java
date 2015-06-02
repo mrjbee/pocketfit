@@ -277,6 +277,7 @@ public class TrainingExecutionService extends Service {
             return (requiredSets - currentExecution.setList.size()) >0;
         }
 
+        @Deprecated
         public List<String> getSetsDescriptionList() {
             return Lists.collect(currentExecution.setList,new Closure<Set, String>() {
                 @Override
@@ -448,6 +449,27 @@ public class TrainingExecutionService extends Service {
 
             public boolean isFinished() {
                 return false;
+            }
+
+            public RoutineExercise.ExerciseDetails asExerciseDetails() {
+
+                switch (exercise.exercise.type){
+                    case weight_times:
+                        RoutineExercise.PowerExerciseDetails powerDetails = new RoutineExercise.PowerExerciseDetails();
+                        powerDetails.sets = -1;
+                        powerDetails.weight = (Float) results.get("weight");
+                        powerDetails.times = (Integer) results.get("times");
+                        return powerDetails;
+                    case distance:
+                        RoutineExercise.DistanceExerciseDetails distanceExerciseDetails = new RoutineExercise.DistanceExerciseDetails();
+                        distanceExerciseDetails.distance = (Float) results.get("distance");
+                        return distanceExerciseDetails;
+                    case time:
+                        RoutineExercise.TimeExerciseDetails timeDetails = new RoutineExercise.TimeExerciseDetails();
+                        timeDetails.time = (Float) results.get("duration");
+                        return timeDetails;
+                }
+                throw new IllegalStateException();
             }
         }
 

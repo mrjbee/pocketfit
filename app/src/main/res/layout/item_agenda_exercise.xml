@@ -64,8 +64,12 @@
             android:text="Caption" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:id="@+id/panel_exercise_sets"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical" />
+
     </LinearLayout>
 
 </LinearLayout>

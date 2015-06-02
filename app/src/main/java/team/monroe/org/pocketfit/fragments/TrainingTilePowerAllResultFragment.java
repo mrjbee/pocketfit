@@ -5,8 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.monroe.team.corebox.utils.Lists;
-
 import java.util.List;
 
 import team.monroe.org.pocketfit.R;
@@ -48,7 +46,7 @@ public class TrainingTilePowerAllResultFragment extends TrainingTileFragment {
 
     private void addDetails(String caption, Object value, String measure) {
         ViewGroup viewPanel =view(R.id.panel_exercise_details, ViewGroup.class);
-        View view = activity().getLayoutInflater().inflate(R.layout.panel_exercise_detail,viewPanel,false);
+        View view = activity().getLayoutInflater().inflate(R.layout.panel_3_column_details_light,viewPanel,false);
         ((TextView)view.findViewById(R.id.item_caption)).setText(caption);
         ((TextView)view.findViewById(R.id.item_value)).setText(value.toString());
         ((TextView)view.findViewById(R.id.item_measure)).setText(measure);

@@ -11,18 +11,15 @@ import android.widget.TextView;
 
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
-import org.monroe.team.android.box.app.ui.SlideTouchGesture;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
-import org.monroe.team.corebox.utils.Closure;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import java.util.Date;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
-import team.monroe.org.pocketfit.fragments.GenericListFragment;
 import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
@@ -34,7 +31,7 @@ import team.monroe.org.pocketfit.fragments.TrainingTileTimeExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileTimeResultFragment;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
-import team.monroe.org.pocketfit.view.SlidingRelativeLayout;
+import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
 import static team.monroe.org.pocketfit.TrainingExecutionService.TrainingPlan.NoOpTrainingPlanListener;
@@ -134,8 +131,11 @@ public class TrainingActivity extends FragmentActivity{
                             ImageView line = (ImageView) convertView.findViewById(R.id.image_line);
                             ImageView lineOver = (ImageView) convertView.findViewById(R.id.image_line_over);
 
+                            ViewGroup setsPanel = (ViewGroup) convertView.findViewById(R.id.panel_exercise_sets);
+
                             @Override
                             public void update(TrainingExecutionService.TrainingPlan.AgendaExercise exercise, int position) {
+                                setsPanel.removeAllViews();
                                 caption.setText(exercise.exercise.title);
                                 index.setText((position+1)+"");
                                 circleImage.setImageResource(!exercise.isExecuted()? R.drawable.circle_gray:R.drawable.circle_pink);
@@ -149,6 +149,16 @@ public class TrainingActivity extends FragmentActivity{
                                     line.setImageResource(R.drawable.gray_line_both);
                                     lineOver.setVisibility(View.VISIBLE);
                                 }
+
+                                for (TrainingExecutionService.TrainingPlan.ExerciseResult result : exercise.results) {
+                                    RoutineExercise.ExerciseDetails details = result.asExerciseDetails();
+                                    View view = getLayoutInflater().inflate(R.layout.panel_3_column_details, setsPanel, false);
+                                    ((TextView)view.findViewById(R.id.item_caption)).setText(RoutineExercise.detailsCharacteristic(details,getResources()));
+                                    ((TextView)view.findViewById(R.id.item_value)).setText(RoutineExercise.detailsValue(details,getResources()));
+                                    ((TextView)view.findViewById(R.id.item_measure)).setText(RoutineExercise.detailsMeasure(details,getResources()));
+                                    setsPanel.addView(view);
+                                }
+
                             }
                             @Override
                             public void cleanup() {}
