@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <include
+        android:layout_gravity="center_vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        layout="@layout/panel_3_column_details"/>
+    <ImageButton
+        android:id="@+id/action_edit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/pen_dark"
+        style="@style/Button.Action"
+        />
+</LinearLayout>

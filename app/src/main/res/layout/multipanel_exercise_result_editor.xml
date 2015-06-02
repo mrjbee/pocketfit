@@ -63,7 +63,7 @@
 
     <include
         android:id="@+id/panel_edit_time"
-        android:visibility="gone"
+        android:visibility="visible"
         layout="@layout/panel_time_picker"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content" />

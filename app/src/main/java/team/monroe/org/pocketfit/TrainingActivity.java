@@ -2,7 +2,10 @@ package team.monroe.org.pocketfit;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Pair;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +17,7 @@ import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.Closure;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
@@ -33,6 +37,7 @@ import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
+import team.monroe.org.pocketfit.view.presenter.ExerciseResultEditPresenter;
 
 import static team.monroe.org.pocketfit.TrainingExecutionService.TrainingPlan.NoOpTrainingPlanListener;
 
@@ -44,6 +49,10 @@ public class TrainingActivity extends FragmentActivity{
     private AppearanceController mTrainingClockAnimator;
     private GenericListViewAdapter<TrainingExecutionService.TrainingPlan.AgendaExercise, GetViewImplementation.ViewHolder<TrainingExecutionService.TrainingPlan.AgendaExercise>> mAgendaAdapter;
     private Data.DataChangeObserver<TrainingExecutionService.TrainingPlan.Agenda> agendaDataChangeObserver;
+    private AppearanceController mShadowLayerAnimator;
+    private AppearanceController mEditPanelAnimator;
+    private ExerciseResultEditPresenter mResultEditPresenter;
+    private Closure<RoutineExercise.ExerciseDetails, Void> mAwaitingEditDoneClosure;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -73,6 +82,7 @@ public class TrainingActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Routine mRoutine = application().getTrainingRoutine();
+        unblockDrawer();
         view_text(R.id.text_routine_name).setText(mRoutine.title);
         mTrainingDurationClockPresenter = new ClockViewPresenter(view_text(R.id.text_clock));
         mTrainingPauseClockPresenter = new ClockViewPresenter(view_text(R.id.text_pause_clock));
@@ -88,7 +98,45 @@ public class TrainingActivity extends FragmentActivity{
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
 
-        float bottomLayerWidth = DisplayUtils.dpToPx(250, getResources());
+        mShadowLayerAnimator = animateAppearance(view(R.id.layer_shadow), alpha(1f,0))
+                .showAnimation(duration_constant(300), interpreter_accelerate(0.3f))
+                .hideAndGone()
+                .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
+                .build();
+        view(R.id.layer_shadow).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        mShadowLayerAnimator.hideWithoutAnimation();
+
+        mEditPanelAnimator = animateAppearance(view(R.id.layer_edit), ySlide(0, 0.5f* DisplayUtils.screenHeight(getResources())))
+                .showAnimation(duration_constant(300), interpreter_accelerate_decelerate())
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.8f))
+                .hideAndGone()
+                .build();
+        mEditPanelAnimator.hideWithoutAnimation();
+        mResultEditPresenter = new ExerciseResultEditPresenter(view(R.id.panel_edit, ViewGroup.class));
+        view(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unblockDrawer();
+                mAwaitingEditDoneClosure.execute(null);
+                mShadowLayerAnimator.hide();
+                mEditPanelAnimator.hide();
+            }
+        });
+
+        view(R.id.action_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unblockDrawer();
+                mAwaitingEditDoneClosure.execute(mResultEditPresenter.result());
+                mShadowLayerAnimator.hide();
+                mEditPanelAnimator.hide();
+            }
+        });
 
         view(R.id.action_options).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,12 +198,27 @@ public class TrainingActivity extends FragmentActivity{
                                     lineOver.setVisibility(View.VISIBLE);
                                 }
 
-                                for (TrainingExecutionService.TrainingPlan.ExerciseResult result : exercise.results) {
-                                    RoutineExercise.ExerciseDetails details = result.asExerciseDetails();
-                                    View view = getLayoutInflater().inflate(R.layout.panel_3_column_details, setsPanel, false);
-                                    ((TextView)view.findViewById(R.id.item_caption)).setText(RoutineExercise.detailsCharacteristic(details,getResources()));
-                                    ((TextView)view.findViewById(R.id.item_value)).setText(RoutineExercise.detailsValue(details,getResources()));
-                                    ((TextView)view.findViewById(R.id.item_measure)).setText(RoutineExercise.detailsMeasure(details,getResources()));
+                                for (final TrainingExecutionService.TrainingPlan.ExerciseResult result : exercise.results) {
+                                    final RoutineExercise.ExerciseDetails details = result.asExerciseDetails();
+                                    View view = getLayoutInflater().inflate(R.layout.panel_3_column_details_edit, setsPanel, false);
+                                    ((TextView)view.findViewById(R.id.item_caption)).setVisibility(View.GONE);
+                                    ((TextView)view.findViewById(R.id.item_value)).setText(RoutineExercise.detailsValue(details, getResources()));
+                                    ((TextView)view.findViewById(R.id.item_measure)).setText(RoutineExercise.detailsMeasure(details, getResources()));
+                                    view.findViewById(R.id.action_edit).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            TrainingActivity.this.editDetails(details, new Closure<RoutineExercise.ExerciseDetails, Void>() {
+
+                                                @Override
+                                                public Void execute(RoutineExercise.ExerciseDetails arg) {
+                                                    if (arg != null){
+                                                        result.updateDetails(arg);
+                                                    }
+                                                    return null;
+                                                }
+                                            });
+                                        }
+                                    });
                                     setsPanel.addView(view);
                                 }
 
@@ -169,12 +232,13 @@ public class TrainingActivity extends FragmentActivity{
         view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
     }
 
-    private boolean isBackPanelClosed() {
-        return view(R.id.panel_content).getTranslationX() < 100;
-    }
-
-    private void onBottomOpen() {
-
+    private void editDetails(RoutineExercise.ExerciseDetails details, Closure<RoutineExercise.ExerciseDetails, Void> onDone) {
+        closeDrawerIfRequired();
+        blockDrawer();
+        mResultEditPresenter.setup(details);
+        mAwaitingEditDoneClosure = onDone;
+        mShadowLayerAnimator.show();
+        mEditPanelAnimator.show();
     }
 
     @Override
@@ -401,6 +465,29 @@ public class TrainingActivity extends FragmentActivity{
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (!closeDrawerIfRequired()) {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean closeDrawerIfRequired() {
+        boolean isOpened = false;
+        DrawerLayout drawer = view(R.id.drawer_layout, DrawerLayout.class);
+        if (drawer.isDrawerVisible(view(R.id.left_drawer))){
+            drawer.closeDrawer(view(R.id.left_drawer));
+            isOpened = true;
+        }
+        return isOpened;
+    }
+
+    private void unblockDrawer() {
+        DrawerLayout drawer = view(R.id.drawer_layout, DrawerLayout.class);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, view(R.id.left_drawer));
+    }
+
+
+    private void blockDrawer() {
+        DrawerLayout drawer = view(R.id.drawer_layout, DrawerLayout.class);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, view(R.id.left_drawer));
     }
 }

@@ -431,7 +431,7 @@ public class TrainingExecutionService extends Service {
             private Date endDate;
         }
 
-        public static class ExerciseResult {
+        public class ExerciseResult {
 
             public final Date startDate;
             public final Date endDate;
@@ -470,6 +470,20 @@ public class TrainingExecutionService extends Service {
                         return timeDetails;
                 }
                 throw new IllegalStateException();
+            }
+
+            public void updateDetails(RoutineExercise.ExerciseDetails details) {
+                if (details instanceof RoutineExercise.PowerExerciseDetails){
+                    results.put("times",((RoutineExercise.PowerExerciseDetails) details).times);
+                    results.put("weight",((RoutineExercise.PowerExerciseDetails) details).weight);
+                }else if(details instanceof RoutineExercise.DistanceExerciseDetails){
+                    results.put("distance",((RoutineExercise.DistanceExerciseDetails) details).distance);
+                }else if(details instanceof RoutineExercise.TimeExerciseDetails){
+                    results.put("duration", ((RoutineExercise.TimeExerciseDetails) details).time);
+                }else{
+                    throw new IllegalStateException();
+                }
+                TrainingPlan.this.getAgenda().invalidate();
             }
         }
 

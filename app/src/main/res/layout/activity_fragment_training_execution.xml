@@ -7,7 +7,7 @@
         <!-- The main content view -->
         <team.monroe.org.pocketfit.view.SlidingRelativeLayout
             android:visibility="visible"
-            android:id="@+id/panel_content"
+            android:id="@+id/content_frame"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
@@ -95,12 +95,63 @@
                     android:layout_marginTop="5dp"
                     android:src="@drawable/options_light" />
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/layer_shadow"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#A2000000"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/layer_edit"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/tile.margin.side"
+                    android:layout_marginRight="@dimen/tile.margin.side"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tile_white_spec">
+                    <include
+                        android:layout_gravity="center"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/panel_edit"
+                        layout="@layout/multipanel_exercise_result_editor"/>
+
+                    <LinearLayout
+                        android:id="@+id/panel_actions"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/action_cancel"
+                            android:layout_weight="1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Button.Panel"
+                            android:text="Cancel"/>
+                        <Button
+                            android:id="@+id/action_save"
+                            android:layout_weight="1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Button.Panel"
+                            android:text="Save"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </team.monroe.org.pocketfit.view.SlidingRelativeLayout>
 
         <!-- The navigation drawer -->
         <RelativeLayout
                 android:visibility="visible"
-                android:id="@+id/panel_below"
+                android:id="@+id/left_drawer"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"

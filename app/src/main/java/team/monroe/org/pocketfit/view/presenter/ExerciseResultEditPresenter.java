@@ -20,6 +20,10 @@ public class ExerciseResultEditPresenter extends ViewPresenter<ViewGroup>{
 
     public void setup(RoutineExercise.ExerciseDetails exerciseDetails){
         mExerciseDetails = exerciseDetails;
+        getEditPanelById(R.id.panel_edit_power).setVisibility(View.GONE);
+        getEditPanelById(R.id.panel_edit_distance).setVisibility(View.GONE);
+        getEditPanelById(R.id.panel_edit_time).setVisibility(View.GONE);
+
         if (exerciseDetails instanceof RoutineExercise.PowerExerciseDetails){
             mDetailsViewPresenter = new ExerciseDetailsViewPresenter<RoutineExercise.PowerExerciseDetails>(getEditPanelById(R.id.panel_edit_power)) {
                 @Override
@@ -64,6 +68,7 @@ public class ExerciseResultEditPresenter extends ViewPresenter<ViewGroup>{
             throw new IllegalStateException();
         }
         mDetailsViewPresenter.fillUI(mExerciseDetails);
+        getRootView().requestLayout();
         mDetailsViewPresenter.show();
     }
 
