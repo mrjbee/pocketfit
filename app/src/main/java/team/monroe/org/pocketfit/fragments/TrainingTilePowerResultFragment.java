@@ -8,62 +8,28 @@ import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
-public class TrainingTilePowerResultFragment extends TrainingTileFragment {
-
-    private RoutineExercise mRoutineExercise;
+public class TrainingTilePowerResultFragment extends TrainingTileResultFragment<RoutineExercise.PowerExerciseDetails> {
 
     @Override
-    protected int getTileLayoutId() {
-        return R.layout.tile_training_power_result;
+    protected int setNumber() {
+        return (application().getTrainingPlan().getSetIndex() + 1);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-
-        mRoutineExercise= application().getTrainingPlan().getCurrentExercise();
-        view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
-        RoutineExercise.PowerExerciseDetails details = (RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails;
-        view_text(R.id.exercise_set).setText("Set " + (application().getTrainingPlan().getSetIndex() + 1));
-        view(R.id.edit_power_weight, EditText.class).setText(details.weight+"");
-        view(R.id.edit_power_times, EditText.class).setText(details.times+"");
-
-
-        view(R.id.action_main).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Float weight = readPositiveFloat(R.id.edit_power_weight);
-                Integer times = readPositiveInteger(R.id.edit_power_times);
-                application().getTrainingPlan().commitPowerSet(weight, times);
-                if (application().getTrainingPlan().hasMoreSetsScheduled()){
-                    application().getTrainingPlan().addSet();
-                }
-                owner().updateTile();
-            }
-        });
+    protected RoutineExercise.PowerExerciseDetails createExerciseDetails() {
+        RoutineExercise.PowerExerciseDetails answer = new RoutineExercise.PowerExerciseDetails();
+        answer.sets = -1;
+        answer.weight = ((RoutineExercise.PowerExerciseDetails)routineExercise().exerciseDetails).weight;
+        answer.times = ((RoutineExercise.PowerExerciseDetails)routineExercise().exerciseDetails).times;
+        return answer;
     }
 
-    protected Integer readPositiveInteger(int r_text) {
-        Integer value;
-        String text = view(r_text, EditText.class).getText().toString();
-        try {
-            value = Math.abs(Integer.parseInt(text));
-        }catch (Exception e){
-            value = null;
+    @Override
+    protected void onSaveResult(RoutineExercise.PowerExerciseDetails exerciseDetails) {
+        application().getTrainingPlan().commitPowerSet(exerciseDetails.weight, exerciseDetails.times);
+        if (application().getTrainingPlan().hasMoreSetsScheduled()){
+            application().getTrainingPlan().addSet();
         }
-        return value;
+        owner().updateTile();
     }
-
-    protected Float readPositiveFloat(int r_text) {
-        Float value;
-        String text = view(r_text, EditText.class).getText().toString();
-        try {
-            value = Math.abs(Float.parseFloat(text));
-        }catch (Exception e){
-            value = null;
-        }
-        return value;
-    }
-
 }

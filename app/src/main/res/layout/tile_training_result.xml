@@ -5,36 +5,40 @@
     android:background="#ffededed"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/exercise_name"
-            style="@style/Text.Tile.Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="Example"
-            android:textStyle="bold" />
-    </LinearLayout>
-
     <RelativeLayout
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+        <TextView
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:id="@+id/exercise_name"
+            style="@style/Text.Tile.Header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:text="Example"
+            android:background="#ffe3e3e3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/exercise_name"
+            android:id="@+id/exercise_set"
+            style="@style/Text.Tile.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set 1"
+            android:textStyle="bold" />
 
         <include
-            android:id="@+id/panel_time_edit"
-            android:layout_centerInParent="true"
-            layout="@layout/panel_time_picker"
+            android:id="@+id/panel_edit_result"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:layout_centerInParent="true"
+            layout="@layout/multipanel_exercise_result_editor"/>
 
     </RelativeLayout>
 
