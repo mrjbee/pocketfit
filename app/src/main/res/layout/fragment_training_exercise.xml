@@ -137,6 +137,13 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/separator" />
 
+                    <TextView
+                        style="@style/Text.Body.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Target" />
+
                     <LinearLayout
                         android:id="@+id/panel_exercise_details"
                         android:layout_width="wrap_content"
@@ -155,6 +162,13 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/separator" />
 
+                    <TextView
+                        android:id="@+id/text_sets_caption"
+                        style="@style/Text.Body.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text = "Result" />
 
                     <LinearLayout
                         android:id="@+id/panel_sets_details"

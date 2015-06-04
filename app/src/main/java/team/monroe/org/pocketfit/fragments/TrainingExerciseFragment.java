@@ -218,8 +218,14 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     }
 
     private void fillUI_awaitingFinish() {
-        view_button(R.id.action_secondary).setText("Extra Set");
-        view_button(R.id.action_secondary).setVisibility(View.VISIBLE);
+
+        if (mExerciseType == Exercise.Type.weight_times) {
+            view_button(R.id.action_secondary).setText("Extra Set");
+            view_button(R.id.action_secondary).setVisibility(View.VISIBLE);
+        }else {
+            view_button(R.id.action_secondary).setVisibility(View.GONE);
+        }
+
         view_button(R.id.action_secondary).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,6 +255,14 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 ((RoutineExercise.PowerExerciseDetails)details).times = ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).times;
                 ((RoutineExercise.PowerExerciseDetails)details).weight =  ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).weight;
                 break;
+            case distance:
+                details = new RoutineExercise.DistanceExerciseDetails();
+                ((RoutineExercise.DistanceExerciseDetails)details).distance = ((RoutineExercise.DistanceExerciseDetails)mRoutineExercise.exerciseDetails).distance;
+                break;
+            case time:
+                details = new RoutineExercise.TimeExerciseDetails();
+                ((RoutineExercise.TimeExerciseDetails)details).time = (float)((double)mTrainingPlan.getSetDuration() / (60d*1000d));
+                break;
             default:
                 throw new IllegalStateException();
         }
@@ -263,7 +277,11 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 RoutineExercise.ExerciseDetails exerciseDetails = mResultEditPresenter.result();
                 if (exerciseDetails instanceof RoutineExercise.PowerExerciseDetails){
                     mTrainingPlan.commitPowerSet(((RoutineExercise.PowerExerciseDetails) exerciseDetails).weight, ((RoutineExercise.PowerExerciseDetails) exerciseDetails).times);
-                }else {
+                }else if (exerciseDetails instanceof RoutineExercise.DistanceExerciseDetails){
+                    mTrainingPlan.commitDistanceSet(((RoutineExercise.DistanceExerciseDetails) exerciseDetails).distance);
+                }else if (exerciseDetails instanceof RoutineExercise.TimeExerciseDetails){
+                    mTrainingPlan.commitTimeSet(((RoutineExercise.TimeExerciseDetails) exerciseDetails).time);
+                }else{
                     throw new IllegalStateException();
                 }
                 fillUI_SetsDetails();
@@ -344,21 +362,23 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         view_text(R.id.exercise_name).setText(mRoutineExercise.exercise.title);
         view_text(R.id.exercise_description).setText(mRoutineExercise.exercise.description);
         mExerciseType = mRoutineExercise.exercise.type;
+        view(R.id.panel_exercise_details, ViewGroup.class).removeAllViews();
 
         switch (mExerciseType){
             case weight_times:
                 RoutineExercise.PowerExerciseDetails exerciseDetails = (RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails;
                 addDetails("Weight",exerciseDetails.weight, "kg");
-                addDetails("Times",exerciseDetails.times, "times");
+                addDetails("Reps",exerciseDetails.times, "reps");
                 addDetails("Sets",exerciseDetails.sets, "sets");
                 break;
-            case time:
-                RoutineExercise.TimeExerciseDetails timeDetails = (RoutineExercise.TimeExerciseDetails) mRoutineExercise.exerciseDetails;
-                addDetails("Time",timeDetails.detailsString(), "");
-                break;
             case distance:
-                RoutineExercise.DistanceExerciseDetails distanceDetails = (RoutineExercise.DistanceExerciseDetails) mRoutineExercise.exerciseDetails;
-                addDetails("Distance", distanceDetails.detailsString(), "");
+            case time:
+                RoutineExercise.ExerciseDetails details = mRoutineExercise.exerciseDetails;
+                addDetails(
+                        RoutineExercise.detailsCharacteristic(details, getResources()),
+                        RoutineExercise.detailsValue(details, getResources()),
+                        RoutineExercise.detailsMeasure(details, getResources())
+                        );
                 break;
             default:
                 throw new IllegalStateException();
