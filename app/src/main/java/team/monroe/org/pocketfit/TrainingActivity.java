@@ -55,6 +55,7 @@ public class TrainingActivity extends FragmentActivity{
     private Closure<RoutineExercise.ExerciseDetails, Void> mAwaitingEditDoneClosure;
     private AppearanceController mHeaderSecondaryAnimator;
     public HeaderChangeListener mHeaderChangeListener;
+    private AppearanceController mHeaderMainAnimator;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -130,6 +131,12 @@ public class TrainingActivity extends FragmentActivity{
                         .hideAndGone()
         );
         mHeaderSecondaryAnimator.hideWithoutAnimation();
+
+        mHeaderMainAnimator = animateAppearance(view(R.id.layer_header), ySlide(0, -DisplayUtils.dpToPx(60,getResources())))
+                        .showAnimation(duration_constant(200), interpreter_accelerate_decelerate())
+                        .hideAnimation(duration_constant(200), interpreter_accelerate(0.8f))
+                        .build();
+        mHeaderMainAnimator.showWithoutAnimation();
 
         mEditPanelAnimator.hideWithoutAnimation();
         mResultEditPresenter = new ExerciseResultEditPresenter(view(R.id.panel_edit, ViewGroup.class));
@@ -242,6 +249,13 @@ public class TrainingActivity extends FragmentActivity{
                 }, R.layout.item_agenda_exercise);
 
         view_list(R.id.list_workout_agenda).setAdapter(mAgendaAdapter);
+    }
+
+    @Override
+    protected void onActivitySize(int width, int height) {
+        if (mHeaderChangeListener != null){
+            mHeaderChangeListener.onHeightChange(view(R.id.layer_header).getHeight());
+        }
     }
 
     private void cancelDetailsEdit() {
@@ -529,6 +543,14 @@ public class TrainingActivity extends FragmentActivity{
 
     public int getHeaderHeight() {
         return view(R.id.layer_header).getHeight();
+    }
+
+    public void onBodyScroll(int scrollY) {
+        if (scrollY > DisplayUtils.dpToPx(60, getResources())){
+            mHeaderMainAnimator.hide();
+        }else if (scrollY < DisplayUtils.dpToPx(10, getResources())){
+            mHeaderMainAnimator.show();
+        }
     }
 
     public static interface HeaderChangeListener{

@@ -3,11 +3,14 @@ package team.monroe.org.pocketfit.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.log.L;
 
 import java.util.List;
 
@@ -56,8 +59,17 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         mResultEditPresenter = new ExerciseResultEditPresenter((ViewGroup) view(R.id.panel_exercise_edit_result));
         mTrainingPlan = application().getTrainingPlan();
         mRoutineExercise = mTrainingPlan.getCurrentExercise();
-        int headerHeight = owner().getHeaderHeight();
-        updateHeaderSpace(headerHeight);
+        view(R.id.scroll, ScrollView.class).getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+            @Override
+            public void onScrollChanged() {
+                int scrollY =   view(R.id.scroll, ScrollView.class).getScrollY();
+                if (owner() !=null) {
+                    owner().onBodyScroll(scrollY);
+                }
+            }
+        });
+        updateHeaderSpace(owner().getHeaderHeight());
         owner().mHeaderChangeListener = new TrainingActivity.HeaderChangeListener() {
             @Override
             public void onHeightChange(int newHeight) {
