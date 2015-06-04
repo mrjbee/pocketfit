@@ -24,8 +24,6 @@ import team.monroe.org.pocketfit.view.VerticalViewPager;
 
 public class DashboardActivity extends ActivitySupport<PocketFitApp>{
 
-    private AppearanceController startupTileAC;
-    private AppearanceController backgroundStripeAC;
     private MainButtonController mainButtonController;
     private VerticalViewPager mViewPager;
     private team.monroe.org.pocketfit.view.FragmentPagerAdapter mPageAdapter;
@@ -38,14 +36,6 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
 
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
 
-        startupTileAC = animateAppearance(view(R.id.view_pager), ySlide(0, DisplayUtils.screenHeight(getResources())))
-                .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
-                .build();
-
-        backgroundStripeAC = animateAppearance(view(R.id.background_stripe), ySlide(0, DisplayUtils.screenHeight(getResources())/2))
-                .showAnimation(duration_constant(400), interpreter_accelerate(0.5f))
-                .build();
-
 
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,44 +45,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
         });
 
         if (isFirstRun()){
-            mainButtonController.blockAppearance();
-            backgroundStripeAC.hideWithoutAnimation();
-            startupTileAC.hideWithoutAnimation();
-            backgroundStripeAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
-                @Override
-                public void customize(Animator animator) {
-                    animator.setStartDelay(200);
-                    animator.addListener(new AnimatorListenerSupport(){
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            startupTileAC.showAndCustomize(new AppearanceController.AnimatorCustomization() {
-                                @Override
-                                public void customize(Animator animator) {
-                                    animator.addListener(new AnimatorListenerSupport(){
-                                        @Override
-                                        public void onAnimationEnd(Animator animation) {
-                                            runLastOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mainButtonController.applyAppearance();
-                                                }
-                                            }, 500);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
         }else {
-            startupTileAC.showWithoutAnimation();
-            backgroundStripeAC.showWithoutAnimation();
             mainButtonController.restoreState(savedInstanceState);
             mCurrentPageClass = (Class<? extends DashboardPageFragment>) savedInstanceState.getSerializable("current_page");
         }

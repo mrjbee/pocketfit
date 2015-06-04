@@ -8,12 +8,12 @@
     <TextView
         android:id="@+id/exercise_name"
         style="@style/Text.Tile.Header.Light"
-        android:layout_width="wrap_content"
+        android:background="#ff457fdf"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
         android:layout_centerHorizontal="true"
         android:text="Example"
         android:textStyle="bold" />
@@ -24,9 +24,9 @@
         style="@style/Text.Tile.Header.Light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:text="Set 1"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Details"
         android:textStyle="bold" />
 
     <TextView
@@ -43,14 +43,15 @@
 
     <TextView
             android:visibility="invisible"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp"
             android:id="@+id/exercise_timer_anchor"
             style="@style/Text.Tile.Clock.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00"
+            android:text="00:00:00"
             android:textStyle="bold" />
 
     <RelativeLayout
@@ -71,9 +72,7 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_centerInParent="true"
         android:id="@+id/exercise_start_time"
         style="@style/Text.Tile.Clock.Light"
         android:layout_width="wrap_content"

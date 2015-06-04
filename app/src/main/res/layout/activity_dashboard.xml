@@ -2,36 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Dashboard"
-    style="@style/Panel.Base"
-    android:background="@color/background.main">
-
-    <LinearLayout
-        android:layout_centerHorizontal="true"
-        android:id="@+id/background_stripe"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
-
-
-        <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:background="@color/background.secondary"
-            android:orientation="vertical"
-            android:layout_marginRight="10dp"
-            />
-
-        <LinearLayout
-            android:layout_marginLeft="10dp"
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:background="@color/background.secondary"
-            android:orientation="vertical" />
-
-    </LinearLayout>
+    style="@style/Panel.Base">
 
     <team.monroe.org.pocketfit.view.VerticalViewPager
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/view_pager"
         android:overScrollMode="always"
         android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.utils.DisplayUtils;
 
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
@@ -14,6 +15,7 @@ import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.combine;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.heightSlide;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_decelerate;
@@ -36,9 +38,9 @@ public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        mStopPanelAnimation = animateAppearance(view(R.id.panel_stop),ySlide(0,70))
+        mStopPanelAnimation = animateAppearance(view(R.id.panel_stop),heightSlide((int) DisplayUtils.dpToPx(50,getResources()), 0))
                 .showAnimation(duration_constant(200),interpreter_accelerate_decelerate())
-                .hideAndGone()
+                .hideAndInvisible()
                 .build();
 
         mRoutineExercise = application().getTrainingPlan().getCurrentExercise();
@@ -68,17 +70,22 @@ public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
                     view(R.id.exercise_start_time).setOnClickListener(null);
                     int[] fromLocation = getViewLocationOnScreen(v);
                     int[] toLocation = getViewLocationOnScreen(view(R.id.exercise_timer_anchor));
-                    int xDelta = fromLocation[0] - toLocation[0];
+                    int xDelta = fromLocation[0] - toLocation[0]-v.getWidth()/2;
                     int yDelta = fromLocation[1] - toLocation[1];
                     AppearanceController ac = combine(
-                            animateAppearance(v, scale(1f,0.6f))
-                            .showAnimation(duration_constant(600),interpreter_overshot()),
                             animateAppearance(v, xSlide(-xDelta,0))
                             .showAnimation(duration_constant(200),interpreter_decelerate(1f)),
                             animateAppearance(v, ySlide(-yDelta,0))
                             .showAnimation(duration_constant(200), interpreter_accelerate(0.5f))
                     );
+
+                    AppearanceController ac2 =
+                            animateAppearance(v, scale(1f,0.6f))
+                                    .showAnimation(duration_constant(600),interpreter_overshot()).build();
+
                     ac.hideWithoutAnimation();
+                    ac2.hideWithoutAnimation();
+
                     ac.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                         @Override
                         public void customize(Animator animator) {
@@ -87,6 +94,19 @@ public abstract class TrainingTileExecuteFragment extends TrainingTileFragment {
                                 public void onAnimationEnd(final Animator animation) {
                                     super.onAnimationEnd(animation);
                                     initializeSetProgressView((android.widget.TextView) v);
+                                }
+                            });
+                        }
+                    });
+                    ac2.showAndCustomize(new AppearanceController.AnimatorCustomization() {
+                        @Override
+                        public void customize(Animator animator) {
+                            animator.addListener(new AnimatorListenerSupport(){
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    //v.setVisibility(View.GONE);
+                                    //TextView newView = view_text(R.id.exercise_timer_anchor);
+                                    //initializeSetProgressView(newView);
                                     mStopPanelAnimation.showAndCustomize(new AppearanceController.AnimatorCustomization() {
                                         @Override
                                         public void customize(Animator anim) {

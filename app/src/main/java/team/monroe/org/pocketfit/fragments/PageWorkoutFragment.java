@@ -693,13 +693,6 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
         return DateUtils.today();
     }
 
-    public void backonPageMoveToHide(float top, boolean pageMotionDirectionUp) {
-        TextView secondaryHeader = getSecondaryHeaderView();
-        float viewPosition = DisplayUtils.dpToPx(110, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
-        if (top < viewPosition){
-            translateHeaderPosition(top);
-        }
-    }
 
     private void translateHeaderPosition(float offset) {
         ViewGroup headerPanel = getHeaderContainer();
@@ -708,8 +701,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
 
     @Override
     public void onPageMoveToShow(float top, boolean pageMotionDirectionUp) {
-        TextView secondaryHeader = getSecondaryHeaderView();
-        float viewPosition = DisplayUtils.dpToPx(108, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        float viewPosition = DisplayUtils.dpToPx(34, getResources());
         if (Math.abs(top) < viewPosition){
             translateHeaderPosition(Math.abs(top));
         }else{
@@ -719,8 +711,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
 
     @Override
     public void onPageMoveToHide(float top, boolean pageMotionDirectionUp) {
-        TextView secondaryHeader = getSecondaryHeaderView();
-        float viewPosition = DisplayUtils.dpToPx(108, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
+        float viewPosition = DisplayUtils.dpToPx(34, getResources());
         if (Math.abs(top) < viewPosition){
             translateHeaderPosition(Math.abs(top));
         }

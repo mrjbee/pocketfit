@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="horizontal"
+    android:background="@drawable/header"
     android:paddingLeft="@dimen/dash.header.margin.side"
     android:paddingRight="@dimen/dash.header.margin.side">
 
     <LinearLayout
+        android:layout_marginLeft="20dp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:layout_width="fill_parent"
@@ -15,9 +17,9 @@
 
         <TextView
             android:id="@+id/caption"
-            style="@style/Text.Header.Caption.Light"
+            style="@style/Text.Header.Caption"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:text="Pocket.Fit" />
@@ -28,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:textAllCaps="true"
             android:layout_weight="1"
             android:text="Secondary Example" />
 

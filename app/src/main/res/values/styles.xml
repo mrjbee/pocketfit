@@ -219,7 +219,7 @@
 
     <style name="Text.Training.Title" parent="AppTheme">
         <item name="android:textSize">25sp</item>
-        <item name="android:textColor">#fff8f8f8</item>
+        <item name="android:textColor">#ff515151</item>
         <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
@@ -235,7 +235,7 @@
 
     <style name="Text.Training.Pause.Clock" parent="AppTheme">
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#fff7f7f7</item>
+        <item name="android:textColor">#ff515151</item>
         <item name="android:textStyle">bold</item>
     </style>
 

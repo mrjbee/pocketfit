@@ -12,6 +12,10 @@ public class TrainingTileTimeExecuteFragment extends TrainingTileExecuteFragment
 
     @Override
     protected void initializeSetProgressView(TextView textView) {
+        if (mSetClockPresenter != null){
+            mSetClockPresenter.hide();
+            mSetClockPresenter.resetClock();
+        }
         RoutineExercise.TimeExerciseDetails details = (RoutineExercise.TimeExerciseDetails) mRoutineExercise.exerciseDetails;
         long requestedMs = (long) (details.time * 60 * 1000);
         mSetClockPresenter = new DowntimeClockViewPresenter(textView);

@@ -4,8 +4,8 @@
     <integer name="card_flip_time_half">200</integer>
 
     <color name="light.black">#252525</color>
-    <color name="background.main">#ff386ec6</color>
-    <color name="background.secondary">#4486f1</color>
+    <color name="background.main">#dbdbdb</color>
+    <color name="background.secondary">#fff4f4f4</color>
 
     <color name="text.color.date">#ff9a9a9a</color>
     <color name="text.color.date.training">#ff575757</color>
@@ -15,7 +15,7 @@
 
     <color name="transperent">#00ffffff</color>
     <color name="button.pressed">#329F9F9F</color>
-    <color name="button.pressed.dark">#ff23457b</color>
+    <color name="button.pressed.dark">#ffbebebe</color>
 
     <color name="text.header.dash">#fffcfcfc</color>
     <color name="text.header.dash.dark">#ff575757</color>

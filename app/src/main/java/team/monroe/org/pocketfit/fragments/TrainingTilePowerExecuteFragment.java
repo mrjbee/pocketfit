@@ -9,6 +9,11 @@ public class TrainingTilePowerExecuteFragment extends TrainingTileExecuteFragmen
 
     @Override
     protected void initializeSetProgressView(TextView textView) {
+        if (mSetClockPresenter != null){
+            mSetClockPresenter.hide();
+            mSetClockPresenter.resetClock();
+        }
+
         mSetClockPresenter = new ClockViewPresenter(textView);
         mSetClockPresenter.show();
         mSetClockPresenter.startClock(application().getTrainingPlan().getSetStartDate());

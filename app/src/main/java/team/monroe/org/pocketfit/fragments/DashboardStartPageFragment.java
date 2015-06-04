@@ -9,4 +9,8 @@ public abstract class DashboardStartPageFragment extends DashboardPageFragment {
         return R.layout.fragment_single_tile_no_bottom;
     }
 
+    @Override
+    protected boolean headerLightVersion() {
+        return false;
+    }
 }
