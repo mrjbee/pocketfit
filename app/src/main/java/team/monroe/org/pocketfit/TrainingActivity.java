@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.utils.Closure;
@@ -54,6 +55,7 @@ public class TrainingActivity extends FragmentActivity{
     private AppearanceController mEditPanelAnimator;
     private ExerciseResultEditPresenter mResultEditPresenter;
     private Closure<RoutineExercise.ExerciseDetails, Void> mAwaitingEditDoneClosure;
+    private AppearanceController mHeaderSecondaryAnimator;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -93,7 +95,7 @@ public class TrainingActivity extends FragmentActivity{
                 .build();
 
         mTrainingClockAnimator = animateAppearance(view(R.id.text_clock), scale(1f,0f))
-                .showAnimation(duration_constant(300),interpreter_overshot())
+                .showAnimation(duration_constant(300),interpreter_decelerate(0.8f))
                 .hideAndInvisible()
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
@@ -116,6 +118,20 @@ public class TrainingActivity extends FragmentActivity{
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.8f))
                 .hideAndGone()
                 .build();
+
+        mHeaderSecondaryAnimator = combine(
+
+                animateAppearance(view(R.id.panel_header_secondary), alpha(1, 0))
+                        .showAnimation(duration_constant(200), interpreter_accelerate_decelerate())
+                        .hideAnimation(duration_constant(200), interpreter_accelerate(0.8f)),
+
+                animateAppearance(view(R.id.panel_header_secondary), heightSlide((int) DisplayUtils.dpToPx(40, getResources()),0))
+                .showAnimation(duration_constant(400), interpreter_accelerate_decelerate())
+                .hideAnimation(duration_constant(400), interpreter_accelerate(0.8f))
+                .hideAndGone()
+        );
+        mHeaderSecondaryAnimator.hideWithoutAnimation();
+
         mEditPanelAnimator.hideWithoutAnimation();
         mResultEditPresenter = new ExerciseResultEditPresenter(view(R.id.panel_edit, ViewGroup.class));
         view(R.id.action_cancel).setOnClickListener(new View.OnClickListener() {
@@ -330,36 +346,45 @@ public class TrainingActivity extends FragmentActivity{
         }else {
             mTrainingDurationClockPresenter.resetClock();
         }
-
         if (application().getTrainingPlan().isPaused()){
-            if (animate) {
-                mPauseClockAnimator.show();
-            }else {
-                mPauseClockAnimator.showWithoutAnimation();
-            }
             mTrainingPauseClockPresenter.startClock(application().getTrainingPlan().getPauseStartDate());
         }else {
-            if (animate) {
-                mPauseClockAnimator.hide();
-            }else {
-                mPauseClockAnimator.hideWithoutAnimation();
-            }
             mTrainingPauseClockPresenter.resetClock();
         }
 
-        if (application().getTrainingPlan().hasMoreExercises()){
+        if (application().getTrainingPlan().hasMoreExercises() && application().getTrainingPlan().isStarted()){
             if (animate) {
-                mTrainingClockAnimator.show();
-                if (application().getTrainingPlan().isPaused())mPauseClockAnimator.show();
+                SceneDirector
+                        .scenario()
+                            .show(mHeaderSecondaryAnimator)
+                            .then()
+                                .show(mTrainingClockAnimator)
+                                .then()
+                                .action(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (application().getTrainingPlan().isPaused()) {
+                                            mPauseClockAnimator.show();
+                                        }else {
+                                            mPauseClockAnimator.hide();
+                                        }
+                                    }
+                                })
+                .play();
             }else {
+                mHeaderSecondaryAnimator.showWithoutAnimation();
                 mTrainingClockAnimator.showWithoutAnimation();
                 if (application().getTrainingPlan().isPaused())mPauseClockAnimator.showWithoutAnimation();
             }
         } else {
             if (animate) {
-                mTrainingClockAnimator.hide();
-                mPauseClockAnimator.hide();
+                SceneDirector.scenario()
+                        .hide(mTrainingClockAnimator, mPauseClockAnimator)
+                            .then()
+                                .hide(mHeaderSecondaryAnimator)
+                .play();
             }else {
+                mHeaderSecondaryAnimator.hideWithoutAnimation();
                 mTrainingClockAnimator.hideWithoutAnimation();
                 mPauseClockAnimator.hideWithoutAnimation();
             }
@@ -386,55 +411,11 @@ public class TrainingActivity extends FragmentActivity{
         }else{
             return TrainingExerciseFragment.class;
         }
-/*
-        Exercise.Type exerciseType = trainingPlan.getCurrentExercise().exercise.type;
-
-        if (!trainingPlan.isExerciseStarted()){
-            //show exercise fragment
-            return TrainingTileExerciseFragment.class;
-        }else{
-            if (trainingPlan.isSetStarted() && trainingPlan.isSetDone()){
-                //set done, show set results
-                switch (exerciseType){
-                    case weight_times:
-                        if (trainingPlan.isAllSetsCommitted()){
-                            return TrainingTilePowerAllResultFragment.class;
-                        }else {
-                            return TrainingTilePowerResultFragment.class;
-                        }
-                    case time:
-                        return TrainingTileTimeResultFragment.class;
-                    case distance:
-                        return TrainingTileDistanceResultFragment.class;
-                    default:
-                        throw new IllegalStateException();
-                }
-            }else {
-                //show set execution
-                switch (exerciseType){
-                    case weight_times:
-                        return TrainingTilePowerExecuteFragment.class;
-                    case time:
-                        return TrainingTileTimeExecuteFragment.class;
-                    case distance:
-                        return TrainingTileDistanceExecuteFragment.class;
-                    default:
-                        throw new IllegalStateException();
-                }
-            }
-        }
-        //return TrainingTileLoadingRoutineExerciseFragment.class;
-        */
     }
 
     //TODO: add back stack top
     private Class currentFragment;
 
-    //TrainingTileExerciseFragment
-    //TrainingTilePowerAllResultFragment
-    //TrainingTilePowerExecuteFragment
-    //TrainingTilePowerResultFragment
-    //TrainingEndFragment
     public void updateTile() {
         Class<? extends BodyFragment> nextTileFragment = calculateCurrentFragment();
         BodyFragmentAnimationRequest animationRequest = animation_slide_out_from_right();

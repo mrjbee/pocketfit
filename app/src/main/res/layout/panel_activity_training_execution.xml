@@ -49,7 +49,7 @@
             android:layout_height="40dp">
             <TextView
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
                 android:id="@+id/text_clock"
                 style="@style/Text.Training.Pause.Clock"
                 android:layout_width="wrap_content"
@@ -59,12 +59,12 @@
 
             <TextView
                 android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:id="@+id/text_pause_clock"
                 style="@style/Text.Training.Clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/text_clock"
                 android:text="00:00:00" />
         </RelativeLayout>
 
