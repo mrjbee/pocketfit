@@ -249,7 +249,7 @@
 
     <style name="Text.Training.Clock" parent="AppTheme">
         <item name="android:textSize">25sp</item>
-        <item name="android:textColor">#ff519fff</item>
+        <item name="android:textColor">#ff30addd</item>
     </style>
 
     <style name="Text.Training.Pause.Clock" parent="AppTheme">

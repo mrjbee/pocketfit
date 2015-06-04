@@ -19,6 +19,7 @@ import team.monroe.org.pocketfit.TrainingExecutionService;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
+import team.monroe.org.pocketfit.view.presenter.DowntimeClockViewPresenter;
 import team.monroe.org.pocketfit.view.presenter.ExerciseResultEditPresenter;
 
 public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
@@ -31,10 +32,13 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     private AppearanceController ac_executionPanelHeight;
     private AppearanceController ac_executionPanelAlpha;
     private AppearanceController ac_actionPanel;
-    private ClockViewPresenter mClockViewPresenter;
     private AppearanceController ac_executionPanelMove;
-    private ExerciseResultEditPresenter mResultEditPresenter;
     private AppearanceController ac_editPanelMove;
+
+    private ClockViewPresenter mClockViewPresenter;
+    private DowntimeClockViewPresenter mDowntimeClockViewPresenter;
+    private ExerciseResultEditPresenter mResultEditPresenter;
+
 
     @Override protected boolean isHeaderSecondary() {
         return false;
@@ -300,27 +304,39 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         view(R.id.stop_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClockViewPresenter.resetClock();
-                mClockViewPresenter = null;
+                if (mClockViewPresenter != null){
+                    mClockViewPresenter.resetClock();
+                    mClockViewPresenter = null;
+                }
+                if (mDowntimeClockViewPresenter != null){
+                    mDowntimeClockViewPresenter.resetClock();
+                    mDowntimeClockViewPresenter = null;
+                }
                 mTrainingPlan.stopSet();
                 mState = State.RESULT_AWAITING;
                 updateUI(true);
             }
         });
         String description = RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources());
-        if (mExerciseType == Exercise.Type.weight_times){
-           int sets = ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets;
-           ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets = -1;
-           description =
-                   RoutineExercise.detailsCharacteristic(mRoutineExercise.exerciseDetails,getResources())
-                   + " "+ (mTrainingPlan.getSetIndex()+1) + " " +
-                   RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources());
-           ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets = sets;
+        if (mExerciseType == Exercise.Type.weight_times) {
+            int sets = ((RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails).sets;
+            ((RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails).sets = -1;
+            description =
+                    RoutineExercise.detailsCharacteristic(mRoutineExercise.exerciseDetails, getResources())
+                            + " " + (mTrainingPlan.getSetIndex() + 1) + " " +
+                            RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources());
+            ((RoutineExercise.PowerExerciseDetails) mRoutineExercise.exerciseDetails).sets = sets;
         }
 
         view_text(R.id.text_exercise_details_short).setText(description);
-        mClockViewPresenter = new ClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
-        mClockViewPresenter.startClock(mTrainingPlan.getSetStartDate());
+        if (mExerciseType == Exercise.Type.time) {
+            mDowntimeClockViewPresenter = new DowntimeClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
+            mDowntimeClockViewPresenter.startClock(mTrainingPlan.getSetStartDate(),
+                    (long) (((RoutineExercise.TimeExerciseDetails)mRoutineExercise.exerciseDetails).time * 1000 * 60));
+        } else {
+            mClockViewPresenter = new ClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
+            mClockViewPresenter.startClock(mTrainingPlan.getSetStartDate());
+        }
     }
 
     private void fillUI_awaitingStart() {
