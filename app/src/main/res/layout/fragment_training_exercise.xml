@@ -23,6 +23,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="200dp">
                     <RelativeLayout
+                        android:id="@+id/panel_exercise_stop"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
                         <TextView
@@ -67,6 +68,12 @@
                                 android:src="@drawable/round_btn_stop"/>
                         </RelativeLayout>
                     </RelativeLayout>
+                    <include
+                        android:id="@+id/panel_exercise_edit_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        layout="@layout/multipanel_exercise_result_editor"/>
                 </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/panel_tile"

@@ -80,6 +80,10 @@ public class RoutineExercise {
     }
 
 
+    public static String shortDescription(ExerciseDetails details, Resources resources) {
+        return detailsValue(details, resources)+" "+detailsMeasure(details, resources);
+    }
+
     public static String detailsCharacteristic(ExerciseDetails details, Resources resources){
             if (details instanceof  DistanceExerciseDetails){
                 return "Distance";

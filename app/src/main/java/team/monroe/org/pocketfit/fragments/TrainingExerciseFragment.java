@@ -17,6 +17,7 @@ import team.monroe.org.pocketfit.TrainingExecutionService;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
+import team.monroe.org.pocketfit.view.presenter.ExerciseResultEditPresenter;
 
 public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
 
@@ -29,6 +30,9 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     private AppearanceController ac_executionPanelAlpha;
     private AppearanceController ac_actionPanel;
     private ClockViewPresenter mClockViewPresenter;
+    private AppearanceController ac_executionPanelMove;
+    private ExerciseResultEditPresenter mResultEditPresenter;
+    private AppearanceController ac_editPanelMove;
 
     @Override protected boolean isHeaderSecondary() {
         return false;
@@ -43,6 +47,7 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mResultEditPresenter = new ExerciseResultEditPresenter((ViewGroup) view(R.id.panel_exercise_edit_result));
         mTrainingPlan = application().getTrainingPlan();
         mRoutineExercise = mTrainingPlan.getCurrentExercise();
 
@@ -62,11 +67,25 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
                 .build();
 
+        ac_executionPanelMove =  animateAppearance(view(R.id.panel_exercise_stop), xSlide(0f, -DisplayUtils.screenWidth(getResources())))
+                    .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
+                    .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                    .hideAndInvisible().build();
+
+
+        ac_editPanelMove =  animateAppearance(view(R.id.panel_exercise_edit_result), xSlide(0f, DisplayUtils.screenWidth(getResources())))
+                        .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
+                        .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                        .hideAndGone().build();
+
+
         ac_actionPanel = animateAppearance(view(R.id.panel_action_button), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
                 .showAnimation(duration_constant(200), interpreter_decelerate(0.8f))
                 .hideAnimation(duration_constant(200), interpreter_accelerate(0.6f))
                 .hideAndGone()
                 .build();
+
+        //panel_exercise_edit_result
 
         fillUI_ExerciseDetails();
         calculateState();
@@ -83,10 +102,34 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 fillUI_awaitingStop();
                 updateUI_awaitingStop(animate);
                 break;
-            case FINISH_AWAITING:
             case RESULT_AWAITING:
+                fillUI_awaitingResult();
+                updateUI_awaitingResult(animate);
+                break;
+            case FINISH_AWAITING:
             default:
                 throw new IllegalStateException();
+        }
+    }
+
+    private void updateUI_awaitingResult(boolean animate) {
+        if (animate){
+            SceneDirector.scenario()
+                            .hide(ac_stopButton)
+                            .then()
+                                .hide(ac_executionPanelMove)
+                                .show(ac_editPanelMove)
+                                .show(ac_executionPanelAlpha, ac_executionPanelHeight)
+                            .then()
+                                .show(ac_actionPanel)
+                    .play();
+        }else{
+            ac_editPanelMove.showWithoutAnimation();
+            ac_executionPanelMove.hideWithoutAnimation();
+            ac_executionPanelAlpha.showWithoutAnimation();
+            ac_executionPanelHeight.showWithoutAnimation();
+            ac_stopButton.hideWithoutAnimation();
+            ac_actionPanel.showWithoutAnimation();
         }
     }
 
@@ -97,10 +140,14 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                     .show(ac_executionPanelHeight)
                         .then()
                             .show(ac_executionPanelAlpha)
+                            .show(ac_executionPanelMove)
+                            .hide(ac_editPanelMove)
                         .then()
                             .show(ac_stopButton)
                     .play();
         }else{
+            ac_editPanelMove.hideWithoutAnimation();
+            ac_executionPanelMove.showWithoutAnimation();
             ac_executionPanelAlpha.showWithoutAnimation();
             ac_executionPanelHeight.showWithoutAnimation();
             ac_stopButton.showWithoutAnimation();
@@ -110,6 +157,8 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
 
 
     private void updateUI_awaitingStart(boolean animate) {
+        ac_editPanelMove.hideWithoutAnimation();
+        ac_executionPanelMove.showWithoutAnimation();
         if (animate){
             SceneDirector.scenario()
                     .hide(ac_stopButton)
@@ -128,13 +177,44 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         }
     }
 
+
+    private void fillUI_awaitingResult() {
+        RoutineExercise.ExerciseDetails details;
+        switch (mExerciseType){
+            case weight_times:
+                details = new RoutineExercise.PowerExerciseDetails();
+                ((RoutineExercise.PowerExerciseDetails)details).sets = -1;
+                ((RoutineExercise.PowerExerciseDetails)details).times = ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).times;
+                ((RoutineExercise.PowerExerciseDetails)details).weight =  ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).weight;
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+
+        mResultEditPresenter.setup(details);
+
+        view_button(R.id.action_secondary).setVisibility(View.GONE);
+        view_button(R.id.action).setText("Save Result");
+        view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
     private void fillUI_awaitingStop() {
         view(R.id.stop_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add stop action
+                mClockViewPresenter.resetClock();
+                mClockViewPresenter = null;
+                mTrainingPlan.stopSet();
+                mState = State.RESULT_AWAITING;
+                updateUI(true);
             }
         });
+        view_text(R.id.text_exercise_details_short).setText(RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources()));
         mClockViewPresenter = new ClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
         mClockViewPresenter.startClock(mTrainingPlan.getSetStartDate());
     }
