@@ -11,9 +11,16 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="120dp">
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:id="@+id/panel_top_wrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"

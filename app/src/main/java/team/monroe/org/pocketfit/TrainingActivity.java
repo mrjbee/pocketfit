@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Pair;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,11 @@ import android.widget.TextView;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.app.ui.animation.apperrance.DefaultAppearanceController;
 import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.log.L;
 import org.monroe.team.corebox.utils.Closure;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
@@ -27,15 +28,12 @@ import java.util.Date;
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
 import team.monroe.org.pocketfit.fragments.TrainingExerciseFragment;
-import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerAllResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTilePowerResultFragment;
-import team.monroe.org.pocketfit.fragments.TrainingTileTimeExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileTimeResultFragment;
-import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
@@ -56,6 +54,7 @@ public class TrainingActivity extends FragmentActivity{
     private ExerciseResultEditPresenter mResultEditPresenter;
     private Closure<RoutineExercise.ExerciseDetails, Void> mAwaitingEditDoneClosure;
     private AppearanceController mHeaderSecondaryAnimator;
+    public HeaderChangeListener mHeaderChangeListener;
 
     @Override
     protected FragmentItem customize_startupFragment() {
@@ -125,10 +124,10 @@ public class TrainingActivity extends FragmentActivity{
                         .showAnimation(duration_constant(200), interpreter_accelerate_decelerate())
                         .hideAnimation(duration_constant(200), interpreter_accelerate(0.8f)),
 
-                animateAppearance(view(R.id.panel_header_secondary), heightSlide((int) DisplayUtils.dpToPx(40, getResources()),0))
-                .showAnimation(duration_constant(400), interpreter_accelerate_decelerate())
-                .hideAnimation(duration_constant(400), interpreter_accelerate(0.8f))
-                .hideAndGone()
+                animateAppearance(view(R.id.panel_header_secondary), myHeightSlide((int) DisplayUtils.dpToPx(40, getResources()), 0))
+                        .showAnimation(duration_constant(400), interpreter_accelerate_decelerate())
+                        .hideAnimation(duration_constant(400), interpreter_accelerate(0.8f))
+                        .hideAndGone()
         );
         mHeaderSecondaryAnimator.hideWithoutAnimation();
 
@@ -296,6 +295,43 @@ public class TrainingActivity extends FragmentActivity{
         updateAgenda();
     }
 
+
+    private TypeBuilder<Integer> myHeightSlide(final int showValue, final int hideValue){
+        return new TypeBuilder<Integer>() {
+            @Override
+            public DefaultAppearanceController.ValueGetter<Integer> buildValueGetter() {
+                return new DefaultAppearanceController.ValueGetter<Integer>() {
+                    @Override
+                    public Integer getShowValue() {
+                        return showValue;
+                    }
+
+                    @Override
+                    public Integer getHideValue() {
+                        return hideValue;
+                    }
+
+                    @Override
+                    public Integer getCurrentValue(View view) {
+                        return view.getLayoutParams().height;
+                    }
+                };
+            }
+
+            @Override
+            public TypedValueSetter<Integer> buildValueSetter() {
+                return new TypedValueSetter<Integer>(Integer.class) {
+                    @Override
+                    public void setValue(View view, Integer value) {
+                        view.getLayoutParams().height = value;
+                        view.requestLayout();
+                        if (mHeaderChangeListener != null)
+                            mHeaderChangeListener.onHeightChange(view(R.id.layer_header).getHeight());
+                    }
+                };
+            }
+        };
+    }
 
 
     private void updateAgenda() {
@@ -489,5 +525,13 @@ public class TrainingActivity extends FragmentActivity{
     protected void onSaveInstanceState(Bundle outState) {
         unblockDrawer();
         super.onSaveInstanceState(outState);
+    }
+
+    public int getHeaderHeight() {
+        return view(R.id.layer_header).getHeight();
+    }
+
+    public static interface HeaderChangeListener{
+        void onHeightChange(int newHeight);
     }
 }

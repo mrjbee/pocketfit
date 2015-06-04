@@ -56,6 +56,15 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         mResultEditPresenter = new ExerciseResultEditPresenter((ViewGroup) view(R.id.panel_exercise_edit_result));
         mTrainingPlan = application().getTrainingPlan();
         mRoutineExercise = mTrainingPlan.getCurrentExercise();
+        int headerHeight = owner().getHeaderHeight();
+        updateHeaderSpace(headerHeight);
+        owner().mHeaderChangeListener = new TrainingActivity.HeaderChangeListener() {
+            @Override
+            public void onHeightChange(int newHeight) {
+                updateHeaderSpace(newHeight);
+            }
+        };
+        //
 
         ac_stopButton = animateAppearance(view(R.id.panel_main_button), scale(1,0))
                 .showAnimation(duration_constant(400), interpreter_overshot())
@@ -91,12 +100,23 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 .hideAndGone()
                 .build();
 
-        //panel_exercise_edit_result
-
         fillUI_ExerciseDetails();
         fillUI_SetsDetails();
         calculateState();
         updateUI(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        owner().mHeaderChangeListener = null;
+    }
+
+    private void updateHeaderSpace(int newHeight) {
+        int height =  (int) (newHeight + DisplayUtils.dpToPx(20, getResources()));
+        height = Math.max(height, (int) DisplayUtils.dpToPx(80, getResources()));
+        view(R.id.panel_top_wrap).getLayoutParams().height = height;
+        view(R.id.panel_top_wrap).requestLayout();
     }
 
     private void fillUI_SetsDetails() {
