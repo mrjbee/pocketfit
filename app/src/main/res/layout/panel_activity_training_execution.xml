@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <!-- Body Fragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/layer_header"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/header">
+
+        <LinearLayout
+            android:id="@+id/panel_header_main"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/text_routine_name"
+                style="@style/Text.Training.Title"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Example" />
+
+
+            <ImageButton
+                android:layout_gravity="center_vertical"
+                android:id="@+id/action_options"
+                style="@style/Button.Action"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/options" />
+         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/panel_header_secondary"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:paddingRight="20dp">
+            <TextView
+                android:id="@+id/text_clock"
+                style="@style/Text.Training.Pause.Clock"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="00:00:00" />
+
+            <TextView
+                android:id="@+id/text_pause_clock"
+                style="@style/Text.Training.Clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/text_clock"
+                android:gravity="top"
+                android:text="00:00:00" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/layer_shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#A2000000"
+        android:orientation="vertical" />
+
+    <!-- Sets editor -->
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/layer_edit"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tile_white_spec">
+            <include
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/panel_edit"
+                layout="@layout/multipanel_exercise_result_editor"/>
+
+            <LinearLayout
+                android:id="@+id/panel_actions"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/action_cancel"
+                    android:layout_weight="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Panel"
+                    android:text="Cancel"/>
+                <Button
+                    android:id="@+id/action_save"
+                    android:layout_weight="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Panel"
+                    android:text="Save"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

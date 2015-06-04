@@ -25,6 +25,7 @@ import java.util.Date;
 
 import team.monroe.org.pocketfit.fragments.BodyFragment;
 import team.monroe.org.pocketfit.fragments.TrainingEndFragment;
+import team.monroe.org.pocketfit.fragments.TrainingExerciseFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceExecuteFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileDistanceResultFragment;
 import team.monroe.org.pocketfit.fragments.TrainingTileExerciseFragment;
@@ -87,13 +88,13 @@ public class TrainingActivity extends FragmentActivity{
         mTrainingPauseClockPresenter = new ClockViewPresenter(view_text(R.id.text_pause_clock));
         mPauseClockAnimator = animateAppearance(view(R.id.text_pause_clock), scale(1f,0f))
                 .showAnimation(duration_constant(300),interpreter_overshot())
-                .hideAndGone()
+                .hideAndInvisible()
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
 
         mTrainingClockAnimator = animateAppearance(view(R.id.text_clock), scale(1f,0f))
                 .showAnimation(duration_constant(300),interpreter_overshot())
-                .hideAndGone()
+                .hideAndInvisible()
                 .hideAnimation(duration_constant(200), interpreter_decelerate(0.5f))
                 .build();
 
@@ -382,8 +383,10 @@ public class TrainingActivity extends FragmentActivity{
 
         if (!application().getTrainingPlan().hasMoreExercises()){
             return TrainingEndFragment.class;
+        }else{
+            return TrainingExerciseFragment.class;
         }
-
+/*
         Exercise.Type exerciseType = trainingPlan.getCurrentExercise().exercise.type;
 
         if (!trainingPlan.isExerciseStarted()){
@@ -421,6 +424,7 @@ public class TrainingActivity extends FragmentActivity{
             }
         }
         //return TrainingTileLoadingRoutineExerciseFragment.class;
+        */
     }
 
     //TODO: add back stack top
