@@ -107,8 +107,34 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 updateUI_awaitingResult(animate);
                 break;
             case FINISH_AWAITING:
+                fillUI_awaitingFinish();
+                updateUI_awaitingFinish(animate);
+                break;
             default:
                 throw new IllegalStateException();
+        }
+    }
+
+    private void updateUI_awaitingFinish(boolean animate) {
+        if (animate){
+            SceneDirector.scenario()
+                    .hide(ac_stopButton)
+                    .then()
+                        .hide(ac_editPanelMove)
+                        .show(ac_executionPanelMove)
+                        .hide(ac_executionPanelAlpha)
+                        .then()
+                            .hide(ac_executionPanelHeight)
+                        .then()
+                            .show(ac_actionPanel)
+                    .play();
+        }else{
+            ac_editPanelMove.hideWithoutAnimation();
+            ac_executionPanelMove.showWithoutAnimation();
+            ac_executionPanelAlpha.hideWithoutAnimation();
+            ac_executionPanelHeight.hideWithoutAnimation();
+            ac_stopButton.hideWithoutAnimation();
+            ac_actionPanel.showWithoutAnimation();
         }
     }
 
@@ -157,12 +183,12 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
 
 
     private void updateUI_awaitingStart(boolean animate) {
-        ac_editPanelMove.hideWithoutAnimation();
-        ac_executionPanelMove.showWithoutAnimation();
         if (animate){
             SceneDirector.scenario()
                     .hide(ac_stopButton)
                     .then()
+                        .hide(ac_editPanelMove)
+                        .show(ac_executionPanelMove)
                         .hide(ac_executionPanelAlpha)
                         .then()
                             .hide(ac_executionPanelHeight)
@@ -170,6 +196,8 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                             .show(ac_actionPanel)
             .play();
         }else{
+            ac_editPanelMove.hideWithoutAnimation();
+            ac_executionPanelMove.showWithoutAnimation();
             ac_executionPanelAlpha.hideWithoutAnimation();
             ac_executionPanelHeight.hideWithoutAnimation();
             ac_stopButton.hideWithoutAnimation();
@@ -177,6 +205,17 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         }
     }
 
+    private void fillUI_awaitingFinish() {
+        view_button(R.id.action_secondary).setVisibility(View.GONE);
+        view_button(R.id.action).setText("Next Exercise");
+        view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTrainingPlan.nextExercise();
+                owner().updateTile();
+            }
+        });
+    }
 
     private void fillUI_awaitingResult() {
         RoutineExercise.ExerciseDetails details;
@@ -198,7 +237,20 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RoutineExercise.ExerciseDetails exerciseDetails = mResultEditPresenter.result();
+                if (exerciseDetails instanceof RoutineExercise.PowerExerciseDetails){
+                    mTrainingPlan.commitPowerSet(((RoutineExercise.PowerExerciseDetails) exerciseDetails).weight, ((RoutineExercise.PowerExerciseDetails) exerciseDetails).times);
+                }else {
+                    throw new IllegalStateException();
+                }
 
+                if (mTrainingPlan.hasMoreSetsScheduled()){
+                    mState = State.START_AWAITING;
+                    updateUI(true);
+                }else{
+                    mState = State.FINISH_AWAITING;
+                    updateUI(true);
+                }
             }
         });
     }
