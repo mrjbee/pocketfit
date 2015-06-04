@@ -67,20 +67,18 @@
     </style>
 
 
-    <style name="Text.Training.Execution.Clock" parent="AppTheme">
+    <style name="Text.Training.Execution.Clock" parent="Text.Training.Execution.Description">
         <item name="android:textSize">50sp</item>
-        <item name="android:textColor">#ff828282</item>
-        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
     <style name="Text.Training.Execution.Description" parent="AppTheme">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#ff828282</item>
+        <item name="android:textColor">#ff585858</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowRadius">1</item>
-        <item name="android:shadowColor">#32FFFFFF</item>
+        <item name="android:shadowColor">#ffffffff</item>
 
     </style>
 
