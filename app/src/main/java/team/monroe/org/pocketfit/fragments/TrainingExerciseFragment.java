@@ -9,6 +9,8 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
+import java.util.List;
+
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import team.monroe.org.pocketfit.R;
@@ -88,8 +90,18 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         //panel_exercise_edit_result
 
         fillUI_ExerciseDetails();
+        fillUI_SetsDetails();
         calculateState();
         updateUI(false);
+    }
+
+    private void fillUI_SetsDetails() {
+        view(R.id.panel_sets_details, ViewGroup.class).removeAllViews();
+        List<TrainingExecutionService.TrainingPlan.ExerciseResult> resultList =  mTrainingPlan.getExerciseResultList();
+        for (TrainingExecutionService.TrainingPlan.ExerciseResult exerciseResult : resultList) {
+            addSetDetails(exerciseResult.asExerciseDetails());
+        }
+
     }
 
     private void updateUI(boolean animate) {
@@ -206,8 +218,19 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     }
 
     private void fillUI_awaitingFinish() {
-        view_button(R.id.action_secondary).setVisibility(View.GONE);
-        view_button(R.id.action).setText("Next Exercise");
+        view_button(R.id.action_secondary).setText("Extra Set");
+        view_button(R.id.action_secondary).setVisibility(View.VISIBLE);
+        view_button(R.id.action_secondary).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTrainingPlan.addSet();
+                mTrainingPlan.startSet();
+                mState = State.STOP_AWAITING;
+                updateUI(true);
+            }
+        });
+
+        view_button(R.id.action).setText("Go Next");
         view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,7 +266,7 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 }else {
                     throw new IllegalStateException();
                 }
-
+                fillUI_SetsDetails();
                 if (mTrainingPlan.hasMoreSetsScheduled()){
                     mState = State.START_AWAITING;
                     updateUI(true);
@@ -266,14 +289,30 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
                 updateUI(true);
             }
         });
-        view_text(R.id.text_exercise_details_short).setText(RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources()));
+        String description = RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources());
+        if (mExerciseType == Exercise.Type.weight_times){
+           int sets = ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets;
+           ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets = -1;
+           description =
+                   RoutineExercise.detailsCharacteristic(mRoutineExercise.exerciseDetails,getResources())
+                   + " "+ (mTrainingPlan.getSetIndex()+1) + " " +
+                   RoutineExercise.shortDescription(mRoutineExercise.exerciseDetails, getResources());
+           ((RoutineExercise.PowerExerciseDetails)mRoutineExercise.exerciseDetails).sets = sets;
+        }
+
+        view_text(R.id.text_exercise_details_short).setText(description);
         mClockViewPresenter = new ClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
         mClockViewPresenter.startClock(mTrainingPlan.getSetStartDate());
     }
 
     private void fillUI_awaitingStart() {
         view_button(R.id.action_secondary).setVisibility(View.GONE);
-        view_button(R.id.action).setText("Start Exercise");
+        int nextSetIndex = mTrainingPlan.getSetIndex() + 1;
+        if (nextSetIndex == 0){
+            view_button(R.id.action).setText("Start Exercise");
+        }else {
+            view_button(R.id.action).setText("Start Set "+(nextSetIndex+1));
+        }
         view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,6 +371,15 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         ((TextView)view.findViewById(R.id.item_caption)).setText(caption);
         ((TextView)view.findViewById(R.id.item_value)).setText(value.toString());
         ((TextView)view.findViewById(R.id.item_measure)).setText(measure);
+        viewPanel.addView(view);
+    }
+
+    private void addSetDetails(RoutineExercise.ExerciseDetails details) {
+        ViewGroup viewPanel =view(R.id.panel_sets_details, ViewGroup.class);
+        View view = activity().getLayoutInflater().inflate(R.layout.panel_3_column_details,viewPanel,false);
+        ((TextView)view.findViewById(R.id.item_caption)).setText(RoutineExercise.detailsCharacteristic(details, getResources()));
+        ((TextView)view.findViewById(R.id.item_value)).setText(RoutineExercise.detailsValue(details, getResources()));
+        ((TextView)view.findViewById(R.id.item_measure)).setText(RoutineExercise.detailsMeasure(details, getResources()));
         viewPanel.addView(view);
     }
 

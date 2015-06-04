@@ -287,8 +287,23 @@ public class TrainingExecutionService extends Service {
             });
         }
 
+        public List<ExerciseResult> getExerciseResultList() {
+            List<ExerciseResult> answer = new ArrayList<>();
+            for (int i = 0; i < currentExecution.setList.size(); i++) {
+                Set set = currentExecution.setList.get(i);
+                if (set.results.isEmpty()) continue;
+                ExerciseResult exerciseResult = new ExerciseResult(
+                        set.startDate,
+                        set.endDate,
+                        currentExecution.routineExercise,
+                        i,
+                        set.results);
+                answer.add(exerciseResult);
+            }
+            return answer;
+        }
+
         public void nextExercise() {
-            int index = routineDay.exerciseList.indexOf(currentExecution.routineExercise);
             for (int i = 0; i < currentExecution.setList.size(); i++) {
                 Set set = currentExecution.setList.get(i);
                 ExerciseResult exerciseResult = new ExerciseResult(
@@ -300,6 +315,7 @@ public class TrainingExecutionService extends Service {
                 exerciseResultList.add(exerciseResult);
             }
 
+            int index = routineDay.exerciseList.indexOf(currentExecution.routineExercise);
             index++;
             if (index < routineDay.exerciseList.size()){
                 currentExecution = new ExerciseExecution(routineDay.exerciseList.get(index));
