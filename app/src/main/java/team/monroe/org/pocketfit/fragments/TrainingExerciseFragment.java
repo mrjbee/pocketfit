@@ -5,11 +5,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
+import org.monroe.team.android.box.utils.DisplayUtils;
+
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
+
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.TrainingActivity;
 import team.monroe.org.pocketfit.TrainingExecutionService;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
+import team.monroe.org.pocketfit.view.presenter.ClockViewPresenter;
 
 public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
 
@@ -17,6 +24,11 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
     private RoutineExercise mRoutineExercise;
     private Exercise.Type mExerciseType;
     private State mState;
+    private AppearanceController ac_stopButton;
+    private AppearanceController ac_executionPanelHeight;
+    private AppearanceController ac_executionPanelAlpha;
+    private AppearanceController ac_actionPanel;
+    private ClockViewPresenter mClockViewPresenter;
 
     @Override protected boolean isHeaderSecondary() {
         return false;
@@ -34,6 +46,114 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         mTrainingPlan = application().getTrainingPlan();
         mRoutineExercise = mTrainingPlan.getCurrentExercise();
 
+        ac_stopButton = animateAppearance(view(R.id.panel_main_button), scale(1,0))
+                .showAnimation(duration_constant(400), interpreter_overshot())
+                .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                .build();
+
+        ac_executionPanelHeight = animateAppearance(view(R.id.panel_exercise_running), heightSlide((int) DisplayUtils.dpToPx(200, getResources()), 0))
+                .showAnimation(duration_constant(500), interpreter_overshot())
+                .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                .hideAndGone()
+                .build();
+
+        ac_executionPanelAlpha = animateAppearance(view(R.id.panel_exercise_running), alpha(1f, 0f))
+                .showAnimation(duration_constant(300), interpreter_decelerate(0.8f))
+                .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                .build();
+
+        ac_actionPanel = animateAppearance(view(R.id.panel_action_button), heightSlide((int) DisplayUtils.dpToPx(50, getResources()), 0))
+                .showAnimation(duration_constant(200), interpreter_decelerate(0.8f))
+                .hideAnimation(duration_constant(200), interpreter_accelerate(0.6f))
+                .hideAndGone()
+                .build();
+
+        fillUI_ExerciseDetails();
+        calculateState();
+        updateUI(false);
+    }
+
+    private void updateUI(boolean animate) {
+        switch (mState){
+            case START_AWAITING:
+                fillUI_awaitingStart();
+                updateUI_awaitingStart(animate);
+                break;
+            case STOP_AWAITING:
+                fillUI_awaitingStop();
+                updateUI_awaitingStop(animate);
+                break;
+            case FINISH_AWAITING:
+            case RESULT_AWAITING:
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    private void updateUI_awaitingStop(boolean animate) {
+        if (animate){
+            SceneDirector.scenario()
+                    .hide(ac_actionPanel)
+                    .show(ac_executionPanelHeight)
+                        .then()
+                            .show(ac_executionPanelAlpha)
+                        .then()
+                            .show(ac_stopButton)
+                    .play();
+        }else{
+            ac_executionPanelAlpha.showWithoutAnimation();
+            ac_executionPanelHeight.showWithoutAnimation();
+            ac_stopButton.showWithoutAnimation();
+            ac_actionPanel.hideWithoutAnimation();
+        }
+    }
+
+
+    private void updateUI_awaitingStart(boolean animate) {
+        if (animate){
+            SceneDirector.scenario()
+                    .hide(ac_stopButton)
+                    .then()
+                        .hide(ac_executionPanelAlpha)
+                        .then()
+                            .hide(ac_executionPanelHeight)
+                        .then()
+                            .show(ac_actionPanel)
+            .play();
+        }else{
+            ac_executionPanelAlpha.hideWithoutAnimation();
+            ac_executionPanelHeight.hideWithoutAnimation();
+            ac_stopButton.hideWithoutAnimation();
+            ac_actionPanel.showWithoutAnimation();
+        }
+    }
+
+    private void fillUI_awaitingStop() {
+        view(R.id.stop_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: add stop action
+            }
+        });
+        mClockViewPresenter = new ClockViewPresenter(view_text(R.id.text_exercise_execution_timer));
+        mClockViewPresenter.startClock(mTrainingPlan.getSetStartDate());
+    }
+
+    private void fillUI_awaitingStart() {
+        view_button(R.id.action_secondary).setVisibility(View.GONE);
+        view_button(R.id.action).setText("Start Exercise");
+        view_button(R.id.action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTrainingPlan.addSet();
+                mTrainingPlan.startSet();
+                mState = State.STOP_AWAITING;
+                updateUI(true);
+            }
+        });
+    }
+
+    private void calculateState() {
         if (!mTrainingPlan.isSetStarted()){
             mState = State.START_AWAITING;
         }else if (!mTrainingPlan.isSetDone()){
@@ -47,9 +167,6 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         if (mState == null) {
             throw new IllegalStateException();
         }
-
-        fillUI_ExerciseDetails();
-
     }
 
     private void fillUI_ExerciseDetails() {

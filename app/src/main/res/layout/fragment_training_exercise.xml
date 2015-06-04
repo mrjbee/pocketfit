@@ -83,7 +83,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/action_alternative"
+                            android:id="@+id/action_secondary"
                             style="@style/Button.Panel"
                             android:layout_width="fill_parent"
                             android:layout_height="50dp"
