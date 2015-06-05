@@ -10,7 +10,6 @@ import android.widget.TextView;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.app.ui.animation.apperrance.SceneDirector;
 import org.monroe.team.android.box.utils.DisplayUtils;
-import org.monroe.team.corebox.log.L;
 
 import java.util.List;
 
@@ -81,6 +80,7 @@ public class TrainingExerciseFragment extends BodyFragment<TrainingActivity> {
         ac_stopButton = animateAppearance(view(R.id.panel_main_button), scale(1,0))
                 .showAnimation(duration_constant(400), interpreter_overshot())
                 .hideAnimation(duration_constant(300), interpreter_accelerate(0.6f))
+                .hideAndGone()
                 .build();
 
         ac_executionPanelHeight = animateAppearance(view(R.id.panel_exercise_running), heightSlide((int) DisplayUtils.dpToPx(200, getResources()), 0))

@@ -265,7 +265,7 @@ public class TrainingActivity extends FragmentActivity{
         mEditPanelAnimator.hide();
     }
 
-    private void editDetails(RoutineExercise.ExerciseDetails details, Closure<RoutineExercise.ExerciseDetails, Void> onDone) {
+    public void editDetails(RoutineExercise.ExerciseDetails details, Closure<RoutineExercise.ExerciseDetails, Void> onDone) {
         closeDrawerIfRequired();
         blockDrawer();
         mResultEditPresenter.setup(details);
