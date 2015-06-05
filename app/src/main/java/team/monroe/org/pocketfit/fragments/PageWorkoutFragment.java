@@ -714,20 +714,10 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
         float viewPosition = DisplayUtils.dpToPx(34, getResources());
         if (Math.abs(top) < viewPosition){
             translateHeaderPosition(Math.abs(top));
+        }else {
+            translateHeaderPosition(Math.abs(viewPosition));
         }
     }
-
-    public void backonPageMoveToShow(float top, boolean pageMotionDirectionUp) {
-        TextView secondaryHeader = getSecondaryHeaderView();
-        float viewPosition = DisplayUtils.dpToPx(110, getResources()) - (secondaryHeader.getBottom() + ((View)secondaryHeader.getParent()).getTop());
-        float fragmentHeight = getFragmentView().getHeight();
-        if (fragmentHeight - top < viewPosition){
-            translateHeaderPosition(fragmentHeight - top);
-        }else{
-            translateHeaderPosition(viewPosition);
-        }
-    }
-
 
     private class Day{
 
