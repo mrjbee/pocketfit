@@ -88,7 +88,8 @@ public class CalendarView extends GridLayout {
     }
 
     private void createDateCell(Date date, int dayOfMonth, int position) {
-        View view =  LayoutInflater.from(getContext()).inflate(R.layout.calendar_day_caption, null);
+        double random = Math.random();
+        View view =  LayoutInflater.from(getContext()).inflate(random>0.5?R.layout.calendar_day:R.layout.calendar_day_caption, null);
         ((TextView)view.findViewById(R.id.caption)).setText(" "+dayOfMonth);
         LayoutParams params = buildLayoutParams(position);
         view.setLayoutParams(params);

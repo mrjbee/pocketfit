@@ -166,6 +166,12 @@
     </style>
 
 
+    <style name="Text.Calendar.Cell" parent="AppTheme">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#ff878787</item>
+    </style>
+
+
     <style name="Text.Body.Optional" parent="AppTheme">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">italic</item>
