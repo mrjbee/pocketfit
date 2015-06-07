@@ -3,6 +3,7 @@ package team.monroe.org.pocketfit.fragments;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;

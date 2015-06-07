@@ -10,13 +10,30 @@
         android:layout_height="wrap_content"
         android:text="Mar, 2015"
         android:layout_gravity="center"
-        style="@style/Text.Body.Caption"/>
+        style="@style/Text.Body.Optional"/>
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/separator"
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:id="@+id/panel_calendar"
         android:layout_gravity="center"
-        android:layout_width="245dp"
+        android:gravity="center"
+        android:layout_width="fill_parent"
         android:layout_height="245dp"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    </LinearLayout>
 
 </LinearLayout>

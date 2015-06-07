@@ -3,8 +3,10 @@ package team.monroe.org.pocketfit;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 import org.monroe.team.corebox.utils.DateUtils;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import team.monroe.org.pocketfit.fragments.DefaultPageFragment;
 import team.monroe.org.pocketfit.view.CalendarView;
+import team.monroe.org.pocketfit.view.VerticalViewPager;
 
 public class PageHistoryFragment extends DefaultPageFragment {
 
@@ -31,9 +34,9 @@ public class PageHistoryFragment extends DefaultPageFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         buildHeader();
-        showMainButton(R.drawable.round_btn_pen, null);
+        hideMainButton(null);
         mMonthMaxPosition = 50;
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTime(DateUtils.today());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         mCurrentMonthDate = calendar.getTime();
@@ -57,24 +60,24 @@ public class PageHistoryFragment extends DefaultPageFragment {
         view(R.id.panel_calendar, ViewGroup.class).addView(mCalendarPager,layoutParams);
         mCalendarPager.setAdapter(new PagerAdapter() {
 
-            private HashMap<Integer, CalendarView> calendarViewPerPositionHashMap = new HashMap<Integer, CalendarView>();
-            private List<CalendarView> notUsedCalendarViewList = new ArrayList<CalendarView>();
+            private HashMap<Integer, ViewGroup> calendarViewPerPositionHashMap = new HashMap<Integer, ViewGroup>();
+            private List<ViewGroup> notUsedCalendarViewList = new ArrayList<ViewGroup>();
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                CalendarView calendarView = calendarViewPerPositionHashMap.get(position);
-                if (calendarView == null) {
+                ViewGroup calendarPanel = calendarViewPerPositionHashMap.get(position);
+                if (calendarPanel == null) {
                     if (!notUsedCalendarViewList.isEmpty()){
-                        calendarView = notUsedCalendarViewList.remove(0);
+                        calendarPanel = notUsedCalendarViewList.remove(0);
                     }else {
-                        calendarView = new CalendarView(getActivity());
+                        calendarPanel = (ViewGroup) activity().getLayoutInflater().inflate(R.layout.page_calendar, container, false);;
                     }
                     Date monthDate = getMonthDateByPosition(position);
-                    calendarView.setMonth(monthDate);
-                    calendarViewPerPositionHashMap.put(position, calendarView);
+                    ((CalendarView)calendarPanel.getChildAt(0)).setMonth(monthDate);
+                    calendarViewPerPositionHashMap.put(position, calendarPanel);
                 }
-                container.addView(calendarView);
-                return calendarView;
+                container.addView(calendarPanel);
+                return calendarPanel;
             }
 
             @Override
@@ -82,7 +85,7 @@ public class PageHistoryFragment extends DefaultPageFragment {
                 container.removeView((View) object);
                 calendarViewPerPositionHashMap.remove(position);
                 if (notUsedCalendarViewList.size() < 5){
-                    notUsedCalendarViewList.add((CalendarView) object);
+                    notUsedCalendarViewList.add((ViewGroup) object);
                 }
             }
 
@@ -155,6 +158,6 @@ public class PageHistoryFragment extends DefaultPageFragment {
 
     @Override
     public void updateMainButton() {
-        showMainButton(R.drawable.round_btn_pen, null);
+        hideMainButton(null);
     }
 }
