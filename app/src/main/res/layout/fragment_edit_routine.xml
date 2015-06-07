@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:orientation="vertical">
-
                 <EditText
                     android:id="@+id/edit_title"
                     android:layout_width="fill_parent"
