@@ -30,7 +30,7 @@ public class PageHistoryFragment extends DefaultPageFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        configureHeader("My Fit Diary", null);
+        buildHeader();
         showMainButton(R.drawable.round_btn_pen, null);
         mMonthMaxPosition = 50;
         Calendar calendar = Calendar.getInstance();
@@ -112,6 +112,17 @@ public class PageHistoryFragment extends DefaultPageFragment {
             public void onPageScrollStateChanged(int state) {}
         });
         mCalendarPager.setCurrentItem(mMonthMaxPosition);
+    }
+
+    private void buildHeader() {
+        View headerActionsView = activity().getLayoutInflater().inflate(R.layout.actions_history, null);
+        headerActionsView.findViewById(R.id.action_today).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarPager.setCurrentItem(mMonthMaxPosition);
+            }
+        });
+        configureHeader("My Fit Diary", headerActionsView);
     }
 
     private Date getMonthDateByPosition(int position) {

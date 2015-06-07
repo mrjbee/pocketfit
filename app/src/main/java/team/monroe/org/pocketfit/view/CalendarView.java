@@ -24,7 +24,6 @@ import team.monroe.org.pocketfit.R;
 
 public class CalendarView extends GridLayout {
 
-    private int mCellCount;
     private int mCellSize;
     private Calendar mCalendar;
     private Date mStartDate;
@@ -55,8 +54,7 @@ public class CalendarView extends GridLayout {
             release();
         }
 
-        mCellCount = 7 * 6;
-        mCellSize = (int) DisplayUtils.dpToPx(40, getResources());
+        mCellSize = (int) DisplayUtils.dpToPx(35, getResources());
         mCalendar = Calendar.getInstance();
         for (int i = 0; i < 7;i++){
             mCalendar.set(Calendar.DAY_OF_WEEK, mCalendar.getFirstDayOfWeek()+i);
