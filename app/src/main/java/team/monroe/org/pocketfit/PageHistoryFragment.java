@@ -1,14 +1,21 @@
 package team.monroe.org.pocketfit;
 
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import org.monroe.team.corebox.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import team.monroe.org.pocketfit.fragments.DefaultPageFragment;
 import team.monroe.org.pocketfit.view.CalendarView;
@@ -16,14 +23,23 @@ import team.monroe.org.pocketfit.view.CalendarView;
 public class PageHistoryFragment extends DefaultPageFragment {
 
     private Date mDate;
+    private ViewPager mCalendarPager;
+    private int mMonthMaxPosition;
+    private Date mCurrentMonthDate;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         configureHeader("My Fit Diary", null);
         showMainButton(R.drawable.round_btn_pen, null);
-        view(R.id.calendar, CalendarView.class).init();
-        view(R.id.text_month).setOnClickListener(new View.OnClickListener() {
+        mMonthMaxPosition = 50;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtils.today());
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        mCurrentMonthDate = calendar.getTime();
+
+        //view(R.id.calendar, CalendarView.class).init();
+        /*view(R.id.text_month).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
@@ -31,17 +47,89 @@ public class PageHistoryFragment extends DefaultPageFragment {
                 calendar.set(Calendar.DAY_OF_MONTH, 1);
                 calendar.add(Calendar.MONTH,1);
                 Date date = calendar.getTime();
-                updateCalendar(date);
+                updateMonthCaption(date);
+            }
+        });*/
+
+        updateMonthCaption(DateUtils.today());
+        mCalendarPager = new ViewPager(getActivity());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        view(R.id.panel_calendar, ViewGroup.class).addView(mCalendarPager,layoutParams);
+        mCalendarPager.setAdapter(new PagerAdapter() {
+
+            private HashMap<Integer, CalendarView> calendarViewPerPositionHashMap = new HashMap<Integer, CalendarView>();
+            private List<CalendarView> notUsedCalendarViewList = new ArrayList<CalendarView>();
+
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                CalendarView calendarView = calendarViewPerPositionHashMap.get(position);
+                if (calendarView == null) {
+                    if (!notUsedCalendarViewList.isEmpty()){
+                        calendarView = notUsedCalendarViewList.remove(0);
+                    }else {
+                        calendarView = new CalendarView(getActivity());
+                    }
+                    Date monthDate = getMonthDateByPosition(position);
+                    calendarView.setMonth(monthDate);
+                    calendarViewPerPositionHashMap.put(position, calendarView);
+                }
+                container.addView(calendarView);
+                return calendarView;
+            }
+
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+                container.removeView((View) object);
+                calendarViewPerPositionHashMap.remove(position);
+                if (notUsedCalendarViewList.size() < 5){
+                    notUsedCalendarViewList.add((CalendarView) object);
+                }
+            }
+
+
+            @Override
+            public int getCount() {
+                return mMonthMaxPosition + 1;
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return view == object;
             }
         });
-        updateCalendar(DateUtils.today());
+        mCalendarPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateMonthCaption(getMonthDateByPosition(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+        mCalendarPager.setCurrentItem(mMonthMaxPosition);
+    }
+
+    private Date getMonthDateByPosition(int position) {
+        if (position == mMonthMaxPosition){
+            return mCurrentMonthDate;
+        }else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(mCurrentMonthDate);
+            calendar.add(Calendar.MONTH, position - mMonthMaxPosition);
+            return calendar.getTime();
+        }
     }
 
     DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
-    private void updateCalendar(Date today) {
+    private void updateMonthCaption(Date today) {
         mDate = today;
         view_text(R.id.text_month).setText(dateFormat.format(mDate));
-        view(R.id.calendar, CalendarView.class).setMonth(mDate);
+        //view(R.id.calendar, CalendarView.class).setMonth(mDate);
     }
 
     @Override

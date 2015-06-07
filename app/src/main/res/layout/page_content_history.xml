@@ -12,10 +12,11 @@
         android:layout_gravity="center"
         style="@style/Text.Body.Caption"/>
 
-    <team.monroe.org.pocketfit.view.CalendarView
+    <LinearLayout
+        android:id="@+id/panel_calendar"
         android:layout_gravity="center"
-        android:id="@+id/calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:orientation="vertical"/>
 
 </LinearLayout>
