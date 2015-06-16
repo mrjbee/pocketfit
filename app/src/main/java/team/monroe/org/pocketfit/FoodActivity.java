@@ -4,6 +4,7 @@ import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.MealEditorFragment;
 import team.monroe.org.pocketfit.fragments.MealsSelectFragment;
+import team.monroe.org.pocketfit.fragments.ProductEditorFragment;
 import team.monroe.org.pocketfit.fragments.ProductListFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
@@ -17,6 +18,11 @@ public class FoodActivity extends FragmentActivity {
     @Override
     protected int customize_rootLayout() {
         return R.layout.activity_fragment_general;
+    }
+
+    public void editProduct(String productId) {
+        updateBodyFragment(new FragmentItem(ProductEditorFragment.class)
+                .addArgument("product_id", productId), animation_slide_from_right());
     }
 
     public void open_mealEditor(String mealId) {

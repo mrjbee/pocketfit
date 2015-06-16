@@ -4,13 +4,14 @@ import org.monroe.team.android.box.data.Data;
 
 import java.util.List;
 
+import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.FragmentActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Product;
 
-public class ProductListFragment extends GenericListFragment<Product, FragmentActivity> {
+public class ProductListFragment extends GenericListFragment<Product, FoodActivity> {
 
     private Data.DataChangeObserver<List> observer_exercise;
 
@@ -19,7 +20,7 @@ public class ProductListFragment extends GenericListFragment<Product, FragmentAc
         application().function_createId("product",observe_function(State.STOP, new PocketFitApp.DataAction<String>() {
             @Override
             public void data(String id) {
-               // exerciseOwner().editExercise(id);
+               owner().editProduct(id);
             }
         }));
     }
