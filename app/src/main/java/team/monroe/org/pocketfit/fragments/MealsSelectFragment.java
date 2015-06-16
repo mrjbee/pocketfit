@@ -30,7 +30,7 @@ public class MealsSelectFragment extends BodyFragment<RoutinesActivity> {
                 application().function_createId("meal",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
                     @Override
                     public void data(String routine) {
-                        ownerContract(FoodActivity.class).open_MealEditor(routine);
+                        ownerContract(FoodActivity.class).open_mealEditor(routine);
                     }
                 }));
             }

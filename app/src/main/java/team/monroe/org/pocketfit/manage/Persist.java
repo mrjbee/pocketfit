@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.monroe.org.pocketfit.presentations.MealProduct;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 
 public class Persist {
@@ -18,6 +19,17 @@ public class Persist {
         public List<String> routineDaysIdList = new ArrayList<>();
 
         public Routine(String id) {
+            this.id = id;
+        }
+    }
+
+    public static class Meal implements Serializable {
+
+        public final String id;
+        public String title;
+        public String imageId;
+        public List<String> mealProductIdList = new ArrayList<>();
+        public Meal(String id) {
             this.id = id;
         }
     }

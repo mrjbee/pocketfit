@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import team.monroe.org.pocketfit.presentations.Exercise;
+import team.monroe.org.pocketfit.presentations.Meal;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
@@ -33,12 +34,14 @@ import team.monroe.org.pocketfit.uc.CreateId;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
+import team.monroe.org.pocketfit.uc.GetMealById;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
 import team.monroe.org.pocketfit.uc.GetRoutineDayById;
 import team.monroe.org.pocketfit.uc.GetRoutineExerciseById;
 import team.monroe.org.pocketfit.uc.GetRoutineList;
 import team.monroe.org.pocketfit.uc.IsExerciseSafeToChange;
 import team.monroe.org.pocketfit.uc.UpdateExercise;
+import team.monroe.org.pocketfit.uc.UpdateMeal;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
 import team.monroe.org.pocketfit.uc.UpdateRoutineExercise;
@@ -184,6 +187,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(GetRoutineById.class, routineId, new NoOpValueAdapter<Routine>(), observer);
     }
 
+    public void function_getMeal(String mealId, ValueObserver<Meal> observer) {
+        fetchValue(GetMealById.class, mealId, new NoOpValueAdapter<Meal>(), observer);
+    }
+
     public void function_updateRoutine(Routine routine, ValueObserver<Void> observer) {
         fetchValue(UpdateRoutine.class, routine, new NoOpValueAdapter<Void>(){
             @Override
@@ -195,6 +202,17 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         }, observer );
     }
 
+    public void function_updateMeal(Meal meal, ValueObserver<Void> observer) {
+        fetchValue(UpdateMeal.class, meal, new NoOpValueAdapter<Void>(){
+            @Override
+            public Void adapt(Void value) {
+              /*  data_routines().invalidate();
+                data_activeRoutine().invalidate();
+                */
+                return super.adapt(value);
+            }
+        }, observer );
+    }
 
     public void function_getRoutineDay(String routineDayId, ValueObserver<RoutineDay> observer) {
         fetchValue(GetRoutineDayById.class, routineDayId, new NoOpValueAdapter<RoutineDay>(), observer);
