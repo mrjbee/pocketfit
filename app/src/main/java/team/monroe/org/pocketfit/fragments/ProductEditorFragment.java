@@ -13,13 +13,12 @@ import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.RoutinesActivity;
 import team.monroe.org.pocketfit.presentations.Exercise;
+import team.monroe.org.pocketfit.presentations.Product;
 
 public class ProductEditorFragment extends BodyFragment<RoutinesActivity>{
 
-    private Spinner mTypeSpinner;
-    private GenericListViewAdapter<String, GetViewImplementation.ViewHolder<String>> mTypeAdapter;
-    private String mExerciseId;
-    private Exercise mExercise;
+    private String mProductId;
+    private Product mProduct;
 
     @Override
     protected boolean isHeaderSecondary() {
@@ -44,43 +43,62 @@ public class ProductEditorFragment extends BodyFragment<RoutinesActivity>{
     @Override
     public void onStart() {
         super.onStart();
-  /*      mExerciseId = getStringArgument("exercise_id");
-        if (mExerciseId == null) throw new IllegalStateException();
-        application().function_getExercise(mExerciseId, observe_function(State.STOP, new PocketFitApp.DataAction<Exercise>() {
+        mProductId = getStringArgument("product_id");
+        if (mProductId == null) throw new IllegalStateException();
+
+        application().function_getProduct(mProductId, observe_function(State.STOP, new PocketFitApp.DataAction<Product>() {
             @Override
-            public void data(Exercise exercise) {
-                mExercise = exercise;
-                if (mExercise == null) mExercise = new Exercise(mExerciseId);
-                view_text(R.id.edit_title).setText(mExercise.title);
-                view_text(R.id.edit_description).setText(mExercise.description);
-                if (mExercise.type != null){
-                    mTypeSpinner.setSelection(mExercise.type.ordinal());
-                    application().function_getExerciseTypeEditable(mExercise.id, observe_function(State.STOP, new PocketFitApp.DataAction<Boolean>() {
-                        @Override
-                        public void data(Boolean data) {
-                            mTypeSpinner.setEnabled(data);
-                        }
-                    }));
-                }else {
-                    mTypeSpinner.setEnabled(true);
-                }
+            public void data(Product product) {
+                mProduct = product;
+                if (mProduct == null) mProduct = new Product(mProductId);
+                view_text(R.id.edit_title).setText(ifNotNull(mProduct.title));
+                view_text(R.id.edit_calories).setText(ifNotNull(mProduct.calories));
+                view_text(R.id.edit_carbs).setText(ifNotNull(mProduct.carbs));
+                view_text(R.id.edit_protein).setText(ifNotNull(mProduct.protein));
+                view_text(R.id.edit_fats).setText(ifNotNull(mProduct.fats));
             }
-        }));*/
+        }));
+    }
+
+    private String ifNotNull(Object obj) {
+        return obj != null? obj.toString():"";
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        /*
-        mExercise.title = view_text(R.id.edit_title).getText().toString();
-        mExercise.description = view_text(R.id.edit_description).getText().toString();
-        mExercise.type = Exercise.Type.values()[mTypeSpinner.getSelectedItemPosition()];
-        application().function_updateExercise(mExercise, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+        mProduct.title = view_text(R.id.edit_title).getText().toString();
+        mProduct.calories = readPositiveInteger(R.id.edit_calories);
+        mProduct.carbs = readPositiveFloat(R.id.edit_carbs);
+        mProduct.fats = readPositiveFloat(R.id.edit_fats);
+        mProduct.protein = readPositiveFloat(R.id.edit_protein);
+        application().function_updateProduct(mProduct, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
             @Override
             public void data(Void data) {
 
             }
         }));
-     */
+    }
+
+    protected Integer readPositiveInteger(int r_text) {
+        Integer value;
+        String text = view_text(r_text).getText().toString();
+        try {
+            value = Math.abs(Integer.parseInt(text));
+        }catch (Exception e){
+            value = null;
+        }
+        return value;
+    }
+
+    protected Float readPositiveFloat(int r_text) {
+        Float value;
+        String text = view_text(r_text).getText().toString();
+        try {
+            value = Math.abs(Float.parseFloat(text));
+        }catch (Exception e){
+            value = null;
+        }
+        return value;
     }
 }

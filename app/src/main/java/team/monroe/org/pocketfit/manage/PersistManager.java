@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import team.monroe.org.pocketfit.presentations.Exercise;
+import team.monroe.org.pocketfit.presentations.Product;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
@@ -20,6 +21,7 @@ public class PersistManager {
     private final SerializationMap<String, Persist.RoutineExercise> routineExerciseSerializationMap;
     private final SerializationMap<String, Exercise> exerciseSerializationMap;
     private final SerializationMap<String, Persist.Meal> mealSerializationMap;
+    private final SerializationMap<String, Product> productSerializationMap;
 
 
     public PersistManager(Context context) {
@@ -28,6 +30,7 @@ public class PersistManager {
         this.routineExerciseSerializationMap = new SerializationMap<>("persist_routineexercise.map", context);
         this.exerciseSerializationMap = new SerializationMap<>("persist_exercises.map", context);
         this.mealSerializationMap = new SerializationMap<>("persist_meal.map", context);
+        this.productSerializationMap = new SerializationMap<>("persist_product.map", context);
     }
 
     public void updateOrCreate(Persist.Routine routine) {
@@ -88,5 +91,13 @@ public class PersistManager {
 
     public void updateOrCreateMeal(Persist.Meal updatePersist) {
         mealSerializationMap.put(updatePersist.id, updatePersist);
+    }
+
+    public Product getProduct(String id) {
+        return productSerializationMap.get(id);
+    }
+
+    public void updateOrCreateProduct(Product product) {
+        productSerializationMap.put(product.id, product);
     }
 }
