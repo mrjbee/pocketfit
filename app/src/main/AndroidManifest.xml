@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FoodSelectActivity"
+            android:name=".FoodActivity"
             android:label="Exercises"
             android:theme="@style/AnimationActivity" >
         </activity>

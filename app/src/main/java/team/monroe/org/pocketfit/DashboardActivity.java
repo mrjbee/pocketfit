@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
-import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.log.L;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
@@ -191,7 +190,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
     }
 
     public void openMealsSelect() {
-        startActivity(new Intent(DashboardActivity.this, FoodSelectActivity.class));
+        startActivity(new Intent(DashboardActivity.this, FoodActivity.class));
     }
 
     public void openDayEditor(String routineId, String routineDayId) {
