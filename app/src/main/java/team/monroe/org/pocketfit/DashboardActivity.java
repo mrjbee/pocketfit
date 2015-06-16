@@ -59,9 +59,9 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
                     case 0:
                         return createWorkoutPage();
                     case 1:
-                        return new PageHistoryFragment();
+                        return new PageFoodFragment();
                     case 2:
-                        return new PageMockFragment();
+                        return new PageHistoryFragment();
                     default:
                         throw new IllegalStateException();
                 }
@@ -85,7 +85,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
 
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -190,6 +190,9 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
         startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
     }
 
+    public void openMealsSelect() {
+        startActivity(new Intent(DashboardActivity.this, FoodSelectActivity.class));
+    }
 
     public void openDayEditor(String routineId, String routineDayId) {
         Intent intent = new Intent(DashboardActivity.this, RoutineDayEditActivity.class);
