@@ -37,6 +37,7 @@ import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetMealById;
+import team.monroe.org.pocketfit.uc.GetMealList;
 import team.monroe.org.pocketfit.uc.GetMealProductById;
 import team.monroe.org.pocketfit.uc.GetProductById;
 import team.monroe.org.pocketfit.uc.GetProductList;
@@ -68,6 +69,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     private ServiceConnection mServiceConnection;
     private TrainingExecutionService.TrainingExecutionManager mTrainingExecutionManager;
     private Data<List> data_products;
+    private Data<List> data_meals;
 
     @Override
     protected PocketFitModel createModel() {
@@ -112,6 +114,13 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             @Override
             protected List<Routine> provideData() {
                 return model().execute(GetRoutineList.class,null);
+            }
+        };
+
+        data_meals = new Data<List>(List.class, model()) {
+            @Override
+            protected List<Meal> provideData() {
+                return model().execute(GetMealList.class,null);
             }
         };
 
@@ -160,6 +169,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public Data<List> data_routines() {
         return data_routines;
+    }
+    public Data<List> data_meals() {
+        return data_meals;
     }
 
     public Data<List> data_exercises() {
@@ -225,9 +237,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(UpdateMeal.class, meal, new NoOpValueAdapter<Void>(){
             @Override
             public Void adapt(Void value) {
-              /*  data_routines().invalidate();
-                data_activeRoutine().invalidate();
-                */
+                data_meals.invalidate();
                 return super.adapt(value);
             }
         }, observer );

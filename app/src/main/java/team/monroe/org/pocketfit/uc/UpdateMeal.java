@@ -48,10 +48,7 @@ public class UpdateMeal extends UserCaseSupport<Meal, Void>{
 
     private void checkForRemove(Persist.Meal origin) {
         if (!isDefined(origin)){
-            using(PersistManager.class).remove(origin.id);
-            if (origin.id.equals(using(SettingManager.class).get(Settings.ID_ACtIVE_ROUTINE))){
-                using(SettingManager.class).set(Settings.ID_ACtIVE_ROUTINE, null);
-            }
+            using(PersistManager.class).removeMeal(origin.id);
         }
     }
 

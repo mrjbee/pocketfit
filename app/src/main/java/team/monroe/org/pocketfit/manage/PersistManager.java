@@ -118,4 +118,12 @@ public class PersistManager {
     public void updateOrCreateMealProduct(Persist.MealProduct mealPersists) {
         mealProductSerializationMap.put(mealPersists.id, mealPersists);
     }
+
+    public Set<String> listMealIds() {
+        return mealSerializationMap.keys();
+    }
+
+    public void removeMeal(String id) {
+        mealSerializationMap.remove(id);
+    }
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="160dp">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
+        android:background="#fd0b45"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:gravity="right"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/Text.List.Action"
+            android:text="Edit"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:id="@+id/item_panel_details"
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
+        android:background="#f3f3f3"
+        android:padding="10dp"
+        >
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            >
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_centerInParent="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/covert_loading"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/round_frame"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="20dp"
+            android:padding="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+                >
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/item_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Example"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    style="@style/Text.Item.Caption"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_sub_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                android:lines="1"
+                android:singleLine="true"
+                android:maxLines="1"
+                style="@style/Text.Item.Sub.Caption"
+                />
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                style="@style/Text.Body"
+                android:maxLines="2"
+                android:singleLine="false"
+                />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/item_sub_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Example"
+                style="@style/Text.Body.Optional"
+                android:maxLines="3"
+                android:singleLine="false"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
