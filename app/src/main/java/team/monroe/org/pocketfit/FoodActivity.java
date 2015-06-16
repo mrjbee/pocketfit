@@ -1,5 +1,8 @@
 package team.monroe.org.pocketfit;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.MealEditorFragment;
@@ -18,6 +21,12 @@ public class FoodActivity extends FragmentActivity {
     @Override
     protected int customize_rootLayout() {
         return R.layout.activity_fragment_general;
+    }
+
+    public void onProductSelected(String productId) {
+        Map<String, String> results = new HashMap<>();
+        results.put("product_id", productId);
+        onChooseResult(results);
     }
 
     public void editProduct(String productId) {

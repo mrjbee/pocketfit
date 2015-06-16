@@ -37,6 +37,7 @@ import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetMealById;
 import team.monroe.org.pocketfit.uc.GetProductById;
+import team.monroe.org.pocketfit.uc.GetProductList;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
 import team.monroe.org.pocketfit.uc.GetRoutineDayById;
 import team.monroe.org.pocketfit.uc.GetRoutineExerciseById;
@@ -63,6 +64,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     private ServiceConnection mServiceConnection;
     private TrainingExecutionService.TrainingExecutionManager mTrainingExecutionManager;
+    private Data<List> data_products;
 
     @Override
     protected PocketFitModel createModel() {
@@ -117,6 +119,13 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             }
         };
 
+        data_products = new Data<List>(List.class, model()) {
+            @Override
+            protected List<Product> provideData() {
+                return model().execute(GetProductList.class, null);
+            }
+        };
+
         data_runningTraining = new Data<Pair> (Pair.class, model()) {
             @Override
             protected Pair provideData() {
@@ -152,6 +161,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
     public Data<List> data_exercises() {
         return data_exercises;
+    }
+
+    public Data<List> data_products() {
+        return data_products;
     }
 
     public Data<RoutineSchedule> data_activeRoutineSchedule() {
@@ -365,7 +378,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(UpdateProduct.class, product, new NoOpValueAdapter<Void>(){
             @Override
             public Void adapt(Void value) {
-                //data_exercises().invalidate();
+                data_products().invalidate();
                 return super.adapt(value);
             }
         } ,voidValueObserver);

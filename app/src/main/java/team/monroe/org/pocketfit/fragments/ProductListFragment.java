@@ -13,7 +13,7 @@ import team.monroe.org.pocketfit.presentations.Product;
 
 public class ProductListFragment extends GenericListFragment<Product, FoodActivity> {
 
-    private Data.DataChangeObserver<List> observer_exercise;
+    private Data.DataChangeObserver<List> dataChangeObserver;
 
     @Override
     protected void onNewItemClick() {
@@ -28,14 +28,15 @@ public class ProductListFragment extends GenericListFragment<Product, FoodActivi
     @Override
     protected void onItemClick(Product product) {
         if (getBoolArgument("chooserMode")){
-          //  exerciseOwner().onExerciseSelected(exercise.id);
+          owner().onProductSelected(product.id);
         }else {
-           // exerciseOwner().editExercise(exercise.id);
+          onItemEdit(product);
         }
     }
 
     @Override
     protected void onItemEdit(Product product) {
+        owner().editProduct(product.id);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ProductListFragment extends GenericListFragment<Product, FoodActivi
 
     @Override
     protected String item_subCaption(Product product) {
-        return product.calories + "calories";
+        return product.calories + " calories";
     }
 
     @Override
@@ -76,11 +77,36 @@ public class ProductListFragment extends GenericListFragment<Product, FoodActivi
     @Override
     public void onStart() {
         super.onStart();
+        dataChangeObserver = new Data.DataChangeObserver<List>() {
+            @Override
+            public void onDataInvalid() {
+                updateProductsList();
+            }
+
+            @Override
+            public void onData(List list) {
+
+            }
+        };
+        application().data_products().addDataChangeObserver(
+                dataChangeObserver
+        );
+        updateProductsList();
+    }
+
+    private void updateProductsList() {
+        application().data_products().fetch(true, observe_data_fetch(State.STOP, new PocketFitApp.DataAction<List>() {
+            @Override
+            public void data(List data) {
+                updateItems(data);
+            }
+        }));
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        application().data_products().removeDataChangeObserver(dataChangeObserver);
     }
 
 }

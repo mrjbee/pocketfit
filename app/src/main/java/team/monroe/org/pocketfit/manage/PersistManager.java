@@ -100,4 +100,8 @@ public class PersistManager {
     public void updateOrCreateProduct(Product product) {
         productSerializationMap.put(product.id, product);
     }
+
+    public Set<String> listProductIds()  {
+        return productSerializationMap.keys();
+    }
 }
