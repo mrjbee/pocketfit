@@ -6,9 +6,11 @@ import java.util.Map;
 import team.monroe.org.pocketfit.fragments.ExerciseEditorFragment;
 import team.monroe.org.pocketfit.fragments.ExercisesListFragment;
 import team.monroe.org.pocketfit.fragments.MealEditorFragment;
+import team.monroe.org.pocketfit.fragments.MealProductEditorFragment;
 import team.monroe.org.pocketfit.fragments.MealsSelectFragment;
 import team.monroe.org.pocketfit.fragments.ProductEditorFragment;
 import team.monroe.org.pocketfit.fragments.ProductListFragment;
+import team.monroe.org.pocketfit.fragments.RoutineDayEditorFragment;
 import team.monroe.org.pocketfit.fragments.RoutineEditorFragment;
 import team.monroe.org.pocketfit.fragments.contract.ExerciseOwnerContract;
 
@@ -42,13 +44,14 @@ public class FoodActivity extends FragmentActivity {
         );
     }
 
-    public void open_productsAsChooser(String mealId, boolean moveToProductMealConfiguration) {
+    public void open_productsAsChooser(String mealId, String mealProductId, boolean moveToProductMealConfiguration) {
 
         FragmentItem fragmentBackStackItem = new FragmentItem(ProductListFragment.class)
                 .addArgument("meal_id", mealId)
+                .addArgument("meal_product_id", mealProductId)
                 .addArgument("chooserMode", "true");
         if (moveToProductMealConfiguration){
-            //fragmentBackStackItem.addArgument("fragment_class", RoutineExerciseEditorFragment.class);
+            fragmentBackStackItem.addArgument("fragment_class", MealProductEditorFragment.class);
         }
 
         if (moveToProductMealConfiguration){
@@ -57,4 +60,13 @@ public class FoodActivity extends FragmentActivity {
             updateBodyFragment(fragmentBackStackItem, animation_flip_in());
         }
     }
+
+    public void open_mealProductEditor(String mealId, String mealProductId) {
+        updateBodyFragment(new FragmentItem(MealProductEditorFragment.class)
+                .addArgument("meal_id", mealId)
+                .addArgument("meal_product_id", mealProductId),
+                animation_slide_from_right()
+        );
+    }
+
 }

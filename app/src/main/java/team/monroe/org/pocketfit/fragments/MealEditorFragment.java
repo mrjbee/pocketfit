@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.monroe.team.android.box.app.FragmentSupport;
+
 import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
@@ -15,7 +17,7 @@ import team.monroe.org.pocketfit.presentations.Meal;
 import team.monroe.org.pocketfit.presentations.MealProduct;
 import team.monroe.org.pocketfit.view.presenter.ListViewPresenter;
 
-public class MealEditorFragment extends BodyFragment<RoutinesActivity> {
+public class MealEditorFragment extends BodyFragment<FoodActivity> {
 
 
     private Meal mMeal;
@@ -44,7 +46,12 @@ public class MealEditorFragment extends BodyFragment<RoutinesActivity> {
             public void onClick(View v) {
                 String title = view_text(R.id.edit_title).getText().toString();
                 if (!title.trim().isEmpty()){
-                    ownerContract(FoodActivity.class).open_productsAsChooser(mMeal.id, true);
+                    application().function_createId("mp", observe_function(State.STOP, new PocketFitApp.DataAction<String>() {
+                        @Override
+                        public void data(String data) {
+                            ownerContract(FoodActivity.class).open_productsAsChooser(mMeal.id, data, true);
+                        }
+                    }));
                 }else{
                     Toast.makeText(getActivity(), "Please add meal title first", Toast.LENGTH_SHORT).show();
                 }
@@ -63,25 +70,24 @@ public class MealEditorFragment extends BodyFragment<RoutinesActivity> {
             protected View data_to_view(int index, final MealProduct mealProduct, final ViewGroup owner, LayoutInflater inflater) {
                 View view = inflater.inflate(R.layout.item_product,owner, false);
                 ((TextView)view.findViewById(R.id.item_caption)).setText(mealProduct.product.title);
-                ((TextView)view.findViewById(R.id.item_sub_caption)).setText(mealProduct.gram+" gram");
-                ((TextView)view.findViewById(R.id.item_text)).setText(mealProduct.calories());
+                ((TextView)view.findViewById(R.id.item_text)).setText(mealProduct.gram+" gram");
+                ((TextView)view.findViewById(R.id.item_sub_caption)).setText(mealProduct.calories()+" cal");
 
                 view.findViewById(R.id.item_action).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-               //         ownerContract(RoutinesActivity.class).open_RoutineDay(mRoutine.id, routineDay.id);
+                        owner().open_mealProductEditor(mMeal.id, mealProduct.id);
                     }
                 });
                 view.findViewById(R.id.item_trash).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                 /*       application().function_updateRoutineDay(routineDay,mRoutine.id, UpdateRoutineDay.RoutineDayUpdate.INDEX_DELETE, new PocketFitApp.DataAction<Void>() {
+                        application().function_updateMealProduct(mealProduct,mMeal.id,true,observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
                             @Override
                             public void data(Void data) {
-                                updateRoutineDetails(mRoutine.id);
+                                updateMeal(mMeal.id);
                             }
-                        });
-                        */
+                        }));
                     }
                 });
                 return view;
@@ -101,6 +107,10 @@ public class MealEditorFragment extends BodyFragment<RoutinesActivity> {
         if (mealId == null){
             application().error("No meal id");
         }
+        updateMeal(mealId);
+    }
+
+    private void updateMeal(final String mealId) {
         application().function_getMeal(mealId,observe_function(State.STOP, new PocketFitApp.DataAction<Meal>() {
             @Override
             public void data(Meal data) {

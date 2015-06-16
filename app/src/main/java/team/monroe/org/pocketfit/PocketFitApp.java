@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Meal;
+import team.monroe.org.pocketfit.presentations.MealProduct;
 import team.monroe.org.pocketfit.presentations.Product;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
@@ -36,6 +37,7 @@ import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetMealById;
+import team.monroe.org.pocketfit.uc.GetMealProductById;
 import team.monroe.org.pocketfit.uc.GetProductById;
 import team.monroe.org.pocketfit.uc.GetProductList;
 import team.monroe.org.pocketfit.uc.GetRoutineById;
@@ -45,6 +47,7 @@ import team.monroe.org.pocketfit.uc.GetRoutineList;
 import team.monroe.org.pocketfit.uc.IsExerciseSafeToChange;
 import team.monroe.org.pocketfit.uc.UpdateExercise;
 import team.monroe.org.pocketfit.uc.UpdateMeal;
+import team.monroe.org.pocketfit.uc.UpdateMealProduct;
 import team.monroe.org.pocketfit.uc.UpdateProduct;
 import team.monroe.org.pocketfit.uc.UpdateRoutine;
 import team.monroe.org.pocketfit.uc.UpdateRoutineDay;
@@ -388,9 +391,18 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         fetchValue(GetRoutineExerciseById.class,routineExerciseId,new NoOpValueAdapter<RoutineExercise>(),routineExerciseValueObserver);
     }
 
+    public void function_getMealProduct(String mealProductId, ValueObserver<MealProduct> observer) {
+        fetchValue(GetMealProductById.class, mealProductId, new NoOpValueAdapter<MealProduct>(), observer);
+    }
+
     public void function_updateRoutineExercise(RoutineExercise routineExercise, String dayId, int index, ValueObserver<Void> observer) {
         fetchValue(UpdateRoutineExercise.class, new UpdateRoutineExercise.RoutineExerciseUpdate(routineExercise, dayId, index), new NoOpValueAdapter<Void>(),observer);
     }
+
+    public void function_updateMealProduct(MealProduct mealProduct, String mealId, boolean remove, ValueObserver<Void> observer) {
+        fetchValue(UpdateMealProduct.class, new UpdateMealProduct.Update(mealProduct, mealId,remove), new NoOpValueAdapter<Void>(),observer);
+    }
+
 
     public boolean hasActiveRoutine() {
         return getSetting(Settings.ID_ACtIVE_ROUTINE) != null;

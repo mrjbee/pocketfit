@@ -72,7 +72,7 @@ public class ProductEditorFragment extends BodyFragment<RoutinesActivity>{
         mProduct.carbs = readPositiveFloat(R.id.edit_carbs);
         mProduct.fats = readPositiveFloat(R.id.edit_fats);
         mProduct.protein = readPositiveFloat(R.id.edit_protein);
-        application().function_updateProduct(mProduct, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+        application().function_updateProduct(mProduct, observe_function(State.ANY, new PocketFitApp.DataAction<Void>() {
             @Override
             public void data(Void data) {
 

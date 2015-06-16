@@ -15,4 +15,8 @@ public class MealProduct {
     public int calories() {
         return Math.round(product.calories/100f * gram);
     }
+
+    public String getProductId() {
+        return product!= null?product.id:null;
+    }
 }

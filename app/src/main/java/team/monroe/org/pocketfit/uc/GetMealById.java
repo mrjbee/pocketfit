@@ -11,6 +11,7 @@ import team.monroe.org.pocketfit.Settings;
 import team.monroe.org.pocketfit.manage.Persist;
 import team.monroe.org.pocketfit.manage.PersistManager;
 import team.monroe.org.pocketfit.presentations.Meal;
+import team.monroe.org.pocketfit.presentations.MealProduct;
 import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.presentations.RoutineDay;
 
@@ -30,11 +31,11 @@ public class GetMealById extends UserCaseSupport<String, Meal>{
         answer.imageId = mealPersist.imageId;
 
         answer.mealProducts = new ArrayList<>();
-        /*for (String dayId : mealPersist.routineDaysIdList) {
-            RoutineDay routineDay = using(Model.class).execute(GetRoutineDayById.class,dayId);
-            if (routineDay == null) throw new NullPointerException("Day couldn`t be null");
-            answer.trainingDays.add(routineDay);
-        }*/
+        for (String mealProductId : mealPersist.mealProductIdList) {
+            MealProduct product = using(Model.class).execute(GetMealProductById.class, mealProductId);
+            if (product == null) throw new NullPointerException("Meal Product couldn`t be null");
+            answer.mealProducts.add(product);
+        }
         return answer;
     }
 }

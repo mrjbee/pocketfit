@@ -22,6 +22,7 @@ public class PersistManager {
     private final SerializationMap<String, Exercise> exerciseSerializationMap;
     private final SerializationMap<String, Persist.Meal> mealSerializationMap;
     private final SerializationMap<String, Product> productSerializationMap;
+    private final SerializationMap<String, Persist.MealProduct> mealProductSerializationMap;
 
 
     public PersistManager(Context context) {
@@ -31,6 +32,7 @@ public class PersistManager {
         this.exerciseSerializationMap = new SerializationMap<>("persist_exercises.map", context);
         this.mealSerializationMap = new SerializationMap<>("persist_meal.map", context);
         this.productSerializationMap = new SerializationMap<>("persist_product.map", context);
+        mealProductSerializationMap= new SerializationMap<>("persist_mp.map", context);
     }
 
     public void updateOrCreate(Persist.Routine routine) {
@@ -103,5 +105,17 @@ public class PersistManager {
 
     public Set<String> listProductIds()  {
         return productSerializationMap.keys();
+    }
+
+    public Persist.MealProduct getMealProduct(String id) {
+        return mealProductSerializationMap.get(id);
+    }
+
+    public void removeMealProduct(String id) {
+        mealProductSerializationMap.remove(id);
+    }
+
+    public void updateOrCreateMealProduct(Persist.MealProduct mealPersists) {
+        mealProductSerializationMap.put(mealPersists.id, mealPersists);
     }
 }

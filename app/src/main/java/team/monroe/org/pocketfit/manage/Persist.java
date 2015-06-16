@@ -48,6 +48,20 @@ public class Persist {
         }
     }
 
+    public static class MealProduct implements Serializable {
+
+        public final String id;
+        public final String mealId;
+        public final String productId;
+        public Float gram;
+
+        public MealProduct(String id, String mealId, String productId) {
+            this.id = id;
+            this.mealId = mealId;
+            this.productId = productId;
+        }
+    }
+
     public static class RoutineExercise implements Serializable {
 
         public final String id;

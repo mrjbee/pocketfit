@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="100dp">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/body_top"
+                android:orientation="vertical">
+
+                <GridLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/text_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Text.Body"
+                        android:text="Example"
+                        />
+
+                    <ImageView
+                        android:id="@+id/action_change_exercise"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="50dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/arrow_thin_right"
+                        />
+                </GridLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:src="@drawable/separator"
+                    android:scaleType="centerCrop"
+                    android:layout_margin="2dp"/>
+
+                <GridLayout
+                    android:visibility="visible"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/panel_power"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:layout_columnSpan="2"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Text.Body.Caption.Bigger"
+                    android:text="Weight in meal"
+                    android:layout_marginBottom="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/edit_weight"
+                    android:layout_column="0"
+                    android:layout_row="3"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:hint="For example, 200 "
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:inputType="numberDecimal"
+                    style="@style/Text.Body.Optional"
+                    />
+                <TextView
+                    android:layout_column="1"
+                    android:layout_row="3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Text.Body.Optional"
+                    android:text="gram"
+                    />
+                </GridLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>
