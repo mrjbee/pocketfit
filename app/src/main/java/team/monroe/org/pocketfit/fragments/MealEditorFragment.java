@@ -119,7 +119,10 @@ public class MealEditorFragment extends BodyFragment<FoodActivity> {
                  mMeal = new Meal(mealId);
                }
                view_text(R.id.edit_title).setText(mMeal.title);
-               listViewPresenter.synchronizeItems(mMeal.mealProducts);
+                view_text(R.id.text_calories).setText(mMeal.calories()+" cal");
+                view_text(R.id.text_nutrition).setText("Fats " + mMeal.fats()+" Carbs "+mMeal.carbs()+" Protein "+mMeal.protein());
+                view_text(R.id.text_total_products).setText(mMeal.mealProducts.size()+"");
+                listViewPresenter.synchronizeItems(mMeal.mealProducts);
             }
         }));
     }
