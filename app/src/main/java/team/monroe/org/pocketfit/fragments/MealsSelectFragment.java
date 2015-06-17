@@ -24,9 +24,7 @@ import java.util.List;
 import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
-import team.monroe.org.pocketfit.RoutinesActivity;
 import team.monroe.org.pocketfit.presentations.Meal;
-import team.monroe.org.pocketfit.presentations.Routine;
 import team.monroe.org.pocketfit.view.SlideOffListView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;

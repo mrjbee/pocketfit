@@ -142,7 +142,7 @@
                 android:orientation="vertical" />
 
             <ImageView
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:src="@drawable/separator"
@@ -150,7 +150,7 @@
                 android:layout_margin="2dp"/>
 
             <GridLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
@@ -198,7 +198,7 @@
                         android:layout_centerInParent="true"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:src="@drawable/covert_loading"
+                        android:src="@drawable/foodcover_loading"
                         android:scaleType="centerCrop"
                         />
 
