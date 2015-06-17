@@ -59,7 +59,9 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
@@ -78,10 +80,9 @@
                     android:id="@+id/item_caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Example"
-                    android:lines="1"
-                    android:singleLine="true"
-                    android:maxLines="1"
+                    android:text="Very long emaple string to test to line"
+                    android:singleLine="false"
+                    android:maxLines="2"
                     style="@style/Text.Item.Caption"
                     />
             </LinearLayout>
@@ -120,5 +121,26 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/panel_add_button"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        >
+        <Button
+            android:id="@+id/action_add"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button_round"/>
+
+        <ImageView
+            android:id="@+id/image_main_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/round_btn_plus"/>
+    </RelativeLayout>
 
 </RelativeLayout>

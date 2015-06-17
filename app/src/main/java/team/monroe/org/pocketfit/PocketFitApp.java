@@ -490,6 +490,10 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager.getTrainingPlan();
     }
 
+    public void addMeal(Meal meal, ValueObserver<Void> observer) {
+        //TODO: Add actual adding
+        observer.onSuccess(null);
+    }
 
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {

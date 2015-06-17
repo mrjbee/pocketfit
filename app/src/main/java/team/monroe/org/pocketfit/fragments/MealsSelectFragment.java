@@ -1,6 +1,7 @@
 package team.monroe.org.pocketfit.fragments;
 
 
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
@@ -15,6 +16,7 @@ import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
+import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
@@ -29,7 +31,10 @@ import team.monroe.org.pocketfit.view.SlideOffListView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_overshot;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
 public class MealsSelectFragment extends BodyFragment<FoodActivity> {
@@ -78,6 +83,11 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                     TextView sub_text = (TextView) convertView.findViewById(R.id.item_sub_text);
                     ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
                     View panelDetails = convertView.findViewById(R.id.item_panel_details);
+                    View addAction = convertView.findViewById(R.id.action_add);
+                    AppearanceController addButtonAnimation = animateAppearance(convertView.findViewById(R.id.panel_add_button), scale(1f,0f))
+                            .hideAnimation(duration_constant(200), interpreter_accelerate(0.3f))
+                            .build();
+
                     String lastInstalledImageId;
 
                     AppearanceController slidePanelAC = animateAppearance(panelDetails,xSlide(0f,100f))
@@ -90,6 +100,29 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
 
                     @Override
                     public void update(final Meal meal, int position) {
+                        addButtonAnimation.showWithoutAnimation();
+                        addAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addButtonAnimation.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+                                    @Override
+                                    public void customize(Animator animator) {
+                                        animator.addListener(new AnimatorListenerSupport(){
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                application().addMeal(meal, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+                                                    @Override
+                                                    public void data(Void data) {
+                                                        owner().finish();
+                                                    }
+                                                }));
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
                         caption.setText(meal.title);
                         subCaption.setText(meal.calories()+" cal");
                         text.setText("Fats " + meal.fats()+" Carbs "+meal.carbs()+" Protein "+meal.protein());
