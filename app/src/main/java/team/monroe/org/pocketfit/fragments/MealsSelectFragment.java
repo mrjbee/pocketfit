@@ -123,7 +123,27 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                                 slidePanelAC.show();
                             }
                         });
-                        imageView.setImageResource(R.drawable.no_covert);
+                        if (meal.imageId == null){
+                            lastInstalledImageId = "";
+                            imageView.setImageResource(R.drawable.foodcover_no_cover);
+                        }else{
+                            final String finalImageId = meal.imageId;
+                            if (finalImageId.equals(lastInstalledImageId)) return;
+
+                            imageView.setImageResource(R.drawable.foodcover_loading);
+                            application().loadToBitmap(meal.imageId,
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
+                                        @Override
+                                        public void data(Pair<String, Bitmap> data) {
+                                            if (finalImageId.equals(data.first)){
+                                                lastInstalledImageId = finalImageId;
+                                                imageView.setImageBitmap(data.second);
+                                            }
+                                        }
+                                    });
+                        }
                     }
                 };
             }

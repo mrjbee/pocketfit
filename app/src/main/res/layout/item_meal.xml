@@ -32,7 +32,7 @@
         >
 
         <RelativeLayout
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="20dp"
@@ -45,7 +45,7 @@
                 android:layout_centerInParent="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:src="@drawable/covert_loading"
+                android:src="@drawable/foodcover_loading"
                 android:scaleType="centerCrop"
                 />
 
@@ -59,7 +59,6 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_marginLeft="20dp"
             android:padding="10dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

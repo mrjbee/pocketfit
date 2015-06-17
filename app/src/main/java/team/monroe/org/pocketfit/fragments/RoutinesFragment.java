@@ -125,6 +125,7 @@ public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
                             }
                         });
                         if (routine.imageId == null){
+                            lastInstalledImageId = "";
                             imageView.setImageResource(R.drawable.no_covert);
                         }else{
                             final String finalImageId = routine.imageId;
