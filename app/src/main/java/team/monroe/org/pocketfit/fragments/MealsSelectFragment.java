@@ -161,15 +161,10 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
     public void onStart() {
         super.onStart();
         listDataChangeObserver = new Data.DataChangeObserver<List>() {
-            @Override
-            public void onDataInvalid() {
+            @Override public void onDataInvalid() {
                 updateMealList();
             }
-
-            @Override
-            public void onData(List list) {
-
-            }
+            @Override public void onData(List list) {}
         };
         application().data_meals().addDataChangeObserver(listDataChangeObserver);
         updateMealList();

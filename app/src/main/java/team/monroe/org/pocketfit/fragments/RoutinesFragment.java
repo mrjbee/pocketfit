@@ -171,14 +171,10 @@ public class RoutinesFragment extends BodyFragment<RoutinesActivity> {
     public void onStart() {
         super.onStart();
         observer_routines = observe_data_change(State.STOP, new Data.DataChangeObserver<List>() {
-            @Override
-            public void onDataInvalid() {
+            @Override public void onDataInvalid() {
                 fetch_Routines();
             }
-
-            @Override
-            public void onData(List list) {
-            }
+            @Override public void onData(List list) {}
         });
         application().data_routines().addDataChangeObserver(observer_routines);
         fetch_Routines();
