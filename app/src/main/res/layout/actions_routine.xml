@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         style="@style/Button.Action.Dark.Header"
-        android:src="@drawable/runner_dark"/>
+        android:src="@drawable/android_exercises"/>
 
     <ImageView
         android:id="@+id/action_edit_routines"
@@ -21,6 +21,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         style="@style/Button.Action.Dark.Header"
-        android:src="@drawable/gear_dark"/>
+        android:src="@drawable/android_gear"/>
 
 </RelativeLayout>

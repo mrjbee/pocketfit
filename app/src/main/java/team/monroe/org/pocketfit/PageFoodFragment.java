@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.monroe.team.corebox.utils.DateUtils;
 
@@ -137,6 +138,7 @@ public class PageFoodFragment extends DefaultPageFragment {
             @Override
             public void onClick(View v) {
                 mDayFoodPager.setCurrentItem(mMaxDayPosition);
+                Toast.makeText(application(), getDateString(mTodayDate), Toast.LENGTH_SHORT).show();
             }
         });
         mHeaderDayText = (TextView) headerActionsView.findViewById(R.id.text_day);
@@ -155,11 +157,15 @@ public class PageFoodFragment extends DefaultPageFragment {
         }
     }
 
-    DateFormat dateFormat = new SimpleDateFormat("dd, MMMM yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("EEE dd, MMMM yyyy");
     private void updateDateCaption(Date today) {
         mDate = today;
-        mHeaderDayText.setText(dateFormat.format(mDate));
-        mDayText.setText(dateFormat.format(mDate));
+        mHeaderDayText.setText(getDateString(today));
+        mDayText.setText(getDateString(today));
+    }
+
+    private String getDateString(Date today) {
+        return dateFormat.format(today);
     }
 
     @Override

@@ -7,6 +7,7 @@
 
 
     <TextView
+        android:layout_marginRight="10dp"
         android:id="@+id/text_day"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/action_today"
@@ -16,12 +17,21 @@
         style="@style/Text.Body.Optional"/>
 
     <ImageView
+        android:layout_toLeftOf="@+id/action_meal_list"
         android:id="@+id/action_today"
+        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        style="@style/Button.Action.Dark.Header"
+        android:src="@drawable/android_today"/>
+
+    <ImageView
+        android:id="@+id/action_meal_list"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_width="40dp"
         android:layout_height="40dp"
         style="@style/Button.Action.Dark.Header"
-        android:src="@drawable/gear_dark"/>
+        android:src="@drawable/android_list"/>
 
 </RelativeLayout>
