@@ -79,12 +79,21 @@ public class FoodActivity extends FragmentActivity {
     }
 
     public void performImageSelection() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra("return-data", false);
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,null);
+        galleryIntent.setType("image/*");
+        galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+        chooser.putExtra(Intent.EXTRA_INTENT, galleryIntent);
+        chooser.putExtra(Intent.EXTRA_TITLE, "Pick and image");
+
+        Intent[] intentArray =  {cameraIntent};
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
         try {
-            startActivityForResult(Intent.createChooser(intent, "Pick cover"), PICK_IMAGE);
+            startActivityForResult(chooser, PICK_IMAGE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No application for image selection", Toast.LENGTH_SHORT).show();
         }
