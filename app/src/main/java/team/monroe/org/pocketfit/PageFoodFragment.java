@@ -26,6 +26,7 @@ public class PageFoodFragment extends DefaultPageFragment {
     private ViewPager mDayFoodPager;
     private int mMaxDayPosition;
     private Date mTodayDate;
+    private FoodDayPageAdapter mDayFoodAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class PageFoodFragment extends DefaultPageFragment {
         mDayFoodPager = new ViewPager(getActivity());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
         view(R.id.panel_day, ViewGroup.class).addView(mDayFoodPager,layoutParams);
-        mDayFoodPager.setAdapter(new PagerAdapter() {
+        mDayFoodAdapter = new FoodDayPageAdapter() {
 
             private HashMap<Integer, ViewGroup> dayFoodViewPerPositionHashMap = new HashMap<Integer, ViewGroup>();
             private List<ViewGroup> notUsedViewList = new ArrayList<ViewGroup>();
@@ -62,7 +63,7 @@ public class PageFoodFragment extends DefaultPageFragment {
                     Date date = getDateByPosition(position);
                     dayFoodPresenter.init(date);
                     dayFoodViewPerPositionHashMap.put(position, dayFoodView);
-                }else {
+                } else {
                     dayFoodPresenter = (DayFoodSummaryPresenter) dayFoodView.getTag();
                 }
                 container.addView(dayFoodView);
@@ -78,7 +79,7 @@ public class PageFoodFragment extends DefaultPageFragment {
                 dayFoodViewPerPositionHashMap.remove(position);
                 if (notUsedViewList.size() < 5) {
                     notUsedViewList.add((ViewGroup) view);
-                }else {
+                } else {
                     presenter.destroy();
                 }
             }
@@ -93,7 +94,18 @@ public class PageFoodFragment extends DefaultPageFragment {
             public boolean isViewFromObject(View view, Object object) {
                 return view == object;
             }
-        });
+
+            @Override
+            protected DayFoodSummaryPresenter getPresenterFor(int position) {
+                View view = dayFoodViewPerPositionHashMap.get(position);
+                if (view == null){
+                    return null;
+                }
+                return (DayFoodSummaryPresenter) view.getTag();
+            }
+        };
+        mDayFoodPager.setAdapter(mDayFoodAdapter);
+
         mDayFoodPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -103,6 +115,8 @@ public class PageFoodFragment extends DefaultPageFragment {
             @Override
             public void onPageSelected(int position) {
                 updateDateCaption(getDateByPosition(position));
+
+                //mDayFoodAdapter.getPresenterFor(position).onSelected();
             }
 
             @Override
@@ -164,5 +178,9 @@ public class PageFoodFragment extends DefaultPageFragment {
     @Override
     public void updateMainButton() {
         showMainButton(R.drawable.round_btn_plus, null);
+    }
+
+    private abstract static class FoodDayPageAdapter extends PagerAdapter{
+        protected abstract DayFoodSummaryPresenter getPresenterFor(int position);
     }
 }

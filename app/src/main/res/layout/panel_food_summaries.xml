@@ -3,7 +3,120 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:padding="20dp">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:layout_gravity="center"
+            android:text="Calories"
+            style="@style/Text.Body.Section.Caption"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/text_calories_limit"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Limit 2500 cal"
+            style="@style/Text.Body.Optional"/>
+
+        <ImageView
+            android:id="@+id/action_edit"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            style="@style/Button.Action"
+            android:src="@drawable/edit"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/panel_edit_limit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="50dp"
+        >
+        <Space
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/action_apply"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            style="@style/Button.Panel"
+            />
+
+        <EditText
+            android:id="@+id/edit_limit"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:hint="Day Limit"
+            android:inputType="number"
+            style="@style/Text.Body"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/text_calories_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0000"
+            android:gravity="bottom"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="cal"
+            style="@style/Text.Body.Optional"/>
+
+        <TextView
+            android:id="@+id/text_calories_delta"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Left 300 cal"
+            style="@style/Text.Body.Optional"/>
+
+    </LinearLayout>
+
+    <team.monroe.org.pocketfit.view.HorProgressBarView
+        android:id="@+id/bar_calories"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp" />
+
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/separator"
+        android:layout_margin="5dp"/>
 
     <GridLayout
         android:layout_marginTop="20dp"
@@ -11,28 +124,6 @@
         android:layout_height="fill_parent"
         android:columnCount="3"
         android:rowCount="4">
-
-        <TextView
-            android:layout_marginBottom="20dp"
-            android:gravity="bottom"
-            android:text="Calories"
-            style="@style/Text.Body.Caption"/>
-
-        <TextView
-            android:id="@+id/text_calories_value"
-            android:text="0000"
-            android:gravity="bottom"
-            android:layout_marginLeft="10dp"
-            style="@style/Text.Body"/>
-
-        <TextView
-            android:gravity="bottom"
-            android:layout_marginLeft="10dp"
-            android:text="cal"
-            style="@style/Text.Body.Optional"/>
-
-
-
 
         <TextView
             android:layout_marginBottom="5dp"

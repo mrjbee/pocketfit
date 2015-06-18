@@ -79,6 +79,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     private TrainingExecutionService.TrainingExecutionManager mTrainingExecutionManager;
     private Data<List> data_products;
     private Data<List> data_meals;
+    private Data<Integer> data_calories_limit;
 
     @Override
     protected PocketFitModel createModel() {
@@ -144,6 +145,13 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             @Override
             protected List<Product> provideData() {
                 return model().execute(GetProductList.class, null);
+            }
+        };
+
+        data_calories_limit = new Data<Integer>(model()) {
+            @Override
+            protected Integer provideData() {
+                return getSetting(Settings.CALORIES_DAY_LIMIT);
             }
         };
 
@@ -222,6 +230,9 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return data_range_ateMeal.getOrCreate(date);
     }
 
+    public Data<Integer> data_calories_limit() {
+        return data_calories_limit;
+    }
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {
         return new ValueObserver<DataType>() {
@@ -534,6 +545,11 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
                 return super.adapt(value);
             }
         } ,observer);
+    }
+
+    public void updateCaloriesLimit(int limitValue) {
+        setSetting(Settings.CALORIES_DAY_LIMIT, limitValue);
+        data_calories_limit().invalidate();
     }
 
 
