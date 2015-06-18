@@ -196,6 +196,11 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
         startActivity(new Intent(this, ExercisesActivity.class));
     }
 
+
+    public void openProductList() {
+        startActivity(new Intent(DashboardActivity.this, ProductsFoodActivity.class));
+    }
+
     public void openRoutinesEditor() {
         startActivityForResult(new Intent(DashboardActivity.this, RoutinesActivity.class), 40);
     }
@@ -282,6 +287,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
     public void closePopup() {
         popupController.hidePopup(getFragmentManager());
     }
+
 
 
     private static class PopupController {

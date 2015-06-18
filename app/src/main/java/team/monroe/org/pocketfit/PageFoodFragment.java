@@ -147,6 +147,13 @@ public class PageFoodFragment extends DefaultPageFragment {
             owner().openPopupMealList(mDate);
             }
         });
+        headerActionsView.findViewById(R.id.action_products).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                owner().openProductList();
+            }
+        });
+
 
         mHeaderDayText = (TextView) headerActionsView.findViewById(R.id.text_day);
         mHeaderDayText.setVisibility(activity().isLandscape(R.bool.class)?View.VISIBLE : View.GONE);

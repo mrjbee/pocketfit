@@ -19,8 +19,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ProductsFoodActivity"
+            android:label="Products"
+            android:theme="@style/AnimationActivity" >
+        </activity>
+        <activity
             android:name=".FoodActivity"
-            android:label="Exercises"
+            android:label="Foods"
             android:theme="@style/AnimationActivity" >
         </activity>
         <activity
