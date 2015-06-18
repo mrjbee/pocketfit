@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team.monroe.org.pocketfit.view.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/panel_tile"
+        android:layout_margin="@dimen/tile.margin.side"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/tile_white"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:paddingLeft="10dp"
+                style="@style/Text.Header.Secondary.Caption.Light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/text.header.dash.dark"
+                android:text="Menu" />
+
+
+            <TextView
+                android:id="@+id/text_day"
+                android:paddingLeft="10dp"
+                style="@style/Text.Body.Optional"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="" />
+
+            <ImageView
+                android:id="@+id/action_close"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                style="@style/Button.Action.Dark.Header"
+                android:src="@drawable/android_close"/>
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/separator"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/separator"
+            android:layout_marginTop="5dp"/>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <team.monroe.org.pocketfit.view.SlideOffListView
+                android:id="@+id/list_routine"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:listSelector="@null"
+                android:scrollbars="none"/>
+            <include
+                android:layout_below="@+id/panel_new_routine"
+                android:id="@+id/panel_no_items"
+                layout="@layout/panel_no_items"
+                android:layout_height="60dp"
+                android:layout_width="wrap_content" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</team.monroe.org.pocketfit.view.SlidingRelativeLayout>

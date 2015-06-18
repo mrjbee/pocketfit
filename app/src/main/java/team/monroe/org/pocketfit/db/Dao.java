@@ -78,4 +78,13 @@ public class Dao extends DAOSupport{
     private PocketFitSchema.MealEntry mealTable() {
         return table(PocketFitSchema.MealEntry.class);
     }
+
+    public void deleteEatMeal(long id) {
+        int i = db.delete(mealTable().TABLE_NAME,
+                "? == "+mealTable()._ID.name(),
+                strs(id));
+        if (i != 1){
+            throw new IllegalStateException("Supposed to remove single instance but was "+i);
+        }
+    }
 }

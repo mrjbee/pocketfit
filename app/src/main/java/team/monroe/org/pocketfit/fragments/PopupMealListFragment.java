@@ -1,6 +1,5 @@
 package team.monroe.org.pocketfit.fragments;
 
-
 import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
@@ -19,8 +19,12 @@ import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControl
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import team.monroe.org.pocketfit.DashboardActivity;
 import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
@@ -35,34 +39,33 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
-public class MealsSelectFragment extends BodyFragment<FoodActivity> {
+public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
 
-    private GenericListViewAdapter<Meal, GetViewImplementation.ViewHolder<Meal>> mMealAdapter;
+    private GenericListViewAdapter<AteMeal, GetViewImplementation.ViewHolder<AteMeal>> mMealAdapter;
     private SlideOffListView mMealsListView;
     private View mNoItemsView;
-    private Data.DataChangeObserver<List> listDataChangeObserver;
+    private Date mDate;
+    private Data<List<AteMeal>> mData;
+    private Data.DataChangeObserver<List<AteMeal>> dataChangeObserver;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_meals_and_drinks;
+        return R.layout.fragment_popup;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        view(R.id.panel_new_routine).setOnClickListener(new View.OnClickListener() {
+        view(R.id.action_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                application().function_createId("meal",observe_function(State.PAUSE, new PocketFitApp.DataAction<String>() {
-                    @Override
-                    public void data(String routine) {
-                        ownerContract(FoodActivity.class).open_mealEditor(routine);
-                    }
-                }));
+                ((DashboardActivity) activity()).closePopup();
             }
         });
+        mDate = new Date(getArguments().getLong("date_time"));
 
-
+        DateFormat dateFormat = new SimpleDateFormat("EEE dd, MMMM yyyy");
+        view_text(R.id.text_day).setText(dateFormat.format(mDate));
 
         mMealsListView = view(R.id.list_routine, SlideOffListView.class);
         mMealsListView.setVisibility(View.INVISIBLE);
@@ -70,10 +73,10 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
         mNoItemsView = view(R.id.panel_no_items);
         mNoItemsView.setVisibility(View.VISIBLE);
 
-        mMealAdapter = new GenericListViewAdapter<Meal, GetViewImplementation.ViewHolder<Meal>>(activity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<Meal>>() {
+        mMealAdapter = new GenericListViewAdapter<AteMeal, GetViewImplementation.ViewHolder<AteMeal>>(activity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<AteMeal>>() {
             @Override
-            public GetViewImplementation.ViewHolder<Meal> create(final View convertView) {
-                return new GetViewImplementation.GenericViewHolder<Meal>() {
+            public GetViewImplementation.ViewHolder<AteMeal> create(final View convertView) {
+                return new GetViewImplementation.GenericViewHolder<AteMeal>() {
 
                     TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
                     TextView subCaption = (TextView) convertView.findViewById(R.id.item_sub_caption);
@@ -81,10 +84,6 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                     TextView sub_text = (TextView) convertView.findViewById(R.id.item_sub_text);
                     ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
                     View panelDetails = convertView.findViewById(R.id.item_panel_details);
-                    View addAction = convertView.findViewById(R.id.action_add);
-                    AppearanceController addButtonAnimation = animateAppearance(convertView.findViewById(R.id.panel_add_button), scale(1f,0f))
-                            .hideAnimation(duration_constant(200), interpreter_accelerate(0.3f))
-                            .build();
 
                     String lastInstalledImageId;
 
@@ -97,31 +96,8 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                     }
 
                     @Override
-                    public void update(final Meal meal, int position) {
-                        addButtonAnimation.showWithoutAnimation();
-                        addAction.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                addButtonAnimation.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
-                                    @Override
-                                    public void customize(Animator animator) {
-                                        animator.addListener(new AnimatorListenerSupport(){
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-                                                super.onAnimationEnd(animation);
-                                                application().function_eatMeal(meal, observe_function(State.STOP, new PocketFitApp.DataAction<AteMeal>() {
-                                                    @Override
-                                                    public void data(AteMeal data) {
-                                                        Toast.makeText(application().getApplicationContext(), "Eat meal add = " + data.id, Toast.LENGTH_LONG).show();
-                                                        owner().finish();
-                                                    }
-                                                }));
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                    public void update(final AteMeal ateMeal, int position) {
+                        final Meal meal = ateMeal.meal;
                         caption.setText(meal.title);
                         subCaption.setText(meal.calories()+" cal");
                         text.setText("Fats " + meal.fats()+" Carbs "+meal.carbs()+" Protein "+meal.protein());
@@ -140,7 +116,13 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
 
                             @Override
                             protected void onApply(float x, float y, float slideValue, float fraction) {
-                                owner().open_mealEditor(meal.id);
+
+                                application().function_deleteAteMeal(ateMeal, new PocketFitApp.FetchObserver<Void>(application()) {
+                                    @Override
+                                    public void onFetch(Void aVoid) {
+                                        mData.invalidate();
+                                    }
+                                });
                             }
 
                             @Override
@@ -179,7 +161,7 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                     }
                 };
             }
-        },R.layout.item_meal);
+        },R.layout.item_meal_menu);
 
         mMealsListView.setAdapter(mMealAdapter);
         mMealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -192,22 +174,27 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
     @Override
     public void onStart() {
         super.onStart();
-        listDataChangeObserver = new Data.DataChangeObserver<List>() {
-            @Override public void onDataInvalid() {
-                updateMealList();
+        mData = application().data_ate_meal(mDate);
+        dataChangeObserver = new Data.DataChangeObserver<List<AteMeal>>() {
+            @Override
+            public void onDataInvalid() {
+                fetchDataMeal();
             }
-            @Override public void onData(List list) {}
+
+            @Override
+            public void onData(List<AteMeal> ateMeals) {
+
+            }
         };
-        application().data_meals().addDataChangeObserver(listDataChangeObserver);
-        updateMealList();
+        mData.addDataChangeObserver(dataChangeObserver);
+        fetchDataMeal();
     }
 
-    private void updateMealList() {
-        application().data_meals().fetch(true, observe_data_fetch(State.STOP, new PocketFitApp.DataAction<List>() {
+    private void fetchDataMeal() {
+        mData.fetch(true, new PocketFitApp.FetchObserver<List<AteMeal>>(application()) {
             @Override
-            public void data(List data) {
-                List<Meal> mealList = data;
-                if (data.isEmpty()) {
+            public void onFetch(List<AteMeal> ateMeals) {
+                if (ateMeals.isEmpty()) {
                     mMealsListView.setVisibility(View.INVISIBLE);
                     mNoItemsView.setVisibility(View.VISIBLE);
 
@@ -217,28 +204,17 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                     mMealsListView.setVisibility(View.VISIBLE);
                     mNoItemsView.setVisibility(View.INVISIBLE);
                     mMealAdapter.clear();
-                    mMealAdapter.addAll(mealList);
+                    mMealAdapter.addAll(ateMeals);
                     mMealAdapter.notifyDataSetChanged();
                 }
             }
-        }));
+        });
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        application().data_meals().removeDataChangeObserver(listDataChangeObserver);
+        mData.removeDataChangeObserver(dataChangeObserver);
+        mData = null;
     }
-
-
-    @Override
-    protected boolean isHeaderSecondary() {
-        return false;
-    }
-
-    @Override
-    protected String getHeaderName() {
-        return "Meals & Drinks";
-    }
-
 }

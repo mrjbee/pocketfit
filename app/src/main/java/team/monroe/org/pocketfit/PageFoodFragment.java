@@ -141,6 +141,13 @@ public class PageFoodFragment extends DefaultPageFragment {
                 Toast.makeText(application(), getDateString(mTodayDate), Toast.LENGTH_SHORT).show();
             }
         });
+        headerActionsView.findViewById(R.id.action_meal_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            owner().openPopupMealList(mDate);
+            }
+        });
+
         mHeaderDayText = (TextView) headerActionsView.findViewById(R.id.text_day);
         mHeaderDayText.setVisibility(activity().isLandscape(R.bool.class)?View.VISIBLE : View.GONE);
         configureHeader("Food Diary", headerActionsView);

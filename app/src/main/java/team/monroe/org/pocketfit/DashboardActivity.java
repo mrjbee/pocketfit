@@ -2,21 +2,28 @@ package team.monroe.org.pocketfit;
 
 import android.animation.Animator;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import org.monroe.team.android.box.app.ActivitySupport;
 import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
+import org.monroe.team.android.box.utils.DisplayUtils;
 import org.monroe.team.corebox.log.L;
+
+import java.util.Date;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.*;
 
 import team.monroe.org.pocketfit.fragments.DashboardPageFragment;
 import team.monroe.org.pocketfit.fragments.PageWorkoutFragment;
+import team.monroe.org.pocketfit.fragments.PopupMealListFragment;
 import team.monroe.org.pocketfit.fragments.contract.BackButtonContract;
 import team.monroe.org.pocketfit.fragments.contract.MainButtonUserContract;
 import team.monroe.org.pocketfit.view.VerticalViewPager;
@@ -24,6 +31,8 @@ import team.monroe.org.pocketfit.view.VerticalViewPager;
 public class DashboardActivity extends ActivitySupport<PocketFitApp>{
 
     private MainButtonController mainButtonController;
+    private PopupController popupController;
+
     private VerticalViewPager mViewPager;
     private team.monroe.org.pocketfit.view.FragmentPagerAdapter mPageAdapter;
     private Class<? extends  DashboardPageFragment> mCurrentPageClass = PageWorkoutFragment.class;
@@ -34,6 +43,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
         setContentView( R.layout.activity_dashboard);
 
         mainButtonController = new MainButtonController(view(R.id.panel_main_button),view(R.id.image_main_button,ImageView.class));
+        popupController = new PopupController(view(R.id.layer_shadow), view(R.id.frag_popup), this);
 
 
         view(R.id.main_button).setOnClickListener(new View.OnClickListener() {
@@ -43,6 +53,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
             }
         });
 
+        popupController.restoreState(savedInstanceState);
         if (isFirstRun()){
         }else {
             mainButtonController.restoreState(savedInstanceState);
@@ -245,16 +256,122 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        popupController.saveState(outState);
         mainButtonController.saveState(outState);
         outState.putSerializable("current_page",mCurrentPageClass);
     }
 
     @Override
     public void onBackPressed() {
+        if (popupController.onBackPressed(getFragmentManager())){
+            return;
+        }
         if (!getPage(BackButtonContract.class).onBackButton()){
             super.onBackPressed();
         }
     }
+
+    public void openPopupMealList(Date date) {
+        Fragment fragment = new PopupMealListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("date_time", date.getTime());
+        fragment.setArguments(bundle);
+        popupController.showPopup(getFragmentManager(), fragment);
+    }
+
+    public void closePopup() {
+        popupController.hidePopup(getFragmentManager());
+    }
+
+
+    private static class PopupController {
+
+        private final View shadowLayer;
+        private final View fragLayer;
+        private final AppearanceController mShadowAc;
+        private final AppearanceController mFragAc;
+        private boolean mPopupVisible = false;
+
+
+        private PopupController(View shadowLayer, View fragLayer, Context context) {
+
+            this.shadowLayer = shadowLayer;
+            this.fragLayer = fragLayer;
+
+            fragLayer.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+
+            mShadowAc = animateAppearance(shadowLayer, alpha(0.7f,0f))
+                    .showAnimation(duration_constant(300), interpreter_overshot())
+                    .hideAnimation(duration_constant(300), interpreter_accelerate(0.8f))
+                    .hideAndGone()
+                    .build();
+
+            mFragAc = animateAppearance(fragLayer, ySlide(0f, DisplayUtils.screenHeight(context.getResources())))
+                    .showAnimation(duration_constant(500), interpreter_overshot())
+                    .hideAnimation(duration_constant(300), interpreter_accelerate(0.8f))
+                    .hideAndGone()
+                    .build();
+        }
+
+        public void restoreState(Bundle savedInstanceState) {
+            if (savedInstanceState != null){
+                mPopupVisible = savedInstanceState.getBoolean("popup_visibility",false);
+            }else {
+                mPopupVisible = false;
+            }
+            if(mPopupVisible){
+                mFragAc.showWithoutAnimation();
+                mShadowAc.showWithoutAnimation();
+            }else{
+                mFragAc.hideWithoutAnimation();
+                mShadowAc.hideWithoutAnimation();
+            }
+        }
+
+        public void saveState(Bundle outState) {
+            outState.putBoolean("popup_visibility", mPopupVisible);
+        }
+
+        public void showPopup(FragmentManager fragmentManager, Fragment fragment) {
+            fragmentManager.beginTransaction().add(R.id.frag_popup,fragment).commit();
+            mPopupVisible = true;
+            mShadowAc.show();
+            mFragAc.show();
+        }
+
+        private void hidePopup(final FragmentManager manager) {
+            if (!mPopupVisible) return;
+            mShadowAc.hide();
+            mFragAc.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+                @Override
+                public void customize(Animator animator) {
+                    animator.addListener(new AnimatorListenerSupport(){
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            manager.beginTransaction().remove(manager.findFragmentById(R.id.frag_popup)).commit();
+                            mPopupVisible = false;
+                        }
+                    });
+                }
+            });
+        }
+
+        public boolean onBackPressed(FragmentManager manager) {
+            if (mPopupVisible){
+                hidePopup(manager);
+                return true;
+            }
+            return false;
+        }
+
+
+    }
+
 
     private static class MainButtonController {
 

@@ -39,6 +39,7 @@ import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
+import team.monroe.org.pocketfit.uc.DeleteMeal;
 import team.monroe.org.pocketfit.uc.EatMeal;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetAteMealByDate;
@@ -534,7 +535,30 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager.getTrainingPlan();
     }
 
-    public void eatMeal(Meal meal, ValueObserver<AteMeal> observer) {
+
+    public void function_deleteAteMeal(AteMeal meal, final FetchObserver<Void> fetchObserver) {
+        fetchValue(DeleteMeal.class,meal, new NoOpValueAdapter<Void>(){
+            @Override
+            public Void adapt(Void value) {
+                Data<List<AteMeal>> data = data_range_ateMeal.get(DateUtils.today());
+                if (data != null){
+                    data.invalidate();
+                }
+                return null;
+            }
+        } ,new ValueObserver<Void>() {
+            @Override
+            public void onSuccess(Void value) {
+                fetchObserver.onFetch(null);
+            }
+
+            @Override
+            public void onFail(Throwable exception) {
+                fetchObserver.onError(new Data.ExceptionFetchError(exception));
+            }
+        });
+    }
+    public void function_eatMeal(Meal meal, ValueObserver<AteMeal> observer) {
         fetchValue(EatMeal.class,meal, new NoOpValueAdapter<AteMeal>(){
             @Override
             public AteMeal adapt(AteMeal value) {
@@ -551,6 +575,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         setSetting(Settings.CALORIES_DAY_LIMIT, limitValue);
         data_calories_limit().invalidate();
     }
+
 
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
