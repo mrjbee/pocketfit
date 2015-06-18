@@ -118,18 +118,47 @@
         android:src="@drawable/separator"
         android:layout_margin="5dp"/>
 
-    <GridLayout
+    <TextView
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:text="Nutrition Values"
+        style="@style/Text.Body.Section.Caption"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="4">
 
         <TextView
             android:layout_marginBottom="5dp"
             android:gravity="bottom"
+            android:text="Protein"
+            style="@style/Text.Body.Optional"/>
+
+        <TextView
+            android:id="@+id/text_protein_value"
+            android:text="00"
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="gram"
+            style="@style/Text.Body.Optional"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:gravity="bottom"
             android:text="Fats"
-            style="@style/Text.Body.Caption"/>
+            style="@style/Text.Body.Optional"/>
 
         <TextView
             android:id="@+id/text_fats_value"
@@ -149,7 +178,7 @@
             android:layout_marginBottom="5dp"
             android:gravity="bottom"
             android:text="Carbs"
-            style="@style/Text.Body.Caption"/>
+            style="@style/Text.Body.Optional"/>
 
         <TextView
             android:id="@+id/text_carbs_value"
@@ -165,24 +194,34 @@
             style="@style/Text.Body.Optional"/>
 
 
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:gravity="bottom"
-            android:text="Protein"
-            style="@style/Text.Body.Caption"/>
 
-        <TextView
-            android:id="@+id/text_protein_value"
-            android:text="00"
-            android:gravity="bottom"
-            android:layout_marginLeft="10dp"
-            style="@style/Text.Body"/>
-
-        <TextView
-            android:gravity="bottom"
-            android:layout_marginLeft="10dp"
-            android:text="gram"
-            style="@style/Text.Body.Optional"/>
 
     </GridLayout>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Balance"
+        style="@style/Text.Body.Section.Caption"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="protein - fats - carbs"
+        style="@style/Text.Body.Optional"/>
+
+    <TextView
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_nutrition_balance"
+        android:text=""
+        style="@style/Text.Body"
+        />
+
 </LinearLayout>

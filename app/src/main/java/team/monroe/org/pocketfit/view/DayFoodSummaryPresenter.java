@@ -25,6 +25,7 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
     private final TextView textFats;
     private final TextView textCarbs;
     private final TextView textProtein;
+    private final TextView textBalance;
     private final View editButton;
     private final View editLimitPanel;
     private final EditText editLimit;
@@ -45,6 +46,7 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
         textFats = (TextView) rootView.findViewById(R.id.text_fats_value);
         textCarbs = (TextView) rootView.findViewById(R.id.text_carbs_value);
         textProtein = (TextView) rootView.findViewById(R.id.text_protein_value);
+        textBalance = (TextView) rootView.findViewById(R.id.text_nutrition_balance);
         editButton = rootView.findViewById(R.id.action_edit);
         editLimitPanel = rootView.findViewById(R.id.panel_edit_limit);
         updateCaloriesDetails();
@@ -151,8 +153,40 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
             public void onFetch(List<AteMeal> ateMeals) {
                 mAteMeals = ateMeals;
                 updateCaloriesDetails();
+                updateNutritious();
             }
         });
+    }
+
+    private void updateNutritious() {
+        float fats = 0;
+        float protein = 0;
+        float carbs = 0;
+
+        for (AteMeal ateMeal : mAteMeals) {
+            fats += ateMeal.meal.fats();
+            carbs += ateMeal.meal.carbs();
+            protein += ateMeal.meal.protein();
+        }
+
+        float sum = fats+carbs+protein;
+
+        textProtein.setText(calculatePercentage(protein, sum) +" %,  "+String.format("%.2f", protein));
+        textFats.setText(calculatePercentage(fats, sum) +" %,  "+String.format("%.2f", fats));
+        textCarbs.setText(calculatePercentage(carbs, sum) +" %,  "+String.format("%.2f", carbs));
+
+        float min = Math.min(Math.min(protein,fats),carbs);
+
+        float proteinPart = min != 0 ? protein/min:0;
+        float carbsPart = min != 0 ? carbs/min:0;
+        float fatsPart = min != 0 ? fats/min:0;
+
+        textBalance.setText(String.format("%.1f", proteinPart)+" - "+String.format("%.1f", fatsPart)+" - "+String.format("%.1f", carbsPart));
+    }
+
+    private int calculatePercentage(float value, float all) {
+        if (all == 0) return 0;
+        return Math.round(value/all * 100f);
     }
 
     private void updateListMeals() {
