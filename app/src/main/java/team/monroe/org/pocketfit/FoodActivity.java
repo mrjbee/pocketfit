@@ -110,4 +110,7 @@ public class FoodActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public void close_current() {
+        onBackPressed();
+    }
 }

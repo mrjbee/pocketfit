@@ -185,4 +185,30 @@ public class MealEditorFragment extends BodyFragment<FoodActivity> {
             }
         }));
     }
+
+    private void onItemRemove() {
+        application().function_removeMeal(mMeal.id, observe_function(State.STOP, new PocketFitApp.DataAction<Boolean>() {
+            @Override
+            public void data(Boolean success) {
+                if (success){
+                    mMeal = null;
+                    owner().close_current();
+                }
+            }
+        }));
+    }
+
+    @Override
+    public View build_HeaderActionsView(ViewGroup actionPanel, LayoutInflater layoutInflater) {
+        View view = layoutInflater.inflate(R.layout.actions_remove, actionPanel, false);
+        view.findViewById(R.id.action_remove).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemRemove();
+            }
+        });
+        return view;
+    }
+
+
 }

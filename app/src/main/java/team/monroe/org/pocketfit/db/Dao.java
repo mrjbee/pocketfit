@@ -87,4 +87,10 @@ public class Dao extends DAOSupport{
             throw new IllegalStateException("Supposed to remove single instance but was "+i);
         }
     }
+
+    public void deleteEatMealByMealId(String mealId) {
+        int i = db.delete(mealTable().TABLE_NAME,
+                "? == "+mealTable()._MEAL_ID.name(),
+                strs(mealId));
+    }
 }

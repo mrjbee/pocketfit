@@ -2,15 +2,13 @@ package team.monroe.org.pocketfit.uc;
 
 import org.monroe.team.android.box.db.TransactionUserCase;
 import org.monroe.team.corebox.services.ServiceRegistry;
-import org.monroe.team.corebox.utils.DateUtils;
-
-import java.util.Date;
 
 import team.monroe.org.pocketfit.db.Dao;
+import team.monroe.org.pocketfit.manage.PersistManager;
 import team.monroe.org.pocketfit.presentations.AteMeal;
 import team.monroe.org.pocketfit.presentations.Meal;
 
-public class DeleteMeal extends TransactionUserCase<AteMeal, Void, Dao>{
+public class DeleteMeal extends TransactionUserCase<String, Boolean, Dao>{
 
 
     public DeleteMeal(ServiceRegistry serviceRegistry) {
@@ -18,8 +16,9 @@ public class DeleteMeal extends TransactionUserCase<AteMeal, Void, Dao>{
     }
 
     @Override
-    protected Void transactionalExecute(AteMeal request, Dao dao) {
-        dao.deleteEatMeal(request.id);
-        return null;
+    protected Boolean transactionalExecute(String mealId, Dao dao) {
+        dao.deleteEatMealByMealId(mealId);
+        using(PersistManager.class).removeMeal(mealId);
+        return true;
     }
 }

@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -39,6 +38,7 @@ import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
+import team.monroe.org.pocketfit.uc.DeleteEatMeal;
 import team.monroe.org.pocketfit.uc.DeleteMeal;
 import team.monroe.org.pocketfit.uc.EatMeal;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
@@ -537,7 +537,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
 
 
     public void function_deleteAteMeal(AteMeal meal, final FetchObserver<Void> fetchObserver) {
-        fetchValue(DeleteMeal.class,meal, new NoOpValueAdapter<Void>(){
+        fetchValue(DeleteEatMeal.class,meal, new NoOpValueAdapter<Void>(){
             @Override
             public Void adapt(Void value) {
                 Data<List<AteMeal>> data = data_range_ateMeal.get(DateUtils.today());
@@ -576,7 +576,16 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         data_calories_limit().invalidate();
     }
 
-
+    public void function_removeMeal(String mealId, ValueObserver<Boolean> observer) {
+        fetchValue(DeleteMeal.class, mealId, new NoOpValueAdapter<Boolean>(){
+            @Override
+            public Boolean adapt(Boolean value) {
+                data_meals().invalidate();
+                data_range_ateMeal.invalidateAll();
+                return super.adapt(value);
+            }
+        }, observer);
+    }
 
     public static abstract class FetchObserver<ValueType> implements Data.FetchObserver<ValueType> {
         final PocketFitApp owner;
