@@ -126,4 +126,8 @@ public class PersistManager {
     public void removeMeal(String id) {
         mealSerializationMap.remove(id);
     }
+
+    public void removeProduct(String productId) {
+        productSerializationMap.remove(productId);
+    }
 }

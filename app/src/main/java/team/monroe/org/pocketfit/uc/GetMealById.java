@@ -33,8 +33,12 @@ public class GetMealById extends UserCaseSupport<String, Meal>{
         answer.mealProducts = new ArrayList<>();
         for (String mealProductId : mealPersist.mealProductIdList) {
             MealProduct product = using(Model.class).execute(GetMealProductById.class, mealProductId);
-            if (product == null) throw new NullPointerException("Meal Product couldn`t be null");
-            answer.mealProducts.add(product);
+            if (product == null){
+               //TODO: uncomment exception
+             //   throw new NullPointerException("Meal Product couldn`t be null");
+            }else {
+                answer.mealProducts.add(product);
+            }
         }
         return answer;
     }

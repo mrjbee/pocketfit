@@ -40,6 +40,7 @@ import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
 import team.monroe.org.pocketfit.uc.DeleteEatMeal;
 import team.monroe.org.pocketfit.uc.DeleteMeal;
+import team.monroe.org.pocketfit.uc.DeleteProduct;
 import team.monroe.org.pocketfit.uc.EatMeal;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetAteMealByDate;
@@ -582,6 +583,16 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             public Boolean adapt(Boolean value) {
                 data_meals().invalidate();
                 data_range_ateMeal.invalidateAll();
+                return super.adapt(value);
+            }
+        }, observer);
+    }
+
+    public void function_deleteProduct(String productId, ValueObserver<Boolean> observer) {
+        fetchValue(DeleteProduct.class, productId, new NoOpValueAdapter<Boolean>(){
+            @Override
+            public Boolean adapt(Boolean value) {
+                data_products().invalidate();
                 return super.adapt(value);
             }
         }, observer);

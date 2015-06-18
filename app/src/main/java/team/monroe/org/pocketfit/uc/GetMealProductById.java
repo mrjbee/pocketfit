@@ -18,9 +18,14 @@ public class GetMealProductById extends UserCaseSupport<String, MealProduct>{
     @Override
     protected MealProduct executeImpl(String id) {
         Persist.MealProduct productPersist = using(PersistManager.class).getMealProduct(id);
-        if (productPersist == null) return null;
+        if (productPersist == null){
+            return null;
+        }
         MealProduct answer = new MealProduct(id);
         answer.product = using(Model.class).execute(GetProductById.class, productPersist.productId);
+        if (answer.product == null){
+            return null;
+        }
         answer.gram = productPersist.gram;
         return answer;
     }
