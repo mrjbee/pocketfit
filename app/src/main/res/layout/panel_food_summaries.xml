@@ -116,7 +116,7 @@
         android:layout_height="1dp"
         android:scaleType="centerCrop"
         android:src="@drawable/separator"
-        android:layout_margin="5dp"/>
+        android:layout_marginTop="15dp"/>
 
     <TextView
         android:layout_marginTop="20dp"
@@ -132,9 +132,13 @@
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
+        android:columnCount="4"
         android:rowCount="4">
-
+        <LinearLayout
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="#fb3666"
+            />
         <TextView
             android:layout_marginBottom="5dp"
             android:gravity="bottom"
@@ -153,6 +157,14 @@
             android:layout_marginLeft="10dp"
             android:text="gram"
             style="@style/Text.Body.Optional"/>
+
+
+        <LinearLayout
+            android:layout_marginRight="5dp"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="#ffa32342"
+            />
 
         <TextView
             android:layout_marginBottom="5dp"
@@ -173,7 +185,11 @@
             android:text="gram"
             style="@style/Text.Body.Optional"/>
 
-
+        <LinearLayout
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="#ffff6d78"
+            />
         <TextView
             android:layout_marginBottom="5dp"
             android:gravity="bottom"
@@ -198,30 +214,51 @@
 
     </GridLayout>
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/separator"
+        android:layout_marginTop="15dp"/>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Balance"
+            style="@style/Text.Body.Section.Caption"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="protein - fats - carbs"
+            style="@style/Text.Body.Optional"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_gravity="left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Balance"
-        style="@style/Text.Body.Section.Caption"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="protein - fats - carbs"
-        style="@style/Text.Body.Optional"/>
-
-    <TextView
         android:layout_gravity="left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_nutrition_balance"
-        android:text=""
+        android:text="1 - 1 - 4"
+        android:layout_marginBottom="5dp"
         style="@style/Text.Body"
         />
+
+    <team.monroe.org.pocketfit.view.FPCProgressBarView
+        android:id="@+id/bar_fpc"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp" />
 
 </LinearLayout>

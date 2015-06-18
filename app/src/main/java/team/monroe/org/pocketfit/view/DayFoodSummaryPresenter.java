@@ -22,6 +22,7 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
     private final TextView textCaloriesDelta;
     private final TextView textCaloriesLimit;
     private final HorProgressBarView barCalories;
+    private final FPCProgressBarView barNutriotions;
     private final TextView textFats;
     private final TextView textCarbs;
     private final TextView textProtein;
@@ -43,6 +44,7 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
         textCaloriesDelta = (TextView) rootView.findViewById(R.id.text_calories_delta);
         textCaloriesLimit = (TextView) rootView.findViewById(R.id.text_calories_limit);
         barCalories = (HorProgressBarView) rootView.findViewById(R.id.bar_calories);
+        barNutriotions = (FPCProgressBarView) rootView.findViewById(R.id.bar_fpc);
         textFats = (TextView) rootView.findViewById(R.id.text_fats_value);
         textCarbs = (TextView) rootView.findViewById(R.id.text_carbs_value);
         textProtein = (TextView) rootView.findViewById(R.id.text_protein_value);
@@ -78,6 +80,8 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
 
     public void init(Date date) {
         editLimitPanel.setVisibility(View.GONE);
+        barCalories.setProgress(0f);
+        barNutriotions.setGram(0,0,0);
         if (mMealData != null) throw new IllegalStateException();
         mMealData = app.data_ate_meal(date);
         mDataObserver = new Data.DataChangeObserver<List<AteMeal>>() {
@@ -168,6 +172,8 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
             carbs += ateMeal.meal.carbs();
             protein += ateMeal.meal.protein();
         }
+
+        barNutriotions.setGram(protein, fats, carbs);
 
         float sum = fats+carbs+protein;
 
