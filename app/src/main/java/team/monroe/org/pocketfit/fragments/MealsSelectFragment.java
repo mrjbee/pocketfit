@@ -7,12 +7,10 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
@@ -26,6 +24,7 @@ import java.util.List;
 import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
+import team.monroe.org.pocketfit.presentations.AteMeal;
 import team.monroe.org.pocketfit.presentations.Meal;
 import team.monroe.org.pocketfit.view.SlideOffListView;
 
@@ -33,7 +32,6 @@ import static org.monroe.team.android.box.app.ui.animation.apperrance.Appearance
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
-import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_overshot;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
@@ -111,9 +109,10 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 super.onAnimationEnd(animation);
-                                                application().addMeal(meal, observe_function(State.STOP, new PocketFitApp.DataAction<Void>() {
+                                                application().eatMeal(meal, observe_function(State.STOP, new PocketFitApp.DataAction<AteMeal>() {
                                                     @Override
-                                                    public void data(Void data) {
+                                                    public void data(AteMeal data) {
+                                                        Toast.makeText(application().getApplicationContext(), "Eat meal add = "+data.id,Toast.LENGTH_LONG).show();
                                                         owner().finish();
                                                     }
                                                 }));

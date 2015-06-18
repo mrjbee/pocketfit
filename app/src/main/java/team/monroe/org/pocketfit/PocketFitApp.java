@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import team.monroe.org.pocketfit.presentations.AteMeal;
 import team.monroe.org.pocketfit.presentations.Exercise;
 import team.monroe.org.pocketfit.presentations.Meal;
 import team.monroe.org.pocketfit.presentations.MealProduct;
@@ -33,6 +34,7 @@ import team.monroe.org.pocketfit.presentations.RoutineDay;
 import team.monroe.org.pocketfit.presentations.RoutineExercise;
 import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
+import team.monroe.org.pocketfit.uc.EatMeal;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
@@ -490,9 +492,8 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
         return mTrainingExecutionManager.getTrainingPlan();
     }
 
-    public void addMeal(Meal meal, ValueObserver<Void> observer) {
-        //TODO: Add actual adding
-        observer.onSuccess(null);
+    public void eatMeal(Meal meal, ValueObserver<AteMeal> observer) {
+        fetchValue(EatMeal.class,meal, new NoOpValueAdapter<AteMeal>() ,observer);
     }
 
 
