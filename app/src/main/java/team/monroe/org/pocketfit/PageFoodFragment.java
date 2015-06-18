@@ -170,6 +170,15 @@ public class PageFoodFragment extends DefaultPageFragment {
     }
 
     @Override
+    public boolean onBackButton() {
+        DayFoodSummaryPresenter presenter = mDayFoodAdapter.getPresenterFor(mDayFoodPager.getCurrentItem());
+        if (presenter != null && presenter.onBackButton()){
+            return true;
+        }
+        return super.onBackButton();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         updateMainButton();

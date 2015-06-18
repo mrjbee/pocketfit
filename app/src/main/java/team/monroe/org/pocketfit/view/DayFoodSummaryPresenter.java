@@ -173,4 +173,11 @@ public class DayFoodSummaryPresenter extends ViewPresenter<View>{
      }
 
 
+    public boolean onBackButton() {
+        if (editLimitPanel.getVisibility() != View.GONE){
+            editLimitPanel.setVisibility(View.GONE);
+            return true;
+        }
+        return false;
+    }
 }
