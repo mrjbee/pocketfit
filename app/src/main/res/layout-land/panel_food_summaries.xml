@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            >
+
+            <TextView
+                android:layout_gravity="center"
+                android:text="Calories"
+                style="@style/Text.Body.Section.Caption"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                />
+
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/text_calories_limit"
+                android:gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Limit 2500 cal"
+                style="@style/Text.Body.Optional"/>
+
+            <ImageView
+                android:id="@+id/action_edit"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                style="@style/Button.Action"
+                android:src="@drawable/edit"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/panel_edit_limit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="50dp"
+            >
+            <Space
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/action_apply"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Apply"
+                style="@style/Button.Panel"
+                />
+
+            <EditText
+                android:id="@+id/edit_limit"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="Day Limit"
+                android:inputType="number"
+                style="@style/Text.Body"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/text_calories_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0000"
+                android:gravity="bottom"
+                style="@style/Text.Body"/>
+
+            <TextView
+                android:gravity="bottom"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="cal"
+                style="@style/Text.Body.Optional"/>
+
+            <TextView
+                android:id="@+id/text_calories_delta"
+                android:gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Left 300 cal"
+                style="@style/Text.Body.Optional"/>
+
+        </LinearLayout>
+
+        <team.monroe.org.pocketfit.view.HorProgressBarView
+            android:id="@+id/bar_calories"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Balance"
+                style="@style/Text.Body.Section.Caption"
+                />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_nutrition_balance"
+                android:text="1 - 1 - 4"
+                android:layout_marginBottom="5dp"
+                style="@style/Text.Body"
+                />
+
+            <TextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="protein - fats - carbs"
+                style="@style/Text.Body.Optional"/>
+
+        </LinearLayout>
+
+        <team.monroe.org.pocketfit.view.FPCProgressBarView
+            android:id="@+id/bar_fpc"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp" />
+
+    </LinearLayout>
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:text="Nutrition Values"
+            style="@style/Text.Body.Section.Caption"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            />
+
+
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:rowCount="4">
+            <LinearLayout
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:background="#fb3666"
+                />
+            <TextView
+                android:layout_marginBottom="5dp"
+                android:gravity="bottom"
+                android:text="Protein"
+                style="@style/Text.Body.Optional"/>
+
+            <TextView
+                android:id="@+id/text_protein_value"
+                android:text="00"
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                style="@style/Text.Body"/>
+
+            <TextView
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:text="gram"
+                style="@style/Text.Body.Optional"/>
+
+
+            <LinearLayout
+                android:layout_marginRight="5dp"
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:background="#ffa32342"
+                />
+
+            <TextView
+                android:layout_marginBottom="5dp"
+                android:gravity="bottom"
+                android:text="Fats"
+                style="@style/Text.Body.Optional"/>
+
+            <TextView
+                android:id="@+id/text_fats_value"
+                android:text="00"
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                style="@style/Text.Body"/>
+
+            <TextView
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:text="gram"
+                style="@style/Text.Body.Optional"/>
+
+            <LinearLayout
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:background="#ffff6d78"
+                />
+            <TextView
+                android:layout_marginBottom="5dp"
+                android:gravity="bottom"
+                android:text="Carbs"
+                style="@style/Text.Body.Optional"/>
+
+            <TextView
+                android:id="@+id/text_carbs_value"
+                android:text="00"
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                style="@style/Text.Body"/>
+
+            <TextView
+                android:gravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:text="gram"
+                style="@style/Text.Body.Optional"/>
+
+
+
+
+        </GridLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

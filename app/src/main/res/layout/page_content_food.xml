@@ -5,11 +5,12 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_marginLeft="20dp"
         android:id="@+id/text_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mar, 2015"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         style="@style/Text.Body.Optional"/>
 
     <ImageView
