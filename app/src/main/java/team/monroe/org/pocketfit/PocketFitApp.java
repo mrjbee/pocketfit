@@ -10,6 +10,7 @@ import android.util.Pair;
 import org.monroe.team.android.box.BitmapUtils;
 import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.data.Data;
+import org.monroe.team.android.box.data.RangeDataProvider;
 import org.monroe.team.android.box.utils.AndroidLogImplementation;
 import org.monroe.team.android.box.utils.FileUtils;
 import org.monroe.team.corebox.log.L;
@@ -21,6 +22,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -36,6 +41,7 @@ import team.monroe.org.pocketfit.presentations.RoutineSchedule;
 import team.monroe.org.pocketfit.uc.CreateId;
 import team.monroe.org.pocketfit.uc.EatMeal;
 import team.monroe.org.pocketfit.uc.GetActiveRoutineSchedule;
+import team.monroe.org.pocketfit.uc.GetAteMealByDate;
 import team.monroe.org.pocketfit.uc.GetExerciseById;
 import team.monroe.org.pocketfit.uc.GetExerciseList;
 import team.monroe.org.pocketfit.uc.GetMealById;
@@ -67,6 +73,7 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     private Data<List> data_routines;
     private Data<List> data_exercises;
     private Data<RoutineSchedule> data_activeRoutineSchedule;
+    private RangeDataProvider<Date,List<AteMeal>> data_range_ateMeal;
 
     private ServiceConnection mServiceConnection;
     private TrainingExecutionService.TrainingExecutionManager mTrainingExecutionManager;
@@ -150,6 +157,25 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
             }
         };
 
+        data_range_ateMeal = new RangeDataProvider<Date, List<AteMeal>>() {
+
+            @Override
+            protected Data<List<AteMeal>> buildData(final Date date) {
+                return new Data<List<AteMeal>>(model()) {
+                    @Override
+                    protected List<AteMeal> provideData() {
+                        return model().execute(GetAteMealByDate.class, date);
+                    }
+                };
+            }
+
+
+            DateFormat dateFormat = new SimpleDateFormat("dd, MMMM yyyy");
+            @Override
+            protected String convertToStringKey(Date date) {
+                return dateFormat.format(date);
+            }
+        };
     }
 
 
@@ -191,6 +217,11 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     public Data<Pair> data_runningTraining() {
         return data_runningTraining;
     }
+
+    public Data<List<AteMeal>> data_ate_meal(Date date) {
+        return data_range_ateMeal.getOrCreate(date);
+    }
+
 
     public <DataType> ValueObserver<DataType> observe_function(final DataAction<DataType> dataAction) {
         return new ValueObserver<DataType>() {
@@ -493,7 +524,16 @@ public class PocketFitApp extends ApplicationSupport<PocketFitModel>{
     }
 
     public void eatMeal(Meal meal, ValueObserver<AteMeal> observer) {
-        fetchValue(EatMeal.class,meal, new NoOpValueAdapter<AteMeal>() ,observer);
+        fetchValue(EatMeal.class,meal, new NoOpValueAdapter<AteMeal>(){
+            @Override
+            public AteMeal adapt(AteMeal value) {
+                Data<List<AteMeal>> data = data_range_ateMeal.get(DateUtils.today());
+                if (data != null){
+                    data.invalidate();
+                }
+                return super.adapt(value);
+            }
+        } ,observer);
     }
 
 

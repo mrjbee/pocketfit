@@ -35,7 +35,6 @@ public class PageFoodFragment extends DefaultPageFragment {
         mMaxDayPosition = 360;
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(DateUtils.today());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
         mTodayDate = calendar.getTime();
         updateDateCaption(mTodayDate);
 
