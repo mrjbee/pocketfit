@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="horizontal"
-    android:paddingRight="@dimen/dash.header.margin.side">
+    android:paddingLeft="@dimen/tile.margin.side"
+    android:paddingRight="@dimen/tile.margin.side"
+    >
 
     <TextView
         android:translationX="@dimen/dash.header.margin.side"

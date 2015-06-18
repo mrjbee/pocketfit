@@ -54,7 +54,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        configureHeader("My Workout", build_HeaderActionsView());
+        configureHeader("Workouts", build_HeaderActionsView());
 
         acNoWorkout= animateAppearance(view(R.id.panel_no_routine),
                 ySlide(0, DisplayUtils.screenHeight(getResources())))
@@ -403,7 +403,7 @@ public class PageWorkoutFragment extends DashboardStartPageFragment {
 
     @Deprecated
     protected String getHeaderName() {
-        return "Workout";
+        return "Workouts";
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.monroe.team.corebox.utils.DateUtils;
 
@@ -27,10 +28,14 @@ public class PageFoodFragment extends DefaultPageFragment {
     private int mMaxDayPosition;
     private Date mTodayDate;
     private FoodDayPageAdapter mDayFoodAdapter;
+    private TextView mHeaderDayText;
+    private TextView mDayText;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mDayText = view_text(R.id.text_day);
+        mDayText.setVisibility(activity().isLandscape(R.bool.class) ? View.GONE : View.VISIBLE);
         buildHeader();
         hideMainButton(null);
         mMaxDayPosition = 360;
@@ -127,14 +132,16 @@ public class PageFoodFragment extends DefaultPageFragment {
     }
 
     private void buildHeader() {
-        View headerActionsView = activity().getLayoutInflater().inflate(R.layout.actions_history, null);
+        View headerActionsView = activity().getLayoutInflater().inflate(R.layout.actions_food, null);
         headerActionsView.findViewById(R.id.action_today).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDayFoodPager.setCurrentItem(mMaxDayPosition);
             }
         });
-        configureHeader("My Calories Diary", headerActionsView);
+        mHeaderDayText = (TextView) headerActionsView.findViewById(R.id.text_day);
+        mHeaderDayText.setVisibility(activity().isLandscape(R.bool.class)?View.VISIBLE : View.GONE);
+        configureHeader("Food Diary", headerActionsView);
     }
 
     private Date getDateByPosition(int position) {
@@ -151,7 +158,8 @@ public class PageFoodFragment extends DefaultPageFragment {
     DateFormat dateFormat = new SimpleDateFormat("dd, MMMM yyyy");
     private void updateDateCaption(Date today) {
         mDate = today;
-        view_text(R.id.text_day).setText(dateFormat.format(mDate));
+        mHeaderDayText.setText(dateFormat.format(mDate));
+        mDayText.setText(dateFormat.format(mDate));
     }
 
     @Override
