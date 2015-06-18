@@ -3,10 +3,8 @@ package team.monroe.org.pocketfit;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 import org.monroe.team.corebox.utils.DateUtils;
@@ -21,7 +19,6 @@ import java.util.List;
 
 import team.monroe.org.pocketfit.fragments.DefaultPageFragment;
 import team.monroe.org.pocketfit.view.CalendarView;
-import team.monroe.org.pocketfit.view.VerticalViewPager;
 
 public class PageHistoryFragment extends DefaultPageFragment {
 
@@ -70,7 +67,7 @@ public class PageHistoryFragment extends DefaultPageFragment {
                     if (!notUsedCalendarViewList.isEmpty()){
                         calendarPanel = notUsedCalendarViewList.remove(0);
                     }else {
-                        calendarPanel = (ViewGroup) activity().getLayoutInflater().inflate(R.layout.page_calendar, container, false);;
+                        calendarPanel = (ViewGroup) activity().getLayoutInflater().inflate(R.layout.panel_calendar, container, false);;
                     }
                     Date monthDate = getMonthDateByPosition(position);
                     ((CalendarView)calendarPanel.getChildAt(0)).setMonth(monthDate);

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <GridLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:columnCount="3"
+        android:rowCount="4">
+
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:gravity="bottom"
+            android:text="Calories"
+            style="@style/Text.Body.Caption"/>
+
+        <TextView
+            android:id="@+id/text_calories_value"
+            android:text="0000"
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="cal"
+            style="@style/Text.Body.Optional"/>
+
+
+
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:gravity="bottom"
+            android:text="Fats"
+            style="@style/Text.Body.Caption"/>
+
+        <TextView
+            android:id="@+id/text_fats_value"
+            android:text="00"
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="gram"
+            style="@style/Text.Body.Optional"/>
+
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:gravity="bottom"
+            android:text="Carbs"
+            style="@style/Text.Body.Caption"/>
+
+        <TextView
+            android:id="@+id/text_carbs_value"
+            android:text="00"
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="gram"
+            style="@style/Text.Body.Optional"/>
+
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:gravity="bottom"
+            android:text="Protein"
+            style="@style/Text.Body.Caption"/>
+
+        <TextView
+            android:id="@+id/text_protein_value"
+            android:text="00"
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            style="@style/Text.Body"/>
+
+        <TextView
+            android:gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="gram"
+            style="@style/Text.Body.Optional"/>
+
+    </GridLayout>
+</LinearLayout>

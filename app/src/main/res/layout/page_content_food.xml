@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mar, 2015"
+        android:layout_gravity="center"
+        style="@style/Text.Body.Optional"/>
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/separator"
+        android:layout_margin="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/panel_day"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"/>
+
+
+</LinearLayout>
