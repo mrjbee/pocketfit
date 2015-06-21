@@ -7,11 +7,9 @@
     <LinearLayout
         android:id="@+id/panel_tile"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="@dimen/tile.margin.side"
-        android:layout_marginRight="@dimen/tile.margin.side"
-        android:layout_width="fill_parent"
+         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/tile_white_spec"
+        android:background="@color/background.light"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="fill_parent"
@@ -46,6 +44,8 @@
 
             <team.monroe.org.pocketfit.view.SlideOffListView
                 android:background="@color/background.main"
+                android:paddingRight="30dp"
+                android:paddingLeft="20dp"
                 android:id="@+id/list_routine"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
