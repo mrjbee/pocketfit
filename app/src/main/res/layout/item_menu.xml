@@ -6,6 +6,7 @@
     >
 
     <RelativeLayout
+        android:visibility="gone"
         android:padding="10dp"
         android:id="@+id/panel_day"
         android:layout_width="wrap_content"
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2000 cal"
+            android:textColor="#fd0b45"
             style="@style/Text.Body.Optional"/>
 
         <GridLayout
@@ -71,11 +73,116 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/panel_meal"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:background="@color/background.light">
+        android:layout_height="wrap_content"
+        android:background="@drawable/tile_white"
+        android:orientation="vertical">
 
+        <RelativeLayout
+            android:padding="20dp"
+            android:id="@+id/panel_meal_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_meal"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/text_meal_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meal Caption"
+                style="@style/Text.Body"/>
+
+
+            <TextView
+                android:id="@+id/text_meal_time"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20:30"
+                style="@style/Text.Body.Optional"/>
+
+            <TextView
+                android:id="@+id/text_meal_calories"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/text_meal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2000 cal"
+                style="@style/Text.Body.Optional"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_below="@+id/panel_meal_top"
+                android:id="@+id/item_image"
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/foodcover_loading"
+                android:scaleType="centerCrop"
+            />
+
+            <GridLayout
+                android:layout_below="@+id/item_image"
+                android:layout_marginTop="10dp"
+                android:padding="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="3">
+                <TextView
+                    android:text="Carbs"
+                    style="@style/Text.Body.Optional"
+                    />
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:text="Fats"
+                    style="@style/Text.Body.Optional"
+                    />
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:text="Protein"
+                    style="@style/Text.Body.Optional"
+                    />
+
+                <TextView
+                    android:id="@+id/text_meal_carbs"
+                    android:text="20.0"
+                    style="@style/Text.Body.Optional"
+                    />
+                <TextView
+                    android:id="@+id/text_meal_fats"
+                    android:layout_marginLeft="20dp"
+                    android:text="20.0"
+                    style="@style/Text.Body.Optional"
+                    />
+                <TextView
+                    android:id="@+id/text_meal_protein"
+                    android:layout_marginLeft="20dp"
+                    android:text="20.0"
+                    style="@style/Text.Body.Optional"
+                    />
+            </GridLayout>
+        <RelativeLayout
+            android:id="@+id/panel_add_button"
+            android:layout_below="@+id/panel_meal_top"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            >
+            <Button
+                android:id="@+id/action_add"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/button_round"/>
+
+            <ImageView
+                android:id="@+id/image_main_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/round_btn_trash"/>
+        </RelativeLayout>
         </RelativeLayout>
 </RelativeLayout>

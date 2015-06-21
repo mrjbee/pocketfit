@@ -1,5 +1,6 @@
 package team.monroe.org.pocketfit.fragments;
 
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
@@ -8,10 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.monroe.team.android.box.app.ApplicationSupport;
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
+import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
@@ -32,7 +35,9 @@ import team.monroe.org.pocketfit.view.SlideOffListView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
+import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
 public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
@@ -89,9 +94,69 @@ public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
                         }
                     }
 
-                    private void update(AteMeal ateMeal, int position) {
-                        panelMeal.setVisibility(View.VISIBLE);
+                    TextView mealCaption = (TextView) convertView.findViewById(R.id.text_meal);
+                    TextView mealTime = (TextView) convertView.findViewById(R.id.text_meal_time);
+                    TextView mealCalories = (TextView) convertView.findViewById(R.id.text_meal_calories);
+                    TextView mealCarbs = (TextView) convertView.findViewById(R.id.text_meal_carbs);
+                    TextView mealFats = (TextView) convertView.findViewById(R.id.text_meal_fats);
+                    TextView mealProtein = (TextView) convertView.findViewById(R.id.text_meal_protein);
+                    String lastInstalledImageId;
+                    ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
+                    View addAction = convertView.findViewById(R.id.action_add);
+                    AppearanceController addButtonAnimation = animateAppearance(convertView.findViewById(R.id.panel_add_button), scale(1f,0f))
+                            .hideAnimation(duration_constant(200), interpreter_accelerate(0.3f))
+                            .build();
 
+                    private void update(final AteMeal ateMeal, int position) {
+                        panelMeal.setVisibility(View.VISIBLE);
+                        mealCaption.setText(ateMeal.meal.title);
+                        mealCalories.setText(ateMeal.meal.calories() + " cal");
+                        mealCarbs.setText(String.format("%.2f", ateMeal.meal.carbs()));
+                        mealFats.setText(String.format("%.2f", ateMeal.meal.fats()));
+                        mealProtein.setText(String.format("%.2f", ateMeal.meal.protein()));
+                        mealTime.setText(DateFormat.getTimeInstance().format(ateMeal.date));
+                        addAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addButtonAnimation.hideAndCustomize(new AppearanceController.AnimatorCustomization() {
+                                    @Override
+                                    public void customize(Animator animator) {
+                                        animator.addListener(new AnimatorListenerSupport(){
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                application().function_deleteAteMeal(ateMeal, new PocketFitApp.FetchObserver<Void>(application()) {
+                                                    @Override
+                                                    public void onFetch(Void aVoid) {
+                                                        mData.invalidate();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        if (ateMeal.meal.imageId == null){
+                            lastInstalledImageId = "";
+                            imageView.setImageResource(R.drawable.foodcover_no_cover);
+                        }else{
+                            final String finalImageId = ateMeal.meal.imageId;
+                            if (finalImageId.equals(lastInstalledImageId)) return;
+
+                            imageView.setImageResource(R.drawable.foodcover_loading);
+                            application().loadToBitmap(ateMeal.meal.imageId,
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    DisplayUtils.dpToPx(100, getResources()),
+                                    new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
+                                        @Override
+                                        public void data(Pair<String, Bitmap> data) {
+                                            if (finalImageId.equals(data.first)){
+                                                lastInstalledImageId = finalImageId;
+                                                imageView.setImageBitmap(data.second);
+                                            }
+                                        }
+                                    });
+                        }
                     }
 
                     TextView dayCaption = (TextView) convertView.findViewById(R.id.text_day);
