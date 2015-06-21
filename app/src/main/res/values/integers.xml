@@ -5,6 +5,7 @@
 
     <color name="light.black">#252525</color>
     <color name="background.main">#dbdbdb</color>
+    <color name="background.light">#fff9f9f9</color>
     <color name="background.secondary">#fff4f4f4</color>
 
     <color name="text.color.date">#ff9a9a9a</color>

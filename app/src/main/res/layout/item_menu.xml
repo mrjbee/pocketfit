@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/panel_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Morning"
+            style="@style/Text.Menu.Caption"/>
+
+        <TextView
+            android:id="@+id/text_day_calories"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2000 cal"
+            style="@style/Text.Body.Optional"/>
+
+        <GridLayout
+            android:layout_below="@+id/text_day"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3">
+            <TextView
+                android:text="Carbs"
+                style="@style/Text.Body.Optional"
+                />
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:text="Fats"
+                style="@style/Text.Body.Optional"
+                />
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:text="Protein"
+                style="@style/Text.Body.Optional"
+                />
+
+            <TextView
+                android:id="@+id/text_day_carbs"
+                android:text="20.0"
+                style="@style/Text.Body.Optional"
+                />
+            <TextView
+                android:id="@+id/text_day_fats"
+                android:layout_marginLeft="20dp"
+                android:text="20.0"
+                style="@style/Text.Body.Optional"
+                />
+            <TextView
+                android:id="@+id/text_day_protein"
+                android:layout_marginLeft="20dp"
+                android:text="20.0"
+                style="@style/Text.Body.Optional"
+                />
+        </GridLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/panel_meal"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:background="@color/background.light">
+
+        </RelativeLayout>
+</RelativeLayout>

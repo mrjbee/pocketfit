@@ -112,7 +112,6 @@ public class MealsSelectFragment extends BodyFragment<FoodActivity> {
                                                 application().function_eatMeal(meal, observe_function(State.STOP, new PocketFitApp.DataAction<AteMeal>() {
                                                     @Override
                                                     public void data(AteMeal data) {
-                                                        Toast.makeText(application().getApplicationContext(), "Eat meal add = " + data.id, Toast.LENGTH_LONG).show();
                                                         owner().finish();
                                                     }
                                                 }));

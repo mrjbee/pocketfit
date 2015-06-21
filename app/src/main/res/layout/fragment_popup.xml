@@ -19,55 +19,41 @@
             android:orientation="horizontal"
             android:padding="5dp">
 
-            <TextView
-                android:paddingLeft="10dp"
-                style="@style/Text.Header.Secondary.Caption.Light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/text.header.dash.dark"
-                android:text="Menu" />
-
-
-            <TextView
-                android:id="@+id/text_day"
-                android:paddingLeft="10dp"
-                style="@style/Text.Body.Optional"
-                android:layout_weight="1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:text="" />
-
             <ImageView
                 android:id="@+id/action_close"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 style="@style/Button.Action.Dark.Header"
                 android:src="@drawable/android_close"/>
 
+            <TextView
+                android:id="@+id/text_day"
+                style="@style/Text.Body.Optional"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:gravity="center"
+                android:layout_height="fill_parent"
+                android:text=" 20 May" />
+
+
         </LinearLayout>
-
-
-        <ImageView
-            android:id="@+id/separator"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/separator"
-            android:layout_marginTop="5dp"/>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
             <team.monroe.org.pocketfit.view.SlideOffListView
+                android:background="@color/background.main"
                 android:id="@+id/list_routine"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:listSelector="@null"
+                android:listSelector="@color/transperent"
+                android:dividerHeight="0dp"
+                android:divider="@null"
                 android:scrollbars="none"/>
+
             <include
                 android:layout_below="@+id/panel_new_routine"
                 android:id="@+id/panel_no_items"

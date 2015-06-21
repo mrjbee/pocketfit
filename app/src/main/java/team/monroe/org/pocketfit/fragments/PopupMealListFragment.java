@@ -1,6 +1,5 @@
 package team.monroe.org.pocketfit.fragments;
 
-import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Pair;
@@ -8,24 +7,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.monroe.team.android.box.app.FragmentSupport;
 import org.monroe.team.android.box.app.ui.GenericListViewAdapter;
 import org.monroe.team.android.box.app.ui.GetViewImplementation;
 import org.monroe.team.android.box.app.ui.SlideTouchGesture;
-import org.monroe.team.android.box.app.ui.animation.AnimatorListenerSupport;
 import org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceController;
 import org.monroe.team.android.box.data.Data;
 import org.monroe.team.android.box.utils.DisplayUtils;
+import org.monroe.team.corebox.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import team.monroe.org.pocketfit.DashboardActivity;
-import team.monroe.org.pocketfit.FoodActivity;
 import team.monroe.org.pocketfit.PocketFitApp;
 import team.monroe.org.pocketfit.R;
 import team.monroe.org.pocketfit.presentations.AteMeal;
@@ -34,14 +32,12 @@ import team.monroe.org.pocketfit.view.SlideOffListView;
 
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.animateAppearance;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.duration_constant;
-import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.interpreter_accelerate_decelerate;
-import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.scale;
 import static org.monroe.team.android.box.app.ui.animation.apperrance.AppearanceControllerBuilder.xSlide;
 
 public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
 
-    private GenericListViewAdapter<AteMeal, GetViewImplementation.ViewHolder<AteMeal>> mMealAdapter;
+    private GenericListViewAdapter<MealMenuItem, GetViewImplementation.ViewHolder<MealMenuItem>> mMealAdapter;
     private SlideOffListView mMealsListView;
     private View mNoItemsView;
     private Date mDate;
@@ -73,95 +69,48 @@ public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
         mNoItemsView = view(R.id.panel_no_items);
         mNoItemsView.setVisibility(View.VISIBLE);
 
-        mMealAdapter = new GenericListViewAdapter<AteMeal, GetViewImplementation.ViewHolder<AteMeal>>(activity(),new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<AteMeal>>() {
+        mMealAdapter = new GenericListViewAdapter<MealMenuItem, GetViewImplementation.ViewHolder<MealMenuItem>>(activity(), new GetViewImplementation.ViewHolderFactory<GetViewImplementation.ViewHolder<MealMenuItem>>(){
+
             @Override
-            public GetViewImplementation.ViewHolder<AteMeal> create(final View convertView) {
-                return new GetViewImplementation.GenericViewHolder<AteMeal>() {
+            public GetViewImplementation.ViewHolder<MealMenuItem> create(final View convertView) {
+                return new GetViewImplementation.GenericViewHolder<MealMenuItem>() {
 
-                    TextView caption = (TextView) convertView.findViewById(R.id.item_caption);
-                    TextView subCaption = (TextView) convertView.findViewById(R.id.item_sub_caption);
-                    TextView text = (TextView) convertView.findViewById(R.id.item_text);
-                    TextView sub_text = (TextView) convertView.findViewById(R.id.item_sub_text);
-                    ImageView imageView = (ImageView) convertView.findViewById(R.id.item_image);
-                    View panelDetails = convertView.findViewById(R.id.item_panel_details);
-
-                    String lastInstalledImageId;
-
-                    AppearanceController slidePanelAC = animateAppearance(panelDetails,xSlide(0f,100f))
-                            .showAnimation(duration_constant(100), interpreter_accelerate_decelerate()).build();
+                    View panelDay = convertView.findViewById(R.id.panel_day);
+                    View panelMeal = convertView.findViewById(R.id.panel_meal);
 
                     @Override
-                    public void cleanup() {
-                        slidePanelAC.showWithoutAnimation();
+                    public void update(MealMenuItem mealMenuItem, int position) {
+                        panelDay.setVisibility(View.GONE);
+                        panelMeal.setVisibility(View.GONE);
+                        if (mealMenuItem.ateMeal == null){
+                            update(mealMenuItem.dayPart, position);
+                        }else{
+                            update(mealMenuItem.ateMeal, position);
+                        }
                     }
 
-                    @Override
-                    public void update(final AteMeal ateMeal, int position) {
-                        final Meal meal = ateMeal.meal;
-                        caption.setText(meal.title);
-                        subCaption.setText(meal.calories()+" cal");
-                        text.setText("Fats " + meal.fats()+" Carbs "+meal.carbs()+" Protein "+meal.protein());
-                        sub_text.setText("Products: "+meal.products());
-                        panelDetails.setOnTouchListener(new SlideTouchGesture(DisplayUtils.dpToPx(100, getResources()),
-                                SlideTouchGesture.Axis.X_LEFT) {
-                            @Override
-                            protected float applyFraction() {
-                                return 0.95f;
-                            }
+                    private void update(AteMeal ateMeal, int position) {
+                        panelMeal.setVisibility(View.VISIBLE);
 
-                            @Override
-                            protected void onEnd(float x, float y, float slideValue, float fraction) {
-                                mMealsListView.disabled = false;
-                            }
+                    }
 
-                            @Override
-                            protected void onApply(float x, float y, float slideValue, float fraction) {
+                    TextView dayCaption = (TextView) convertView.findViewById(R.id.text_day);
+                    TextView dayCalories = (TextView) convertView.findViewById(R.id.text_day_calories);
+                    TextView dayCarbs = (TextView) convertView.findViewById(R.id.text_day_carbs);
+                    TextView dayFats = (TextView) convertView.findViewById(R.id.text_day_fats);
+                    TextView dayProtein = (TextView) convertView.findViewById(R.id.text_day_protein);
 
-                                application().function_deleteAteMeal(ateMeal, new PocketFitApp.FetchObserver<Void>(application()) {
-                                    @Override
-                                    public void onFetch(Void aVoid) {
-                                        mData.invalidate();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            protected void onProgress(float x, float y, float slideValue, float fraction) {
-                                if (Math.abs(slideValue) < 80) return;
-                                mMealsListView.disabled = true;
-                                panelDetails.setTranslationX(-(slideValue));
-                            }
-                            @Override
-                            protected void onCancel(float x, float y, float slideValue, float fraction) {
-                                super.onCancel(x, y, slideValue, fraction);
-                                slidePanelAC.show();
-                            }
-                        });
-                        if (meal.imageId == null){
-                            lastInstalledImageId = "";
-                            imageView.setImageResource(R.drawable.foodcover_no_cover);
-                        }else{
-                            final String finalImageId = meal.imageId;
-                            if (finalImageId.equals(lastInstalledImageId)) return;
-
-                            imageView.setImageResource(R.drawable.foodcover_loading);
-                            application().loadToBitmap(meal.imageId,
-                                    DisplayUtils.dpToPx(100, getResources()),
-                                    DisplayUtils.dpToPx(100, getResources()),
-                                    new PocketFitApp.DataAction<Pair<String, Bitmap>>() {
-                                        @Override
-                                        public void data(Pair<String, Bitmap> data) {
-                                            if (finalImageId.equals(data.first)){
-                                                lastInstalledImageId = finalImageId;
-                                                imageView.setImageBitmap(data.second);
-                                            }
-                                        }
-                                    });
-                        }
+                    private void update(DayPart dayPart, int position) {
+                        panelDay.setVisibility(View.VISIBLE);
+                        dayCaption.setText(dayPart.title);
+                        dayCalories.setText(dayPart.calories + " cal");
+                        dayCarbs.setText(String.format("%.2f", dayPart.carbs));
+                        dayFats.setText(String.format("%.2f", dayPart.fats));
+                        dayProtein.setText(String.format("%.2f", dayPart.protein));
                     }
                 };
             }
-        },R.layout.item_meal_menu);
+        },R.layout.item_menu);
 
         mMealsListView.setAdapter(mMealAdapter);
         mMealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -197,16 +146,75 @@ public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
                 if (ateMeals.isEmpty()) {
                     mMealsListView.setVisibility(View.INVISIBLE);
                     mNoItemsView.setVisibility(View.VISIBLE);
-
                     mMealAdapter.clear();
                     mMealAdapter.notifyDataSetChanged();
                 } else {
                     mMealsListView.setVisibility(View.VISIBLE);
                     mNoItemsView.setVisibility(View.INVISIBLE);
                     mMealAdapter.clear();
-                    mMealAdapter.addAll(ateMeals);
+
+                    Pair<Long, ArrayList<AteMeal>>[] ateMealsPerDay =new Pair[]{
+                            new Pair<>(5L * (1000 * 60 *60) ,new ArrayList<AteMeal>()),
+                            new Pair<>(12L * (1000 * 60 *60),new ArrayList<AteMeal>()),
+                            new Pair<>(20L * (1000 * 60 *60),new ArrayList<AteMeal>()),
+                            new Pair<>(24L * (1000 * 60 *60),new ArrayList<AteMeal>()),
+                    };
+
+                    for (AteMeal ateMeal : ateMeals) {
+                        long ateTime = DateUtils.timeOnly(ateMeal.date);
+                        for (Pair<Long, ArrayList<AteMeal>> longArrayListPair : ateMealsPerDay) {
+                            if (ateTime < longArrayListPair.first){
+                                longArrayListPair.second.add(ateMeal);
+                                break;
+                            }
+                        }
+                    }
+
+                    ArrayList<MealMenuItem> menuItems = new ArrayList<MealMenuItem>();
+                    for (int i = 0; i< ateMealsPerDay.length; i++){
+                        Pair<Long, ArrayList<AteMeal>> mealPerTime = ateMealsPerDay[i];
+                        if (!mealPerTime.second.isEmpty()){
+                            menuItems.add(createDayPartMealItem(mealPerTime, i));
+                            for (AteMeal ateMeal : mealPerTime.second) {
+                                menuItems.add(new MealMenuItem(ateMeal, null));
+                            }
+                        }
+                    }
+
+                    mMealAdapter.addAll(menuItems);
                     mMealAdapter.notifyDataSetChanged();
                 }
+            }
+
+            private MealMenuItem createDayPartMealItem(Pair<Long, ArrayList<AteMeal>> mealPerTime, int position) {
+                String title = "";
+                switch (position){
+                    case 0:
+                        title = "Night";
+                        break;
+                    case 1:
+                        title = "Morning";
+                        break;
+                    case 2:
+                        title = "Afternoon";
+                        break;
+                    case 3:
+                        title = "Evening";
+                        break;
+                    default:
+                        throw new IllegalStateException();
+
+                }
+
+                DayPart dayPart = new DayPart(title);
+                for (AteMeal ateMeal : mealPerTime.second) {
+                    dayPart.calories += ateMeal.meal.calories();
+                    dayPart.fats += ateMeal.meal.fats();
+                    dayPart.protein += ateMeal.meal.protein();
+                    dayPart.carbs += ateMeal.meal.carbs();
+                }
+
+                return new MealMenuItem(null, dayPart);
             }
         });
     }
@@ -217,4 +225,30 @@ public class PopupMealListFragment extends FragmentSupport<PocketFitApp> {
         mData.removeDataChangeObserver(dataChangeObserver);
         mData = null;
     }
+
+    public class DayPart {
+
+        private final String title;
+        private float carbs =0;
+        private float fats=0;
+        private float protein=0;
+        private int calories=0;
+
+        public DayPart(String title) {
+            this.title = title;
+        }
+    }
+
+    public class MealMenuItem{
+
+        private final AteMeal ateMeal;
+        private final DayPart dayPart;
+
+        public MealMenuItem(AteMeal ateMeal, DayPart dayPart) {
+            this.ateMeal = ateMeal;
+            this.dayPart = dayPart;
+        }
+    }
+
+
 }

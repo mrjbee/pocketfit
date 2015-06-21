@@ -113,6 +113,12 @@
         <item name="android:shadowColor">#ffffffff</item>
     </style>
 
+    <style name="Text.Menu.Caption" parent="AppTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ff575757</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
+    </style>
+
     <style name="Text.Body.Caption.Bigger" parent="Text.Body.Caption">
         <item name="android:textSize">18sp</item>
     </style>
@@ -174,8 +180,8 @@
 
     <style name="Text.Body.Optional" parent="AppTheme">
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">italic</item>
         <item name="android:textColor">#ff878787</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
     <style name="Button.Panel.Light" parent="Button.Panel">
