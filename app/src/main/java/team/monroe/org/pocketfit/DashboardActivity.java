@@ -318,7 +318,7 @@ public class DashboardActivity extends ActivitySupport<PocketFitApp>{
                     .build();
 
             mFragAc = animateAppearance(fragLayer, ySlide(0f, DisplayUtils.screenHeight(context.getResources())))
-                    .showAnimation(duration_constant(500), interpreter_overshot())
+                    .showAnimation(duration_constant(500), interpreter_decelerate(0.8f))
                     .hideAnimation(duration_constant(300), interpreter_accelerate(0.8f))
                     .hideAndGone()
                     .build();
